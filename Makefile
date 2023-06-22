@@ -35,6 +35,7 @@ INCS = -I $(INC_DIREC) -I $(LIBFT_DIR)includes/
 LIBS = $(LIBFT_DIR)libft.a
 
 SRC_FILES = main \
+			banner
 			
 
 SRCS = $(addprefix $(SRC_DIREC), $(addsuffix .c, $(SRC_FILES)))
