@@ -48,8 +48,8 @@ libft:
 				@$(MAKE) -sC $(LIBFT_DIR)
 
 all: $(OBJ_DIREC) $(OBJS) libft
-				$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(INCS) -o $(NAME)
-				$(CC) -g $(CFLAGS) $(OBJS) $(LIBS) $(INCS) -o $(NAME)
+				$(CC) $(CFLAGS) $(OBJS) -lreadline $(LIBS) $(INCS) -o $(NAME)
+				$(CC) -g $(CFLAGS) $(OBJS) -lreadline $(LIBS) $(INCS) -o $(NAME)
 				@echo "- $(NAME) created !"
 
 $(OBJ_DIREC)%.o : $(SRC_DIREC)%.c
