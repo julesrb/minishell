@@ -114,8 +114,16 @@ void    execute_command(char *input, char **envp)
     {
         cmd = ft_split(input, ' ');
         path = ft_access_path(cmd, 0);
+        if (!path)
+        {   
+            ft_putstr_fd("minishell: ", 2);
+            ft_putstr_fd(cmd[0], 2);
+            ft_putendl_fd(": command not found", 2);
+            exit(ft_free(path, NULL, cmd, NULL));
+        }
         if(execve(path, cmd, envp) == -1)
-        {
+        {   
+            ft_putstr_fd("minishell: ", 2);
             ft_putstr_fd(cmd[0], 2);
             ft_putendl_fd(": command not found", 2);
             exit(ft_free(path, NULL, cmd, NULL));

@@ -21,7 +21,7 @@ int main(int argc, char **argv, char **envp)
 	print_opening();
     while(1)
     {
-        input = readline("[Minishell] >");
+        input = readline("[Minishell] ");
         execute_command(input, envp);
         add_history(input);
     }
