@@ -13,8 +13,8 @@
 NAME = libft.a
 CFLAGS	:= -Wextra -Wall -Werror
 
-HEADERS	:= -I ./include
-SRCS	:= $(shell find ./src -iname "*.c")
+HEADERS	:= -I ./includes
+SRCS	:= $(shell find ./sources -iname "*.c")
 OBJS	:= ${SRCS:.c=.o}
 
 all: $(NAME)

@@ -2,7 +2,7 @@ NAME	:= minishell
 CFLAGS	:= -Wextra -Wall -Werror -g
 LIBFT	:= ./lib/libft
 
-HEADERS	:= -I ./includes  -I $(LIBFT)/include
+HEADERS	:= -I ./includes  -I $(LIBFT)/includes
 LIBS	:= $(LIBFT)/libft.a
 SRCS	:= $(shell find ./sources -iname "*.c")
 OBJS	:= ${SRCS:.c=.o}
