@@ -27,6 +27,6 @@ int main(void)
 
 /* int	main(void)
 {
-	ft_printf("/ - Welcome to minishell - /\n");
+	print_opening();
 	return (EXIT_SUCCESS);
 } */

@@ -13,6 +13,9 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <errno.h>
+# include <fcntl.h>
+# include <stdio.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <readline/readline.h>
@@ -20,7 +23,7 @@
 # include <stdlib.h>
 # include "libft.h"
 
-
+int	print_opening(void);
 
 
 
