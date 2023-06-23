@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,19 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-int main(void)
-{
-    char *input;
+# include <errno.h>
+# include <fcntl.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdlib.h>
+# include "libft.h"
 
-	print_opening();
-    while(1)
-    {
-        input = readline("[Minishell] >");
-        add_history(input);
-    }
-    free(input);
-    return(0);
-}
+int	print_opening(void);
+
+
+
+
+#endif
 

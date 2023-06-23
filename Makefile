@@ -35,6 +35,7 @@ INCS = -I $(INC_DIREC) -I $(LIBFT_DIR)includes/
 LIBS = $(LIBFT_DIR)libft.a
 
 SRC_FILES = main \
+			banner
 			
 
 SRCS = $(addprefix $(SRC_DIREC), $(addsuffix .c, $(SRC_FILES)))
@@ -48,8 +49,8 @@ libft:
 				@$(MAKE) -sC $(LIBFT_DIR)
 
 all: $(OBJ_DIREC) $(OBJS) libft
-				$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(INCS) -o $(NAME)
-				$(CC) -g $(CFLAGS) $(OBJS) $(LIBS) $(INCS) -o $(NAME)
+				$(CC) $(CFLAGS) $(OBJS) -lreadline $(LIBS) $(INCS) -o $(NAME)
+				$(CC) -g $(CFLAGS) $(OBJS) -lreadline $(LIBS) $(INCS) -o $(NAME)
 				@echo "- $(NAME) created !"
 
 $(OBJ_DIREC)%.o : $(SRC_DIREC)%.c
