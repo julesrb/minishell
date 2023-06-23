@@ -12,14 +12,17 @@
 
 #include "minishell.h"
 
-int main(void)
+int main(int argc, char **argv, char **envp)
 {
     char *input;
 
+    argv = NULL;
+    argc = 0;
 	print_opening();
     while(1)
     {
         input = readline("[Minishell] >");
+        execute_command(input, envp);
         add_history(input);
     }
     free(input);

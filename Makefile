@@ -1,78 +1,31 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jubernar <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/06/22 15:34:46 by jubernar          #+#    #+#              #
-#    Updated: 2023/06/22 15:34:48 by jubernar         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME	:= minishell
+CFLAGS	:= -Wextra -Wall -Werror -g
+LIBFT	:= ./lib/libft
 
-# -----------\ Name \--------------------------------------------------------- #
+HEADERS	:= -I ./includes  -I $(LIBFT)/include
+LIBS	:= $(LIBFT)/libft.a
+SRCS	:= $(shell find ./sources -iname "*.c")
+OBJS	:= ${SRCS:.c=.o}
 
-NAME	= minishell
+all: lib $(NAME)
 
-# -----------\ Directories \-------------------------------------------------- #
+lib:
+	@$(MAKE) -C $(LIBFT)
 
-INC_DIREC = includes/
-SRC_DIREC = sources/
-OBJ_DIREC = objects/
-LIBFT_DIR = lib/libft/
+%.o: %.c
+	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf "Compiling: $(notdir $<)"
 
-# -----------\ Compilation \-------------------------------------------------- #
+$(NAME): $(OBJS)
+	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME) -lreadline
 
-CC		= cc 
-AR		= ar -rcs
-MD		= -mkdir -p
-CFLAGS	= -Wall -Werror -Wextra
+clean:
+	@rm -f $(OBJS) $(OBJS_BONUS)
+	@$(MAKE) clean -C $(LIBFT)
 
-# -----------\ Files & sources \---------------------------------------------- #
+fclean: clean	
+	@rm -f $(NAME)
+	@$(MAKE) fclean -C $(LIBFT)
 
-INCS = -I $(INC_DIREC) -I $(LIBFT_DIR)includes/
+re: clean all
 
-LIBS = $(LIBFT_DIR)libft.a
-
-SRC_FILES = main \
-			banner
-			
-
-SRCS = $(addprefix $(SRC_DIREC), $(addsuffix .c, $(SRC_FILES)))
-OBJS = $(addprefix $(OBJ_DIREC), $(addsuffix .o, $(SRC_FILES)))
-
-# -----------\ Rules \-------------------------------------------------------- #
-
-$(NAME) : all
-
-libft:
-				@$(MAKE) -sC $(LIBFT_DIR)
-
-all: $(OBJ_DIREC) $(OBJS) libft
-				$(CC) $(CFLAGS) $(OBJS) -lreadline $(LIBS) $(INCS) -o $(NAME)
-				$(CC) -g $(CFLAGS) $(OBJS) -lreadline $(LIBS) $(INCS) -o $(NAME)
-				@echo "- $(NAME) created !"
-
-$(OBJ_DIREC)%.o : $(SRC_DIREC)%.c
-				@$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-				@echo "- Compiled $<"
-
-$(OBJ_DIREC):
-				@$(MD) $(OBJ_DIREC)
-				@echo "- Created folder $(OBJ_DIREC)"
-
-clean :
-				@$(MAKE) -sC $(LIBFT_DIR) clean
-				@echo "- Deleted LIBFT successfully"
-				@rm -fr $(OBJ_DIREC)
-				@echo "- Deleted $(OBJ_DIREC) successfully"
-
-fclean :		clean
-				@rm -fr $(LIBFT_DIR)libft.a
-				@echo "- Deleted libft.a successfully"
-				@rm -fr $(NAME)
-				@echo "- Deleted $(NAME) successfully"
-
-re:				fclean all
-
-.PHONY: all clean fclean re
+.PHONY: all, clean, fclean, re, lib
