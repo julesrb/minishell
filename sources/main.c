@@ -16,6 +16,7 @@ int main(void)
 {
     char *input;
 
+	print_opening();
     while(1)
     {
         input = readline("[Minishell] >");
@@ -25,8 +26,3 @@ int main(void)
     return(0);
 }
 
-/* int	main(void)
-{
-	print_opening();
-	return (EXIT_SUCCESS);
-} */
