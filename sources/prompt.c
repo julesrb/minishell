@@ -12,14 +12,14 @@
 
 #include "minishell.h"
 
-char *prompt(char **envp)
+int	prompt(char **envp, t_minishell *t_mini)
 {
-    char *input;
-
-    input = readline("[Minishell] ");
+    t_mini->input = readline("[Minishell] ");
+	(void)envp;
     //execute_command(input, envp);
-	add_history(input);
-	free(input);
-	return (input);
+	add_history(t_mini->input);
+
+	//free(input);
+	return (0);
 }
 

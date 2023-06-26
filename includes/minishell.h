@@ -29,7 +29,8 @@
 
 typedef struct s_minishell
 {
-	char **cmd_table // output du parser
+	char *input;  //prompt input
+	char **cmd_table; // output du parser
 	int pipe; // nb de pipe
 	int input_redirection; // 1 si < 2 si <<
 	int output_redirection; // 1 si > 2 si >>
@@ -37,7 +38,11 @@ typedef struct s_minishell
 }t_minishell;
 
 int	print_opening(void);
-char *prompt(char **envp);
+
+int	prompt(char **envp, t_minishell *t_mini);
+
+// Lexer related functions
+int	lexer(t_minishell *t_mini);
 
 // Path related functions
 void    execute_command(char *input, char **envp);

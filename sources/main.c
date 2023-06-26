@@ -12,60 +12,30 @@
 
 #include "minishell.h"
 
-int	yield_redirection(char *token)
+int	init_t_mini(t_minishell *t_mini)
 {
-
-	return (1);
+	t_mini->input = NULL;
+	t_mini->cmd_table = NULL;
+	t_mini->pipe = 0;
+	t_mini->input_redirection = 0;
+	t_mini->output_redirection = 0;
+	t_mini->nb_cmd = 0;
+	return (0);
 }
 
-char *lexer(char *input)
-{
-	 // deal with " "
-	 // deal with ''
-	 // deal with |
-	 // deal with < << >> >
-	 // deal with strings
-		 // deal with command
-	 // deal with $
-
-	int i;
-
-	i = 0;
-	while (input[i] != 0)
-	{
-		if (input[i] == "<" || input[i] == ">")
-			i += yield_redirection(input[i]);
-		else if (input[i] == "|")
-			i += yield_pipe(input[i]);
-		else if (ft_isalpha(input[i]) == 1)
-			i += yield_string(input[i]);
-		else if (input[i] == "$")
-			i += yield_env_var(input[i]);
-		else if (input[i] == 39)
-			i += yield_single_quote(input[i]);
-		else if (input[i] == 34)
-			i += yield_double_quote(input[i]);
-		else
-			i++;
-	}
-	free(input);
-	return (NULL);
-}
 
 int main(int argc, char **argv, char **envp)
 {
-	char *input;
+	t_minishell t_mini;
 
-    argv = NULL;
-    argc = 0;
 	(void)argv;
 	(void)argc;
-	(void)input;
 	print_opening();
     while(1)  
     {
-		input = prompt(envp);
-		lexer(input);
+		init_t_mini(&t_mini);
+		prompt(envp, &t_mini);
+		lexer(&t_mini);
 	
 		//execute_command(input, envp);
     }
