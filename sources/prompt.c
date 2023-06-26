@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-char *prompt(char **envp)
+/* char *prompt(char **envp)
 {
     char *input;
 
@@ -21,5 +21,5 @@ char *prompt(char **envp)
 	add_history(input);
 	free(input);
 	return (input);
-}
+} */
 

@@ -20,14 +20,14 @@ void	exec(char *cmd, char **envp)
             ft_putstr_fd("minishell: ", 2);
             ft_putstr_fd(cmd_split[0], 2);
             ft_putendl_fd(": command not found", 2);
-            exit(ft_free(path, NULL, cmd, NULL));
+            exit(ft_free(path, NULL, cmd_split, NULL));
         }
 }
 
 void	insert_pipe(char *cmd, char **envp)
 {
 	int	fd[2];
-	int	pid;
+	pid_t	pid;
 
 	if (pipe(fd) == -1)
 		exit(EXIT_FAILURE);
@@ -51,38 +51,29 @@ void	insert_pipe(char *cmd, char **envp)
 	}
 }
 
-void    executor(char *input, char **envp)
+
+
+
+void    executor(t_minishell mini, char **envp)
 {
-    pid_t pid;
 	int index;
-	int nb_cmd = 1;
+	int fd_infile = 0;
+	int fd_outfile = 1;
 
-	int fd_infile = open(pipex.argv[1], O_RDONLY, 0777);
-	if (pipex.fd_infile == -1)
+
+	fd_infile = input_redirection(mini);
+	if (dup2(fd_infile, 0) == -1)
+		exit(EXIT_FAILURE);
+	fd_outfile = output_redirection(mini);
+	index = 1;
+	while (index < 1 + mini.pipe)
 	{
-		ft_putstr_fd("bash: ", 2);
-		perror(argv[1]);
-		exit (EXIT_FAILURE);
+		insert_pipe(mini.cmd_table[index], envp);
+		index++;
 	}
-	if (dup2(pipex.fd_infile, 0) == -1)
+	if (dup2(fd_outfile, 1) == -1)
 		exit(EXIT_FAILURE);
-	pipex.fd_outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (pipex.fd_outfile == -1)
-		perror(NULL);
-	index = 2;
-	while (index < argc -2)
-		insert_pipe(pipex, index++);
-	if (dup2(pipex.fd_outfile, 1) == -1)
-		exit(EXIT_FAILURE);
-	close(pipex.fd_outfile);
-	exec(argv[argc - 2], pipex);
-
-
-    pid = fork();
-    if (pid == -1)
-        exit(EXIT_FAILURE);
-    if (pid == 0)
-		exec(input, envp);
-    else
-        waitpid(pid, NULL, 0);
+	if (fd_outfile != 1)
+		close(fd_outfile);
+	exec(mini.cmd_table[index], envp);
 }
