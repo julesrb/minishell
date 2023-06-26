@@ -1,78 +1,53 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jubernar <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/06/22 15:34:46 by jubernar          #+#    #+#              #
-#    Updated: 2023/06/22 15:34:48 by jubernar         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 # -----------\ Name \--------------------------------------------------------- #
 
-NAME	= minishell
+NAME	:= minishell
 
 # -----------\ Directories \-------------------------------------------------- #
 
-INC_DIREC = includes/
-SRC_DIREC = sources/
-OBJ_DIREC = objects/
-LIBFT_DIR = lib/libft/
+LIBFT_DIR	:= ./lib/libft/
+INC_DIREC := includes/
+SRC_DIREC := sources/
+OBJ_DIREC := build/
 
 # -----------\ Compilation \-------------------------------------------------- #
 
-CC		= cc 
-AR		= ar -rcs
-MD		= -mkdir -p
-CFLAGS	= -Wall -Werror -Wextra
+CFLAGS	:= -Wextra -Wall -Werror -g
+MD		:= -mkdir -p
 
 # -----------\ Files & sources \---------------------------------------------- #
 
-INCS = -I $(INC_DIREC) -I $(LIBFT_DIR)includes/
-
-LIBS = $(LIBFT_DIR)libft.a
-
-SRC_FILES = main \
-			banner
-			
-
-SRCS = $(addprefix $(SRC_DIREC), $(addsuffix .c, $(SRC_FILES)))
-OBJS = $(addprefix $(OBJ_DIREC), $(addsuffix .o, $(SRC_FILES)))
+HEADERS	:= -I $(INC_DIREC) -I $(LIBFT_DIR)includes/
+LIBS	:= $(LIBFT_DIR)libft.a
+SRCS	:= $(shell find $(SRC_DIREC) -iname "*.c")
+OBJS := $(addprefix $(OBJ_DIREC), $(notdir $(SRCS:.c=.o)))
 
 # -----------\ Rules \-------------------------------------------------------- #
 
-$(NAME) : all
+
+all: $(NAME)
+
+$(NAME): $(OBJ_DIREC) libft $(OBJS)
+	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME) -lreadline
+	@echo "Minishell compilation: 100%"
 
 libft:
-				@$(MAKE) -sC $(LIBFT_DIR)
+	@$(MAKE) -C $(LIBFT_DIR)
 
-all: $(OBJ_DIREC) $(OBJS) libft
-				$(CC) $(CFLAGS) $(OBJS) -lreadline $(LIBS) $(INCS) -o $(NAME)
-				$(CC) -g $(CFLAGS) $(OBJS) -lreadline $(LIBS) $(INCS) -o $(NAME)
-				@echo "- $(NAME) created !"
-
-$(OBJ_DIREC)%.o : $(SRC_DIREC)%.c
-				@$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-				@echo "- Compiled $<"
+$(OBJ_DIREC)%.o: $(SRC_DIREC)%.c
+	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf "Compiling: $(notdir $<)\n"
 
 $(OBJ_DIREC):
-				@$(MD) $(OBJ_DIREC)
-				@echo "- Created folder $(OBJ_DIREC)"
+	@$(MD) $(OBJ_DIREC)
+	@echo "Creating folder $(OBJ_DIREC)"
 
-clean :
-				@$(MAKE) -sC $(LIBFT_DIR) clean
-				@echo "- Deleted LIBFT successfully"
-				@rm -fr $(OBJ_DIREC)
-				@echo "- Deleted $(OBJ_DIREC) successfully"
+clean:
+	@rm -fr $(OBJ_DIREC)
+	@$(MAKE) clean -C $(LIBFT_DIR)
 
-fclean :		clean
-				@rm -fr $(LIBFT_DIR)libft.a
-				@echo "- Deleted libft.a successfully"
-				@rm -fr $(NAME)
-				@echo "- Deleted $(NAME) successfully"
+fclean: clean	
+	@rm -f $(NAME)
+	@$(MAKE) fclean -C $(LIBFT_DIR)
 
-re:				fclean all
+re: clean all
 
-.PHONY: all clean fclean re
+.PHONY: all, clean, fclean, re, libft
