@@ -10,31 +10,49 @@
 #                                                                              #
 # **************************************************************************** #
 
+# -----------\ Name \--------------------------------------------------------- #
+
 NAME = libft.a
+
+# -----------\ Directories \-------------------------------------------------- #
+
+INC_DIREC := includes/
+SRC_DIREC := sources/
+OBJ_DIREC := build/
+
+# -----------\ Compilation \-------------------------------------------------- #
+
 CFLAGS	:= -Wextra -Wall -Werror
+AR		:= ar -rcs
+MD		:= -mkdir -p
+
+# -----------\ Files & sources \---------------------------------------------- #
 
 HEADERS	:= -I ./includes
-SRCS	:= $(shell find ./sources -iname "*.c")
-OBJS	:= ${SRCS:.c=.o}
+SRCS	:= $(shell find $(SRC_DIREC) -iname "*.c")
+OBJS := $(addprefix $(OBJ_DIREC), $(notdir $(SRCS:.c=.o)))
+
+# -----------\ Rules \-------------------------------------------------------- #
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	@ar rc $(NAME) $(OBJS)
-	@echo "Processus completion: 100%"
+$(NAME): $(OBJ_DIREC) $(OBJS)
+	@$(AR) $(NAME) $(OBJS)
+	@echo "libft compilation: 100%"
 	
-%.o: %.c
-	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf " Compiling: $(notdir $<)"
+$(OBJ_DIREC)%.o: $(SRC_DIREC)%.c
+	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf "Compiling: $(notdir $<)\n"
+
+$(OBJ_DIREC):
+	@$(MD) $(OBJ_DIREC)
+	@echo "- Created folder $(OBJ_DIREC)"
 
 clean:
-	@rm -f $(OBJS)
+	@rm -fr $(OBJ_DIREC)
 
 fclean: clean
 	@rm -f $(NAME)
 
 re: clean all
-
-compile:
-	@cc -Wall -Wextra -Werror main.c -L. -lft
 
 .PHONY: all, clean, fclean, re
