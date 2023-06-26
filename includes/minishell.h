@@ -27,7 +27,17 @@
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1
 
+typedef struct s_minishell
+{
+	char **cmd_table // output du parser
+	int pipe; // nb de pipe
+	int input_redirection; // 1 si < 2 si <<
+	int output_redirection; // 1 si > 2 si >>
+	int nb_cmd; // nb de commande a executer
+}t_minishell;
+
 int	print_opening(void);
+char *prompt(char **envp);
 
 // Path related functions
 void    executor(char *input, char **envp);
