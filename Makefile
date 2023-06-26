@@ -23,6 +23,8 @@ OBJS := $(addprefix $(OBJ_DIREC), $(notdir $(SRCS:.c=.o)))
 
 # -----------\ Rules \-------------------------------------------------------- #
 
+.DEFAULT_GOAL := all
+.DELETE_ON_ERROR:
 
 all: $(NAME)
 
