@@ -15,6 +15,7 @@
 int	init_t_mini(t_minishell *t_mini)
 {
 	t_mini->input = NULL;
+	t_mini->lexer_table = NULL;
 	t_mini->cmd_table = NULL;
 	t_mini->pipe = 0;
 	t_mini->input_redirection = 0;
@@ -36,6 +37,8 @@ int main(int argc, char **argv, char **envp)
 		init_t_mini(&t_mini);
 		prompt(envp, &t_mini);
 		lexer(&t_mini);
+		//parser(&t_mini);
+		
 	
 		//execute_command(input, envp);
     }

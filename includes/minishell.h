@@ -27,14 +27,22 @@
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1
 
+typedef struct s_lexer
+{
+	char			*content;
+	struct s_lexer	*next;
+}t_lexer;
+
 typedef struct s_minishell
 {
 	char *input;  //prompt input
-	char **cmd_table; // output du parser
+	t_lexer *lexer_table;
+	char ***cmd_table; // output du parser
 	int pipe; // nb de pipe
 	int input_redirection; // 1 si < 2 si <<
 	int output_redirection; // 1 si > 2 si >>
 	int nb_cmd; // nb de commande a executer
+	char *limiter;
 }t_minishell;
 
 int	print_opening(void);
@@ -42,6 +50,8 @@ int	print_opening(void);
 int	prompt(char **envp, t_minishell *t_mini);
 
 // Lexer related functions
+int	lexer(t_minishell *t_mini);
+
 int	lexer(t_minishell *t_mini);
 
 // Path related functions
