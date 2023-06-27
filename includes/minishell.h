@@ -31,11 +31,21 @@
 typedef struct s_minishell
 {
 	char **cmd_table; // output du parser
-	int pipe; // nb de pipe
-	int input_redirection; // 1 si < 2 si <<
-	int output_redirection; // 1 si > 2 si >>
-	int nb_cmd; // nb de commande a executer
-}t_minishell;
+	int pipe; // nb de pipe			path = ft_access_path(cmd_split, 0);
+			if (!path)
+			{   
+				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd(cmd_split[0], 2);
+				ft_putendl_fd(": command not found", 2);
+				exit(ft_free(path, NULL, cmd_split, NULL));
+			}
+			if(execve(path, cmd_split, envp) == -1)
+			{   
+				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd(cmd_split[0], 2);
+				ft_putendl_fd(": command not found", 2);
+				exit(ft_free(path, NULL, cmd_split, NULL));
+			}
 
 int	print_opening(void);
 char *prompt(char **envp);

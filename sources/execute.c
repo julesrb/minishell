@@ -1,27 +1,80 @@
 
 #include "minishell.h"
 
+int	is_builtin(char *cmd)
+{
+	if(!ft_strncmp(cmd, "cd", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd, "echo", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd, "pwd", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd, "export", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd, "unset", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd, "env", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd, "exit", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	return(EXIT_FAILURE);
+}
+
+int		execute_builtin(char **cmd_split, char **envp)
+{
+	if(!ft_strncmp(cmd_split[0], "pwd", ft_strlen(cmd_split[0])))
+		return (pwd_builtin(void));
+	else if(!ft_strncmp(cmd_split[0], "env", ft_strlen(cmd_split[0])))
+		return (env_builtin(envp));
+/* 	else if(!ft_strncmp(cmd_split[0], "cd", ft_strlen(cmd_split[0])))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd_split[0], "export", ft_strlen(cmd_split[0])))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd_split[0], "unset", ft_strlen(cmd_split[0])))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd_split[0], "echo", ft_strlen(cmd_split[0])))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd_split[0], "exit", ft_strlen(cmd_split[0])))
+		return (EXIT_SUCCESS); */
+	return(EXIT_FAILURE);
+
+}
+
+
 void	exec(char *cmd, char **envp)
 {
 	char **cmd_split;
     char *path;
 
         cmd_split = ft_split(cmd, ' ');
-        path = ft_access_path(cmd_split, 0);
-        if (!path)
-        {   
-            ft_putstr_fd("minishell: ", 2);
-            ft_putstr_fd(cmd_split[0], 2);
-            ft_putendl_fd(": command not found", 2);
-            exit(ft_free(path, NULL, cmd_split, NULL));
-        }
-        if(execve(path, cmd_split, envp) == -1)
-        {   
-            ft_putstr_fd("minishell: ", 2);
-            ft_putstr_fd(cmd_split[0], 2);
-            ft_putendl_fd(": command not found", 2);
-            exit(ft_free(path, NULL, cmd_split, NULL));
-        }
+		if (!is_builtin(cmd[0]))
+		{
+			if (!execute_builtin(cmd_split, envp))
+			{
+				ft_free_tab(cmd_split);
+				exit(EXIT_SUCCESS);
+			}
+			ft_free_tab(cmd_split);
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			path = ft_access_path(cmd_split, 0);
+			if (!path)
+			{   
+				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd(cmd_split[0], 2);
+				ft_putendl_fd(": command not found", 2);
+				exit(ft_free(path, NULL, cmd_split, NULL));
+			}
+			if(execve(path, cmd_split, envp) == -1)
+			{   
+				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd(cmd_split[0], 2);
+				ft_putendl_fd(": command not found", 2);
+				exit(ft_free(path, NULL, cmd_split, NULL));
+			}
+		}
 }
 
 void	insert_pipe(char *cmd, char **envp)
