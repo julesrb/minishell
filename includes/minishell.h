@@ -52,6 +52,6 @@ void	exec(char *cmd, char **envp);
 
 int     output_redirection(t_minishell mini);
 int     input_redirection(t_minishell mini);
-
+void	here_doc(char *limiter);
 #endif
 

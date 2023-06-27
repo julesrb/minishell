@@ -38,14 +38,14 @@ int main(int argc, char **argv, char **envp)
     mini.cmd_table = (char **)malloc(sizeof(mini.cmd_table) * 2);
     mini.cmd_table[0] = ft_strdup("<<EOF");
     mini.cmd_table[1] = ft_strdup("sort");  
-    mini.cmd_table[2] = ft_strdup("grep o");
+    mini.cmd_table[2] = ft_strdup("grep b");
     mini.cmd_table[3] = ft_strdup("file2");
     mini.pipe = 1;
     mini.input_redirection = 2;
     mini.output_redirection = 1;
     mini.nb_cmd = 1;
     argv = NULL;
-    argc = 0;
+    argc = argc + 3;
 	print_opening();
     executor(mini, envp);
     return(0);

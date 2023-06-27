@@ -51,9 +51,6 @@ void	insert_pipe(char *cmd, char **envp)
 	}
 }
 
-
-
-
 void    executor(t_minishell mini, char **envp)
 {
 	int index;
@@ -61,9 +58,16 @@ void    executor(t_minishell mini, char **envp)
 	int fd_outfile = 1;
 
 
-	fd_infile = input_redirection(mini);
-	if (dup2(fd_infile, 0) == -1)
-		exit(EXIT_FAILURE);
+	if (mini.input_redirection != 2)
+	{
+		fd_infile = input_redirection(mini);
+		if (dup2(fd_infile, 0) == -1)
+			exit(EXIT_FAILURE);
+	}
+	else if (mini.input_redirection == 2)
+	{
+		here_doc("EOF");
+	}
 	fd_outfile = output_redirection(mini);
 	index = 1;
 	while (index < 1 + mini.pipe)
