@@ -38,5 +38,7 @@ void	ft_free_tab(char **tab);
 void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2);
 int	ft_free(char *str1, char *str2, char **tab1, char **tab2);
 
+int     env_builtin(char **envp);
+
 #endif
 

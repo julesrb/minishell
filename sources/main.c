@@ -14,18 +14,19 @@
 
 int main(int argc, char **argv, char **envp)
 {
-    char *input;
+/*     char *input; */
 
     argv = NULL;
     argc = 0;
 	print_opening();
-    while(1)
+/*     while(1)
     {
         input = readline("[Minishell] ");
         execute_command(input, envp);
         add_history(input);
     }
-    free(input);
+    free(input); */
+    env_builtin(envp);
     return(0);
 }
 
