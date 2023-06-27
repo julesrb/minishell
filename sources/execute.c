@@ -110,7 +110,6 @@ void    executor(t_minishell mini, char **envp)
 	int fd_infile = 0;
 	int fd_outfile = 1;
 
-
 	if (mini.input_redirection != 2)
 	{
 		fd_infile = input_redirection(mini);
@@ -118,10 +117,10 @@ void    executor(t_minishell mini, char **envp)
 			exit(EXIT_FAILURE);
 	}
 	else if (mini.input_redirection == 2)
-		here_doc("EOF");
+		here_doc(mini.limiter);
 	fd_outfile = output_redirection(mini);
-	index = 1;
-	while (index < 1 + mini.pipe)
+	index = 0;
+	while (index < mini.pipe)
 	{
 		insert_pipe(mini.cmd_table[index], envp);
 		index++;
