@@ -65,9 +65,7 @@ void    executor(t_minishell mini, char **envp)
 			exit(EXIT_FAILURE);
 	}
 	else if (mini.input_redirection == 2)
-	{
 		here_doc("EOF");
-	}
 	fd_outfile = output_redirection(mini);
 	index = 1;
 	while (index < 1 + mini.pipe)

@@ -32,9 +32,9 @@ void	here_doc(char *limiter)
 		here_doc_put_in(limiter, p_fd);
 	else
 	{
+		wait(NULL);
 		close(p_fd[1]);
 		dup2(p_fd[0], 0);
-		wait(NULL);
 	}
 }
 
