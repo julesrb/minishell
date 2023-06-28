@@ -1,136 +1,133 @@
 
 #include "minishell.h"
 
-int	ft_free(char *str1, char *str2, char **tab1, char **tab2)
+int	is_builtin(char *cmd)
 {
-	if (str1)
-		free(str1);
-	if (str2)
-		free(str2);
-	if (tab1)
-		ft_free_tab(tab1);
-	if (tab2)
-		ft_free_tab(tab2);
-	return (1);
+	if(!ft_strncmp(cmd, "cd", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd, "echo", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd, "pwd", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd, "export", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd, "unset", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd, "env", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd, "exit", ft_strlen(cmd)))
+		return (EXIT_SUCCESS);
+	return(EXIT_FAILURE);
 }
 
-void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2)
+int		execute_builtin(char **cmd_split, char **envp)
 {
-	perror(NULL);
-	ft_free(str1, str2, tab1, tab2);
-	exit(EXIT_FAILURE);
-}
+	if(!ft_strncmp(cmd_split[0], "pwd", ft_strlen(cmd_split[0])))
+		return (pwd_builtin(void));
+	else if(!ft_strncmp(cmd_split[0], "env", ft_strlen(cmd_split[0])))
+		return (env_builtin(envp));
+/* 	else if(!ft_strncmp(cmd_split[0], "cd", ft_strlen(cmd_split[0])))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd_split[0], "export", ft_strlen(cmd_split[0])))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd_split[0], "unset", ft_strlen(cmd_split[0])))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd_split[0], "echo", ft_strlen(cmd_split[0])))
+		return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd_split[0], "exit", ft_strlen(cmd_split[0])))
+		return (EXIT_SUCCESS); */
+	return(EXIT_FAILURE);
 
-void	ft_free_tab(char **tab)
-{
-	size_t	i;
-
-	i = 0;
-	if (tab)
-	{
-		while (tab[i])
-		{
-			free(tab[i]);
-			i++;
-		}
-		free(tab);
-	}
-}
-
-char	**ft_access_list_help(char *cmd_2, char **path_from_envp, int len, int i)
-{
-	char	**result;
-
-	result = (char **)malloc(sizeof(result) * ++len);
-	if (!result)
-		ft_free_exit(cmd_2, NULL, NULL, path_from_envp);
-	while (path_from_envp[i] != NULL)
-	{
-		result[i] = ft_strjoin(path_from_envp[i], cmd_2);
-		if (!result[i])
-			ft_free_exit(cmd_2, NULL, NULL, path_from_envp);
-		i++;
-	}
-	result[i] = NULL;
-	return (result);
-}
-
-char	**ft_access_list(char **cmd)
-{
-	int		len;
-	char	**result;
-    char    **path_from_envp;
-    char    *cmd_2;
-
-	len = 0;
-	cmd_2 = (char *)malloc(sizeof(cmd_2) * (ft_strlen(cmd[0]) + 2));
-	if (!cmd_2)
-		ft_free_exit(NULL, NULL, cmd, NULL);
-	cmd_2[0] = '/';
-	ft_strlcpy(cmd_2 + 1, cmd[0], ft_strlen(cmd[0]) + 1);
-	path_from_envp = ft_split(getenv("PATH"), ':');
-	while (path_from_envp[len] != NULL)
-		len++;
-	result = ft_access_list_help(cmd_2, path_from_envp, len, 0);
-	ft_free(cmd_2, NULL, NULL, path_from_envp);
-	return (result);
-}
-
-char	*ft_access_path(char **cmd, int i)
-{
-	char	*result;
-    char **access_list;
-
-	result = NULL;
-	access_list = ft_access_list(cmd);
-	while (access_list[i] != NULL)
-	{
-		if (access(access_list[i], F_OK | X_OK) == 0)
-		{
-			result = malloc(sizeof(result) * ft_strlen(access_list[i]));
-			if (!result)
-				ft_free_exit(NULL, NULL, cmd, access_list);
-			ft_strlcpy(result, access_list[i],
-				ft_strlen(access_list[i]) + 1);
-			break ;
-		}
-		i++;
-	}
-	ft_free_tab(access_list);
-	return (result);
 }
 
 
-void    execute_command(char *input, char **envp)
+void	exec(char *cmd, char **envp)
 {
-    pid_t pid;
-    char **cmd;
+	char **cmd_split;
     char *path;
 
-    pid = fork();
-    if (pid == -1)
-        exit(EXIT_FAILURE);
-    if (pid == 0)
-    {
-        cmd = ft_split(input, ' ');
-        path = ft_access_path(cmd, 0);
-        if (!path)
-        {   
-            ft_putstr_fd("minishell: ", 2);
-            ft_putstr_fd(cmd[0], 2);
-            ft_putendl_fd(": command not found", 2);
-            exit(ft_free(path, NULL, cmd, NULL));
-        }
-        if(execve(path, cmd, envp) == -1)
-        {   
-            ft_putstr_fd("minishell: ", 2);
-            ft_putstr_fd(cmd[0], 2);
-            ft_putendl_fd(": command not found", 2);
-            exit(ft_free(path, NULL, cmd, NULL));
-        }
-    }
-    else
-    {
-        waitpid(pid, NULL, 0);
-    }
+        cmd_split = ft_split(cmd, ' ');
+		if (!is_builtin(cmd[0]))
+		{
+			if (!execute_builtin(cmd_split, envp))
+			{
+				ft_free_tab(cmd_split);
+				exit(EXIT_SUCCESS);
+			}
+			ft_free_tab(cmd_split);
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			path = ft_access_path(cmd_split, 0);
+			if (!path)
+			{   
+				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd(cmd_split[0], 2);
+				ft_putendl_fd(": command not found", 2);
+				exit(ft_free(path, NULL, cmd_split, NULL));
+			}
+			if(execve(path, cmd_split, envp) == -1)
+			{   
+				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd(cmd_split[0], 2);
+				ft_putendl_fd(": command not found", 2);
+				exit(ft_free(path, NULL, cmd_split, NULL));
+			}
+		}
+}
+
+void	insert_pipe(char *cmd, char **envp)
+{
+	int	fd[2];
+	pid_t	pid;
+
+	if (pipe(fd) == -1)
+		exit(EXIT_FAILURE);
+	pid = fork();
+	if (pid == -1)
+		exit(EXIT_FAILURE);
+	if (pid == 0)
+	{
+		close(fd[0]);
+		if (dup2(fd[1], 1) == -1)
+			exit(EXIT_FAILURE);
+		close(fd[1]);
+		exec(cmd, envp);
+	}
+	else
+	{
+		wait(NULL);
+		close(fd[1]);
+		dup2(fd[0], 0);
+		close(fd[0]);
+	}
+}
+
+void    executor(t_minishell mini, char **envp)
+{
+	int index;
+	int fd_infile = 0;
+	int fd_outfile = 1;
+
+	if (mini.input_redirection != 2)
+	{
+		fd_infile = input_redirection(mini);
+		if (dup2(fd_infile, 0) == -1)
+			exit(EXIT_FAILURE);
+	}
+	else if (mini.input_redirection == 2)
+		here_doc(mini.limiter);
+	fd_outfile = output_redirection(mini);
+	index = 0;
+	while (index < mini.pipe)
+	{
+		insert_pipe(mini.cmd_table[index], envp);
+		index++;
+	}
+	if (dup2(fd_outfile, 1) == -1)
+		exit(EXIT_FAILURE);
+	if (fd_outfile != 1)
+		close(fd_outfile);
+	exec(mini.cmd_table[index], envp);
 }

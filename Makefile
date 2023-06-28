@@ -11,7 +11,7 @@ OBJ_DIREC := build/
 
 # -----------\ Compilation \-------------------------------------------------- #
 
-CFLAGS	:= -Wextra -Wall -Werror -g
+CFLAGS	:= -Wextra -Wall -g
 MD		:= -mkdir -p
 
 # -----------\ Files & sources \---------------------------------------------- #
@@ -23,6 +23,8 @@ OBJS := $(addprefix $(OBJ_DIREC), $(notdir $(SRCS:.c=.o)))
 
 # -----------\ Rules \-------------------------------------------------------- #
 
+.DEFAULT_GOAL := all
+.DELETE_ON_ERROR:
 
 all: $(NAME)
 
