@@ -137,7 +137,7 @@ int	yield_redirection(char *redir, t_minishell *mini)
 		str[i] = redir[i];
 		i++;
 	}
-	str[2] = 0;
+	str[i] = 0;
 	add_lexer_table(&mini->lexer_table, str);
 	return (len);
 }

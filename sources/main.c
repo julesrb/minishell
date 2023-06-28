@@ -43,7 +43,7 @@ int main(int argc, char **argv, char **envp)
 		parser(&mini);
  			print_t_mini(&mini);
 			print_cmd_table(&mini, mini.nb_cmd); 
-		executor(mini, envp);
+		//executor(mini, envp);
 		free(mini.cmd_table);
     }
     return(0);
