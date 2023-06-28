@@ -15,13 +15,6 @@
 
 int	check_redirection(t_minishell *mini, char *redir)
 {
-	if (redir[0] != redir[1])
-	{
-		if (redir[0] == '<')
-			mini->input_redirection = 1;
-		if (redir[0] == '>')
-			mini->output_redirection = 1;
-	}
 	if (redir[0] == redir[1])
 	{
 		if (redir[0] == '<')
@@ -33,7 +26,17 @@ int	check_redirection(t_minishell *mini, char *redir)
 		if (redir[0] == '>')
 			mini->output_redirection = 2;
 	}
-		// think about edge case like <> or ><
+	else 
+	{
+		if (redir[0] == '<')
+			mini->input_redirection = 1;
+		if (redir[0] == '>')
+			mini->output_redirection = 1;
+	}
+	if (redir[0] == '<' && redir[1] == '>')
+		ft_printf("redirection parser error.");
+	if (redir[0] == '>' && redir[1] == '<')
+		ft_printf("redirection parser error.");
 	return (0);
 }
 
@@ -86,6 +89,8 @@ int	parser(t_minishell *mini)
 		curr = build_command(mini, cmd, curr);
 		cmd++;
 	}
+	//check_command and pipe;
+	mini->nb_cmd = mini->pipe + 1;
 	deallocate(&mini->lexer_table);
 	return (1);
 }
