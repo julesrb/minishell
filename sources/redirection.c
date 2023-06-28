@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-void	here_doc_put_in(char *limiter, int *p_fd)
+void	here_doc_put_in(char *limiter, int *fds)
 {
 	char	*ret;
 
-	close(p_fd[0]);
+	close(fds[0]);
 	while (1)
 	{
 		ret = get_next_line(0);
@@ -13,31 +13,30 @@ void	here_doc_put_in(char *limiter, int *p_fd)
 			free(ret);
 			exit(0);
 		}
-		ft_putstr_fd(ret, p_fd[1]);
+		ft_putstr_fd(ret, fds[1]);
 		free(ret);
 	}
 }
 
 void	here_doc(char *limiter)
 {
-	int		p_fd[2];
+	int		fds[2];
 	pid_t	pid;
 
-	if (pipe(p_fd) == -1)
+	if (pipe(fds) == -1)
 		exit(0);
 	pid = fork();
 	if (pid == -1)
 		exit(0);
 	if (!pid)
-		here_doc_put_in(limiter, p_fd);
+		here_doc_put_in(limiter, fds);
 	else
 	{
 		wait(NULL);
-		close(p_fd[1]);
-		dup2(p_fd[0], 0);
+		close(fds[1]);
+		dup2(fds[0], 0);
 	}
 }
-
 
 int     input_redirection(t_minishell mini)
 {
