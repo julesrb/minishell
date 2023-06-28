@@ -7,6 +7,6 @@ int    pwd_builtin(void)
     pwd = getenv("PWD");
     if (!pwd)
         return(EXIT_FAILURE);
-    printf("%s\n", pwd);
-    return(EXIT_SUCESS);
+    ft_putendl_fd(pwd, 1);
+    return(EXIT_SUCCESS);
 }

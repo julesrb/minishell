@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 int	add_lexer_table(t_lexer **root, char *str)
 {
 	t_lexer	*new_node;

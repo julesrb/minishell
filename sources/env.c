@@ -7,7 +7,7 @@ int     env_builtin(char **envp)
     i = 0;
     while (envp[i] != NULL)
     {
-        printf("%s\n", envp[i]);
+        ft_putendl_fd(envp[i], 1);
         i++;
     }
     return(EXIT_SUCCESS);
