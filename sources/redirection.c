@@ -45,11 +45,11 @@ int     input_redirection(t_minishell mini)
     fd_infile = 0;
     if (mini.input_redirection == 1)
     {
-	    fd_infile = open(mini.infile, O_RDONLY, 0777);
+	    fd_infile = open(mini.in_file, O_RDONLY, 0777);
         if (fd_infile == -1)
 	    {
             ft_putstr_fd("bash: ", 2);
-            perror(mini.infile);
+            perror(mini.in_file);
             exit (EXIT_FAILURE);
     	}
     }
@@ -63,13 +63,13 @@ int     output_redirection(t_minishell mini)
     fd_outfile = 1;
     if (mini.output_redirection == 1)
     {
-	    fd_outfile = open(mini.outfile, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	    fd_outfile = open(mini.out_file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
         if (fd_outfile == -1)
 		    perror(NULL);
     }
     else if (mini.output_redirection == 2)
     {
-	    fd_outfile = open(mini.outfile, O_WRONLY | O_CREAT | O_APPEND, 0777);
+	    fd_outfile = open(mini.out_file, O_WRONLY | O_CREAT | O_APPEND, 0777);
         if (fd_outfile == -1)
 		    perror(NULL);
     }

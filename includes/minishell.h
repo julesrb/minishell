@@ -34,12 +34,6 @@ typedef struct s_lexer
 	struct s_lexer	*next;
 }t_lexer;
 
-typedef struct s_lexer
-{
-	char			*content;
-	struct s_lexer	*next;
-}t_lexer;
-
 typedef struct s_minishell
 {
 	char *input;  //prompt input
