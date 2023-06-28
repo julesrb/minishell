@@ -43,6 +43,8 @@ typedef struct s_minishell
 	int output_redirection; // 1 si > 2 si >>
 	int nb_cmd; // nb de commande a executer
 	char *limiter;
+	char *in_file;
+	char *out_file;
 }t_minishell;
 
 int	print_opening(void);
@@ -53,6 +55,14 @@ int	prompt(char **envp, t_minishell *t_mini);
 int	lexer(t_minishell *t_mini);
 
 int	parser(t_minishell *t_mini);
+
+
+//Utils
+int		print_t_mini(t_minishell *t_mini);
+int		print_lst(t_lexer *lst);
+void	deallocate(t_lexer **head);
+int		print_cmd_table(t_minishell *t_mini, int cmd);
+
 
 // Path related functions
 void    execute_command(char *input, char **envp);

@@ -12,16 +12,6 @@
 
 #include "minishell.h"
 
-int	print_t_mini(t_minishell *t_mini)
-{
-	ft_printf("\ninput = %s\n", t_mini->input);
-	ft_printf("pipe = %i\n", t_mini->pipe);
-	ft_printf("in_redir = %i\n", t_mini->input_redirection);
-	ft_printf("out_redir = %i\n", t_mini->output_redirection);
-	ft_printf("nb_cmd = %i\n", t_mini->nb_cmd);
-	//ft_printf("input = %s\n",t_mini->cmd_table);
-	return (0);
-}
 
 int	add_lexer_table(t_lexer **root, char *str)
 {
@@ -155,30 +145,8 @@ int	yield_redirection(char *redir, t_minishell *t_mini)
 	return (0);
 }
 
-int	print_lst(t_lexer *lst)
-{
-	int i;
-
-	i = 1;
-	ft_printf("\n");
-	while (lst != NULL)
-	{
-		printf("token %i = %s \n", i, lst->content);
-		lst = lst->next;
-		i++;
-	}
-	return (0);
-}
-
 int	lexer(t_minishell *t_mini)
 {
-	 // deal with " "
-	 // deal with ''
-	 // deal with |
-	 // deal with < << >> >
-	 // deal with strings
-		 // deal with command
-	 // deal with $
 	char *input;
 	int i;
 
@@ -200,9 +168,7 @@ int	lexer(t_minishell *t_mini)
 			i++;
 	}
 	t_mini->nb_cmd = t_mini->pipe + 1;
-	print_t_mini(t_mini);
-	print_lst(t_mini->lexer_table);
+	//print_lst(t_mini->lexer_table);
 	free(input);
-	
 	return (0);
 }

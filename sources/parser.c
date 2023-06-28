@@ -13,28 +13,6 @@
 #include "minishell.h"
 
 
-int	print_cmd_table(t_minishell *t_mini, int cmd)
-{
-	int i = 0;
-
-	while (i < cmd)
-	{
-		printf("command %i = %s\n", i, t_mini->cmd_table[i]);
-		i++;
-	}
-	return (0);
-}
-
-/* int	translate_token(t_lexer *lexer)
-{
-	t_lexer *curr;
-
-	curr = lexer;
-	while (curr != NULL)
-	{
-		if (curr->content[0] == '')
-	}
-} */
 int	check_redirection(t_minishell *t_mini, char *redir)
 {
 	if (redir[0] != redir[1])
@@ -89,21 +67,6 @@ t_lexer	*build_command(t_minishell *t_mini, int cmd, t_lexer *lexer_pos)
 	return (curr);
 }
 
-void	deallocate(t_lexer **head)
-{
-	t_lexer	*curr;
-	t_lexer	*trash;
-
-	curr = *head;
-	while (curr != NULL)
-	{
-		trash = curr;
-		free(curr->content);
-		curr = curr->next;
-		free(trash);
-	}
-	*head = NULL;
-}
 
 int	parser(t_minishell *t_mini)
 {
@@ -124,6 +87,6 @@ int	parser(t_minishell *t_mini)
 		cmd++;
 	}
 	deallocate(&t_mini->lexer_table);
-	print_cmd_table(t_mini, cmd);
+	//print_cmd_table(t_mini, cmd);
 	return (1);
 }
