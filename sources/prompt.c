@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   prompt.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,37 +12,14 @@
 
 #include "minishell.h"
 
-int	init_t_mini(t_minishell *t_mini)
+int	prompt(char **envp, t_minishell *t_mini)
 {
-	t_mini->input = NULL;
-	t_mini->lexer_table = NULL;
-	t_mini->cmd_table = NULL;
-	t_mini->pipe = 0;
-	t_mini->input_redirection = 0;
-	t_mini->output_redirection = 0;
-	t_mini->nb_cmd = 0;
+    t_mini->input = readline("[Minishell] ");
+	(void)envp;
+    //execute_command(input, envp);
+	add_history(t_mini->input);
+
+	//free(input);
 	return (0);
-}
-
-
-int main(int argc, char **argv, char **envp)
-{
-	t_minishell t_mini;
-
-	(void)argv;
-	(void)argc;
-	print_opening();
-    while(1)  
-    {
-		init_t_mini(&t_mini);
-		prompt(envp, &t_mini);
-		lexer(&t_mini);
-		parser(&t_mini);
-		free(t_mini.cmd_table);
-		
-	
-		//execute_command(input, envp);
-    }
-    return(0);
 }
 
