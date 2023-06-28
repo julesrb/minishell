@@ -79,6 +79,7 @@ void	exec(char *cmd, char **envp);
 
 // Builtin functions
 int    pwd_builtin(void);
+int     env_builtin(char **envp);
 
 int     output_redirection(t_minishell mini);
 int     input_redirection(t_minishell mini);

@@ -34,6 +34,7 @@ int	init_t_mini(t_minishell *mini)
     envp = NULL;
 	print_opening();
 /*     while(1)
+/*     while(1)
     {
         input = readline("[Minishell] ");
         execute_command(input, envp);
