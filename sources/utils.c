@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,41 +12,18 @@
 
 #include "minishell.h"
 
-int	init_t_mini(t_minishell *mini)
+void	deallocate(t_lexer **head)
 {
-	mini->input = NULL;
-	mini->lexer_table = NULL;
-	mini->cmd_table = NULL;
-	mini->limiter = NULL;
-	mini->in_file = NULL;
-	mini->out_file = NULL;
-	mini->pipe = 0;
-	mini->input_redirection = 0;
-	mini->output_redirection = 0;
-	mini->nb_cmd = 0;
-	return (0);
+	t_lexer	*curr;
+	t_lexer	*trash;
+
+	curr = *head;
+	while (curr != NULL)
+	{
+		trash = curr;
+		free(curr->content);
+		curr = curr->next;
+		free(trash);
+	}
+	*head = NULL;
 }
-
-int main(int argc, char **argv, char **envp)
-{
-	t_minishell mini;
-
-	(void)argv;
-	(void)argc;
-	print_opening();
-    while(1)  
-    {
-		init_t_mini(&mini);
-		prompt(envp, &mini);
-		lexer(&mini);
-			print_lst(mini.lexer_table);
-		parser(&mini);
-			print_t_mini(&mini);
-			print_cmd_table(&mini, mini.nb_cmd);
-			
-		//execute_command(input, envp);
-		free(mini.cmd_table);
-    }
-    return(0);
-}
-

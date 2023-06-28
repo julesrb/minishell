@@ -1,34 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   prompt.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbussier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/28 13:16:13 by gbussier          #+#    #+#             */
-/*   Updated: 2022/12/06 12:25:58 by gbussier         ###   ########.fr       */
+/*   Created: 2023/06/22 13:05:00 by jubernar          #+#    #+#             */
+/*   Updated: 2023/06/22 13:05:02 by jubernar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-#include <stdio.h>
-#include <ctype.h>
+#include "minishell.h"
 
-int	ft_isalpha(int c);
-
-int	main(void)
-{	
-	int	c;
-
-	c = 'z';
-	printf("%d\n",ft_isalpha(c));
-	printf("%d\n",isalpha(c));
-}
-*/
-
-int	ft_isalpha(int c)
+int	prompt(char **envp, t_minishell *t_mini)
 {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
-		return (1);
+    t_mini->input = readline("[Minishell] ");
+	(void)envp;
+    //execute_command(input, envp);
+	add_history(t_mini->input);
+
+	//free(input);
 	return (0);
 }
+

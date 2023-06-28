@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,41 +12,39 @@
 
 #include "minishell.h"
 
-int	init_t_mini(t_minishell *mini)
+int	print_t_mini(t_minishell *mini)
 {
-	mini->input = NULL;
-	mini->lexer_table = NULL;
-	mini->cmd_table = NULL;
-	mini->limiter = NULL;
-	mini->in_file = NULL;
-	mini->out_file = NULL;
-	mini->pipe = 0;
-	mini->input_redirection = 0;
-	mini->output_redirection = 0;
-	mini->nb_cmd = 0;
+	ft_printf("pipe = %i\n", mini->pipe);
+	ft_printf("in_redir = %i\n", mini->input_redirection);
+	ft_printf("out_redir = %i\n", mini->output_redirection);
+	ft_printf("nb_cmd = %i\n", mini->nb_cmd);
+	//ft_printf("input = %s\n",t_mini->cmd_table);
 	return (0);
 }
 
-int main(int argc, char **argv, char **envp)
+int	print_lst(t_lexer *lst)
 {
-	t_minishell mini;
+	int i;
 
-	(void)argv;
-	(void)argc;
-	print_opening();
-    while(1)  
-    {
-		init_t_mini(&mini);
-		prompt(envp, &mini);
-		lexer(&mini);
-			print_lst(mini.lexer_table);
-		parser(&mini);
-			print_t_mini(&mini);
-			print_cmd_table(&mini, mini.nb_cmd);
-			
-		//execute_command(input, envp);
-		free(mini.cmd_table);
-    }
-    return(0);
+	i = 1;
+	ft_printf("\n");
+	while (lst != NULL)
+	{
+		printf("token %i = %s \n", i, lst->content);
+		lst = lst->next;
+		i++;
+	}
+	return (0);
 }
 
+int	print_cmd_table(t_minishell *mini, int cmd)
+{
+	int i = 0;
+
+	while (i < cmd)
+	{
+		printf("command %i = %s\n", i, mini->cmd_table[i]);
+		i++;
+	}
+	return (0);
+}
