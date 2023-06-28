@@ -14,6 +14,7 @@
 
 int	init_t_mini(t_minishell *mini)
 {
+<<<<<<< HEAD
 	mini->input = NULL;
 	mini->lexer_table = NULL;
 	mini->cmd_table = NULL;
@@ -25,6 +26,23 @@ int	init_t_mini(t_minishell *mini)
 	mini->output_redirection = 0;
 	mini->nb_cmd = 0;
 	return (0);
+=======
+/*     char *input; */
+
+    argv = NULL;
+    argc = 0;
+    envp = NULL;
+	print_opening();
+/*     while(1)
+    {
+        input = readline("[Minishell] ");
+        execute_command(input, envp);
+        add_history(input);
+    }
+    free(input); */
+    pwd_builtin();
+    return(0);
+>>>>>>> pwd
 }
 
 int main(int argc, char **argv, char **envp)

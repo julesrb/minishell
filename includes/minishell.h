@@ -77,6 +77,9 @@ void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2);
 int	ft_free(char *str1, char *str2, char **tab1, char **tab2);
 void	exec(char *cmd, char **envp);
 
+// Builtin functions
+int    pwd_builtin(void);
+
 int     output_redirection(t_minishell mini);
 int     input_redirection(t_minishell mini);
 void	here_doc(char *limiter);
