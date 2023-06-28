@@ -49,19 +49,21 @@ typedef struct s_minishell
 
 int	print_opening(void);
 
-int	prompt(char **envp, t_minishell *t_mini);
+int	prompt(char **envp, t_minishell *mini);
 
 // Lexer related functions
-int	lexer(t_minishell *t_mini);
+int	lexer(t_minishell *mini);
 
-int	parser(t_minishell *t_mini);
+int	parser(t_minishell *mini);
 
 
-//Utils
-int		print_t_mini(t_minishell *t_mini);
-int		print_lst(t_lexer *lst);
+// Utils
 void	deallocate(t_lexer **head);
-int		print_cmd_table(t_minishell *t_mini, int cmd);
+
+// Debug
+int		print_t_mini(t_minishell *mini);
+int		print_lst(t_lexer *lst);
+int		print_cmd_table(t_minishell *mini, int cmd);
 
 
 // Path related functions

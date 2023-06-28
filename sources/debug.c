@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,18 +12,39 @@
 
 #include "minishell.h"
 
-void	deallocate(t_lexer **head)
+int	print_t_mini(t_minishell *mini)
 {
-	t_lexer	*curr;
-	t_lexer	*trash;
+	ft_printf("pipe = %i\n", mini->pipe);
+	ft_printf("in_redir = %i\n", mini->input_redirection);
+	ft_printf("out_redir = %i\n", mini->output_redirection);
+	ft_printf("nb_cmd = %i\n", mini->nb_cmd);
+	//ft_printf("input = %s\n",t_mini->cmd_table);
+	return (0);
+}
 
-	curr = *head;
-	while (curr != NULL)
+int	print_lst(t_lexer *lst)
+{
+	int i;
+
+	i = 1;
+	ft_printf("\n");
+	while (lst != NULL)
 	{
-		trash = curr;
-		free(curr->content);
-		curr = curr->next;
-		free(trash);
+		printf("token %i = %s \n", i, lst->content);
+		lst = lst->next;
+		i++;
 	}
-	*head = NULL;
+	return (0);
+}
+
+int	print_cmd_table(t_minishell *mini, int cmd)
+{
+	int i = 0;
+
+	while (i < cmd)
+	{
+		printf("command %i = %s\n", i, mini->cmd_table[i]);
+		i++;
+	}
+	return (0);
 }

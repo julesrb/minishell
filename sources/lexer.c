@@ -33,7 +33,7 @@ int	add_lexer_table(t_lexer **root, char *str)
 	return (0);
 }
 
-int	yield_word(char *token, t_minishell *t_mini)
+int	yield_word(char *token, t_minishell *mini)
 {
 	int i;
 	int len;
@@ -54,11 +54,11 @@ int	yield_word(char *token, t_minishell *t_mini)
 		i++;
 	}
 	str[i] = '\0';
-	add_lexer_table(&t_mini->lexer_table, str);
+	add_lexer_table(&mini->lexer_table, str);
 	return (i);
 }
 
-int	yield_quote(char *token, t_minishell *t_mini)
+int	yield_quote(char *token, t_minishell *mini)
 {
 	int i;
 	int len;
@@ -82,11 +82,11 @@ int	yield_quote(char *token, t_minishell *t_mini)
 		i++;
 	}
 	str[i] = '\0';
-	add_lexer_table(&t_mini->lexer_table, str);
+	add_lexer_table(&mini->lexer_table, str);
 	return (i + 1); // + 1 is go beyond the closing quote
 }
 
-int	yield_var(char *token, t_minishell *t_mini)
+int	yield_var(char *token, t_minishell *mini)
 {
 	char *str;
 	int i;
@@ -105,23 +105,23 @@ int	yield_var(char *token, t_minishell *t_mini)
 		i++;
 	}
 	str[i] = '\0';
-	add_lexer_table(&t_mini->lexer_table, str);
+	add_lexer_table(&mini->lexer_table, str);
 	return (i);
 }
 
-int	yield_pipe(char *token, t_minishell *t_mini)
+int	yield_pipe(char *token, t_minishell *mini)
 {
 	char *str;
 
-	t_mini->pipe += 1;
+	mini->pipe += 1;
 	str = malloc(sizeof (char) * (1 + 1));
 	str[0] = token[0];
 	str[1] = 0;
-	add_lexer_table(&t_mini->lexer_table, str);
+	add_lexer_table(&mini->lexer_table, str);
 	return (1);
 }
 
-int	yield_redirection(char *redir, t_minishell *t_mini)
+int	yield_redirection(char *redir, t_minishell *mini)
 {
 	char *str;
 
@@ -130,7 +130,7 @@ int	yield_redirection(char *redir, t_minishell *t_mini)
 		str = malloc(sizeof (char) * (1 + 1));
 		str[0] = redir[0];
 		str[1] = 0;
-		add_lexer_table(&t_mini->lexer_table, str);
+		add_lexer_table(&mini->lexer_table, str);
 		return (1);
 	}
 	if (redir[0] == redir[1])
@@ -139,36 +139,35 @@ int	yield_redirection(char *redir, t_minishell *t_mini)
 		str[0] = redir[0];
 		str[1] = redir[1];
 		str[2] = 0;
-		add_lexer_table(&t_mini->lexer_table, str);
+		add_lexer_table(&mini->lexer_table, str);
 		return (2);
 	}
 	return (0);
 }
 
-int	lexer(t_minishell *t_mini)
+int	lexer(t_minishell *mini)
 {
 	char *input;
 	int i;
 
 	i = 0;
-	input = t_mini->input;
+	input = mini->input;
 	while (input[i] != 0)
 	{
 		if (input[i] == '<' || input[i] == '>')
-			i += yield_redirection(&input[i], t_mini);  // done
+			i += yield_redirection(&input[i], mini);  // done
 		else if (ft_isalpha(input[i]) == 1 || input[i] == '-')
-			i += yield_word(&input[i], t_mini); 		// WIP
+			i += yield_word(&input[i], mini); 		// WIP
 		else if (input[i] == 39 || input[i] == 34)
-			i += yield_quote(&input[i], t_mini);
+			i += yield_quote(&input[i], mini);
 	 	else if (input[i] == '$')
-			i += yield_var(&input[i], t_mini);
+			i += yield_var(&input[i], mini);
 		else if (input[i] == '|' )
-			i += yield_pipe(&input[i], t_mini);
+			i += yield_pipe(&input[i], mini);
 		else
 			i++;
 	}
-	t_mini->nb_cmd = t_mini->pipe + 1;
-	//print_lst(t_mini->lexer_table);
+	mini->nb_cmd = mini->pipe + 1;
 	free(input);
 	return (0);
 }
