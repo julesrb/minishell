@@ -105,31 +105,67 @@ int	insert_pipe(char *cmd, char **envp)
 	return(EXIT_FAILURE);
 }
 
+int	execute_last_command(t_minishell mini, char **envp, int index)
+{
+	int fd[2];
+	pid_t pid;
+
+	pipe(fd);
+	pid = fork();
+	if (pid == 0)
+	{
+		close(fd[0]);
+		close(fd[1]);
+		exec(mini.cmd_table[index], envp);
+	}
+	else
+	{
+		wait(NULL);
+		close(fd[1]);
+		close(fd[0]);
+		return(EXIT_SUCCESS);
+	}
+	return(EXIT_SUCCESS);
+}
+
 int    executor(t_minishell mini, char **envp)
 {
 	int index;
-	int fd_infile = 0;
-	int fd_outfile = 1;
+	int fd_infile = -1;
+	int fd_outfile = -1;
 
-	if (mini.input_redirection != 2)
+	mini.in_file = ft_strdup("file1");
+	mini.out_file = ft_strdup("file5");
+	mini.limiter = ft_strdup("EOF");
+	mini.input_redirection = 0;
+	mini.output_redirection = 0;
+	if (mini.input_redirection)
 	{
-		fd_infile = input_redirection(mini);
-		if (dup2(fd_infile, 0) == -1)
-			return(EXIT_FAILURE);
+		if (mini.input_redirection == 1)
+		{
+			fd_infile = input_redirection(mini);
+			if (dup2(fd_infile, 0) == -1)
+				return(EXIT_FAILURE);
+			close(fd_infile);
+		}
+		else if (mini.input_redirection == 2)
+			here_doc(mini.limiter);
 	}
-	else if (mini.input_redirection == 2)
-		here_doc(mini.limiter);
-	fd_outfile = output_redirection(mini);
 	index = 0;
 	while (index < mini.pipe)
 	{
 		insert_pipe(mini.cmd_table[index], envp);
 		index++;
 	}
-	if (dup2(fd_outfile, 1) == -1)
-		return(EXIT_FAILURE);
-	if (fd_outfile != 1)
+	if (mini.output_redirection)
+	{
+		fd_outfile = output_redirection(mini);
+		if (fd_outfile == -1)
+			perror(NULL);
+		if (dup2(fd_outfile, 1) == -1)
+			return(EXIT_FAILURE);
 		close(fd_outfile);
-	exec(mini.cmd_table[index], envp);
+	}
+	execute_last_command(mini, envp, index);
 	return(EXIT_SUCCESS);
 }

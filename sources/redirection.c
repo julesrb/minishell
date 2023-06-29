@@ -42,17 +42,13 @@ int     input_redirection(t_minishell mini)
 {
     int fd_infile;
 
-    fd_infile = 0;
-    if (mini.input_redirection == 1)
-    {
-	    fd_infile = open(mini.in_file, O_RDONLY, 0777);
-        if (fd_infile == -1)
-	    {
-            ft_putstr_fd("bash: ", 2);
-            perror(mini.in_file);
-            exit (EXIT_FAILURE);
-    	}
-    }
+	fd_infile = open(mini.in_file, O_RDONLY, 0777);
+	if (fd_infile == -1)
+	{
+		ft_putstr_fd("bash: ", 2);
+		perror(mini.in_file);
+		return (EXIT_FAILURE);
+	}
     return (fd_infile);
 }
 

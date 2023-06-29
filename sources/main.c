@@ -44,6 +44,7 @@ int main(int argc, char **argv, char **envp)
 /* 			print_t_mini(&mini);
 			print_cmd_table(&mini, mini.nb_cmd); */	
 		executor(mini, envp);
+		add_history(mini.input);
 		free(mini.cmd_table);
     }
     return(0);
