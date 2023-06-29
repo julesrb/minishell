@@ -45,13 +45,13 @@ int main(int argc, char **argv, char **envp)
 		parser(&mini);
  			print_t_mini(&mini);
 			//print_cmd_table(&mini, mini.nb_cmd);
-		if (mini.error_pipe != 0 || mini.error_redir != 0)
+	/* 	if (mini.error_pipe != 0 || mini.error_redir != 0)
 			{
 				ft_printf("Parsing ERROR\n");
 				//free_cmd_table(mini.cmd_table);
 			}
 		else
-		executor(mini, envp);
+		executor(mini, envp); */
 		//free_cmd_table(mini.cmd_table);
 		//free_redir_files_names();
     }
