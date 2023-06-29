@@ -163,6 +163,6 @@ int	lexer(t_minishell *mini)
 		else
 			i++;
 	}
-	free(input);
+	//free(input);
 	return (0);
 }

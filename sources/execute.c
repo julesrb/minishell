@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 int	is_builtin(char *cmd)
@@ -105,40 +104,12 @@ int	insert_pipe(char *cmd, char **envp)
 	return(EXIT_FAILURE);
 }
 
-int	execute_last_command(t_minishell mini, char **envp, int index)
-{
-	int fd[2];
-	pid_t pid;
-
-	pipe(fd);
-	pid = fork();
-	if (pid == 0)
-	{
-		close(fd[0]);
-		close(fd[1]);
-		exec(mini.cmd_table[index], envp);
-	}
-	else
-	{
-		wait(NULL);
-		close(fd[1]);
-		close(fd[0]);
-		return(EXIT_SUCCESS);
-	}
-	return(EXIT_SUCCESS);
-}
-
 int    executor(t_minishell mini, char **envp)
 {
 	int index;
 	int fd_infile = -1;
 	int fd_outfile = -1;
 
-	mini.in_file = ft_strdup("file1");
-	mini.out_file = ft_strdup("file5");
-	mini.limiter = ft_strdup("EOF");
-	mini.input_redirection = 0;
-	mini.output_redirection = 0;
 	if (mini.input_redirection)
 	{
 		if (mini.input_redirection == 1)
@@ -157,15 +128,33 @@ int    executor(t_minishell mini, char **envp)
 		insert_pipe(mini.cmd_table[index], envp);
 		index++;
 	}
-	if (mini.output_redirection)
+
+	int fd[2];
+	pid_t pid;
+
+	pipe(fd);
+	pid = fork();
+	if (pid == 0)
 	{
-		fd_outfile = output_redirection(mini);
-		if (fd_outfile == -1)
-			perror(NULL);
-		if (dup2(fd_outfile, 1) == -1)
-			return(EXIT_FAILURE);
-		close(fd_outfile);
+		close(fd[0]);
+		close(fd[1]);
+		if (mini.output_redirection)
+		{
+			fd_outfile = output_redirection(mini);
+			if (fd_outfile == -1)
+				perror(NULL);
+			if (dup2(fd_outfile, 1) == -1)
+				return(EXIT_FAILURE);
+			close(fd_outfile);
+		}
+		exec(mini.cmd_table[index], envp);
 	}
-	execute_last_command(mini, envp, index);
+	else
+	{
+		wait(NULL);
+		close(fd[1]);
+		close(fd[0]);
+		return(EXIT_SUCCESS);
+	}
 	return(EXIT_SUCCESS);
 }
