@@ -24,10 +24,7 @@ t_lexer	*check_redir_file(t_minishell *mini, t_lexer *lexer_pos)
 	while (curr->content[i] != 0)
 	{
 		if (ft_isalnum(curr->content[i]) == 0 && curr->content[i] != '.')
-		{
-			ft_printf("ERROR FILE");
 			mini->error_redir = 1;
-		}
 		i++;
 	}
 	if (mini->error_redir == 0)
@@ -45,7 +42,7 @@ t_lexer	*check_redir_file(t_minishell *mini, t_lexer *lexer_pos)
 
 int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
 {
-	//ft_printf("HERE\n");
+	ft_printf("HERE\n");
 	if (cmd_nb == 0 || cmd_nb == mini->nb_cmd - 1) // edge case where in and out are inversed ?
 	{
 		if (redir[0] == redir[1])
@@ -64,10 +61,7 @@ int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
 		}
 		if ((redir[0] == '<' && redir[1] == '>') ||
 			(redir[0] == '>' && redir[1] == '<'))
-			{
-				ft_printf("redirection parser error.");
 				mini->error_redir = 1;
-			}
 	}
 	if (mini->input_redirection != 0 || mini->output_redirection != 0)
 		return (1);
@@ -76,18 +70,13 @@ int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
 
 t_lexer	*build_command(t_minishell *mini, int cmd, t_lexer *lexer_pos)
 {
-	int arg;
 	t_lexer	*curr;
 	char *command;
 
-	arg = 0;
 	curr = lexer_pos;
 	command = ft_strdup("");
-	ft_printf("**\n");
 	if (curr->content[0] == '|') // as first // as midle // as last // double
-	{
 		curr = curr->next;
-	}
 	while (curr != NULL && curr->content[0] != '|')
 	{
 		if (curr->content[0] == '<' || curr->content[0] == '>')
@@ -95,17 +84,24 @@ t_lexer	*build_command(t_minishell *mini, int cmd, t_lexer *lexer_pos)
 			if (check_redirection(mini, curr->content, cmd) == 1)
 				curr = check_redir_file(mini, curr);
 		}
-		command = ft_strjoin(command, curr->content);
-		command = ft_strjoin(command, " ");
-		ft_printf("+\n");
-		curr = curr->next;
-		ft_printf("-\n");
-		arg++;
+		if (curr != NULL)
+		{
+			command = ft_strjoin(command, curr->content);
+			command = ft_strjoin(command, " ");
+			curr = curr->next;
+		}
 	}
 	mini->cmd_table[cmd] = command;
-	printf("command %i = %s\n", cmd, mini->cmd_table[cmd]);
-	ft_printf("=\n");
 	return (curr);
+}
+
+int	last_token_is_pipe(t_lexer *curr)
+{
+	while (curr->next != NULL)
+		curr = curr->next;
+	if (curr->content[0] == '|')
+		return (1);
+	return (0);
 }
 
 int	check_pipe_error(t_minishell *mini)
@@ -116,14 +112,15 @@ int	check_pipe_error(t_minishell *mini)
 
 	if (curr->content[0] == '|') //check for pipe at begining
 		mini->error_pipe = 1;
-	//check for pipe at end begining
-
-	while (curr != NULL)
+	if(last_token_is_pipe(curr) == 1)
+		mini->error_pipe = 1;
+	while (curr->next != NULL)
 	{
-		if (curr->content[0] == '|')
-
+		if (curr->content[0] == '|' && curr->next->content[0] == '|')
+			mini->error_pipe = 1;
 		curr = curr->next;
 	}
+	return(0);
 }
 
 int	parser(t_minishell *mini)
@@ -141,21 +138,14 @@ int	parser(t_minishell *mini)
 
 	// translate_var_token(curr); // translate the var
 
-	// check_redirection;
-		// add the limiter option
 	while (curr != NULL)
 	{
 		curr = build_command(mini, cmd, curr);
 		cmd++;
 	}
-	//check_command();  and pipe;
-
 	deallocate(&mini->lexer_table);
-	ft_printf("Parser_done\n");
 	return (1);
 }
-// redir error DONE
-// pipe error
+
 // command error or empty
-// check redir first and last 
-	//check redir file and asign
+// translate_var_token(curr); // translate the var

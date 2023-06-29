@@ -27,3 +27,5 @@ void	deallocate(t_lexer **head)
 	}
 	*head = NULL;
 }
+
+

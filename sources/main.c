@@ -41,13 +41,19 @@ int main(int argc, char **argv, char **envp)
 		init_t_mini(&mini);
 		prompt(envp, &mini);
 		lexer(&mini);
- 			print_lst(mini.lexer_table); 
+ 			//print_lst(mini.lexer_table); 
 		parser(&mini);
  			print_t_mini(&mini);
-			print_cmd_table(&mini, mini.nb_cmd); 
-		//executor(mini, envp);
-		//ft_printf("just before free\n");
-		//free(mini.cmd_table);
+			//print_cmd_table(&mini, mini.nb_cmd);
+		if (mini.error_pipe != 0 || mini.error_redir != 0)
+			{
+				ft_printf("Parsing ERROR\n");
+				//free_cmd_table(mini.cmd_table);
+			}
+		else
+		executor(mini, envp);
+		//free_cmd_table(mini.cmd_table);
+		//free_redir_files_names();
     }
     return(0);
 } 
