@@ -24,6 +24,8 @@ int	init_t_mini(t_minishell *mini)
 	mini->input_redirection = 0;
 	mini->output_redirection = 0;
 	mini->nb_cmd = 0;
+	mini->error_redir = 0;
+	mini->error_pipe = 0;
 	return (0);
 }
 
@@ -44,7 +46,8 @@ int main(int argc, char **argv, char **envp)
  			print_t_mini(&mini);
 			print_cmd_table(&mini, mini.nb_cmd); 
 		//executor(mini, envp);
-		free(mini.cmd_table);
+		//ft_printf("just before free\n");
+		//free(mini.cmd_table);
     }
     return(0);
 } 
