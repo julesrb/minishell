@@ -42,7 +42,7 @@ t_lexer	*check_redir_file(t_minishell *mini, t_lexer *lexer_pos)
 
 int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
 {
-/* 	ft_printf("HERE\n"); */
+	ft_printf("HERE\n");
 	if (cmd_nb == 0 || cmd_nb == mini->nb_cmd - 1) // edge case where in and out are inversed ?
 	{
 		if (redir[0] == redir[1])

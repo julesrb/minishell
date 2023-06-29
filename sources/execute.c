@@ -45,7 +45,7 @@ int	exec(char *cmd, char **envp)
     char *path;
 
         cmd_split = ft_split(cmd, ' ');
-		if (!is_builtin(cmd))
+		if (is_builtin(cmd) == EXIT_SUCCESS)
 		{
 			if (!execute_builtin(cmd_split, envp))
 			{
@@ -104,33 +104,12 @@ int	insert_pipe(char *cmd, char **envp)
 	return(EXIT_FAILURE);
 }
 
-int    executor(t_minishell mini, char **envp)
+
+int		execute_last_command(t_minishell mini, char **envp, int index)
 {
-	int index;
-	int fd_infile = -1;
-	int fd_outfile = -1;
-
-	if (mini.input_redirection)
-	{
-		if (mini.input_redirection == 1)
-		{
-			fd_infile = input_redirection(mini);
-			if (dup2(fd_infile, 0) == -1)
-				return(EXIT_FAILURE);
-			close(fd_infile);
-		}
-		else if (mini.input_redirection == 2)
-			here_doc(mini.limiter);
-	}
-	index = 0;
-	while (index < mini.pipe)
-	{
-		insert_pipe(mini.cmd_table[index], envp);
-		index++;
-	}
-
 	int fd[2];
 	pid_t pid;
+	int fd_outfile;
 
 	pipe(fd);
 	pid = fork();
@@ -156,5 +135,33 @@ int    executor(t_minishell mini, char **envp)
 		close(fd[0]);
 		return(EXIT_SUCCESS);
 	}
+	return(EXIT_SUCCESS);
+}
+
+
+int    executor(t_minishell mini, char **envp)
+{
+	int index;
+	int fd_infile = 0;
+
+	if (mini.input_redirection)
+	{
+		if (mini.input_redirection == 1)
+		{
+			fd_infile = input_redirection(mini);
+			if (dup2(fd_infile, 0) == -1)
+				return(EXIT_FAILURE);
+			close(fd_infile);
+		}
+		else if (mini.input_redirection == 2)
+			here_doc(mini.limiter);
+	}
+	index = 0;
+	while (index < mini.pipe)
+	{
+		insert_pipe(mini.cmd_table[index], envp);
+		index++;
+	}
+	execute_last_command(mini, envp, index);
 	return(EXIT_SUCCESS);
 }

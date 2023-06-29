@@ -19,4 +19,3 @@ int	prompt(char **envp, t_minishell *t_mini)
 	add_history(t_mini->input);
 	return (0);
 }
-
