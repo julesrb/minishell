@@ -42,6 +42,8 @@ typedef struct s_minishell
 	int pipe; // nb de pipe
 	int input_redirection; // 1 si < 2 si <<
 	int output_redirection; // 1 si > 2 si >>
+	int	error_redir;
+	int	error_pipe;
 	int nb_cmd; // nb de commande a executer
 	char *limiter;
 	char *in_file;
