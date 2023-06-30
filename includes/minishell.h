@@ -48,6 +48,7 @@ typedef struct s_minishell
 	char *limiter;
 	char *in_file;
 	char *out_file;
+	int  exit_status;
 }t_minishell;
 
 int	print_opening(void);
