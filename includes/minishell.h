@@ -49,11 +49,12 @@ typedef struct s_minishell
 	char *in_file;
 	char *out_file;
 	int  exit_status;
+	char **envp;
 }t_minishell;
 
 int	print_opening(void);
 
-int	prompt(char **envp, t_minishell *mini);
+int	prompt(t_minishell *mini);
 
 // Lexer related functions
 int	lexer(t_minishell *mini);
@@ -62,6 +63,7 @@ int	parser(t_minishell *mini);
 
 void	arg_check(int argc, char **argv);
 
+int	var_translation(t_minishell *mini, t_lexer *curr);
 
 // Utils
 void	deallocate(t_lexer **head);
@@ -86,6 +88,7 @@ int	exec(char *cmd, char **envp);
 // Builtin functions
 int    pwd_builtin(void);
 int     env_builtin(char **envp);
+int     echo_builtin(char **cmd_split);
 
 int	input_redirection(t_minishell mini);
 int	output_redirection(t_minishell mini);

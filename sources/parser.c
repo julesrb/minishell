@@ -89,7 +89,7 @@ t_lexer	*build_command(t_minishell *mini, int cmd, t_lexer *lexer_pos)
 				curr = check_redir_file(mini, curr);
 		}
 		if (curr->content[0] == '$')
-			var_translation(curr->content);
+			var_translation(mini, curr);
 		if (curr != NULL && curr->content[0] != '|')
 		{
 			command = ft_strjoin(command, curr->content);

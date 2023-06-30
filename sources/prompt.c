@@ -12,10 +12,9 @@
 
 #include "minishell.h"
 
-int	prompt(char **envp, t_minishell *t_mini)
+int	prompt(t_minishell *t_mini)
 {
     t_mini->input = readline("[Minishell] ");
-	(void)envp;
 	add_history(t_mini->input);
 	return (0);
 }
