@@ -28,4 +28,27 @@ void	deallocate(t_lexer **head)
 	*head = NULL;
 }
 
+void	free_mini(t_minishell *mini)
+{
+	int i;
+
+	i = 0;
+	if (mini->cmd_table != NULL)
+	{
+		while (i < mini->nb_cmd)
+		{
+			free(mini->cmd_table[i]);
+			i++;
+		}
+		free(mini->cmd_table);
+	}
+	if (mini->limiter != NULL)
+		free(mini->limiter);
+	if (mini->in_file != NULL)
+		free(mini->in_file);
+	if (mini->out_file != NULL)
+		free(mini->out_file);
+
+}
+
 

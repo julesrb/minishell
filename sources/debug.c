@@ -19,6 +19,9 @@ int	print_t_mini(t_minishell *mini)
 	ft_printf("| redir_in = %i\n", mini->input_redirection);
 	ft_printf("| redir_out = %i\n", mini->output_redirection);
 	ft_printf("| redir_error = %i\n", mini->error_redir);
+	ft_printf("| in_file = %s\n", mini->in_file);
+	ft_printf("| out_file = %s\n", mini->out_file);
+	ft_printf("| limiter = %s\n", mini->limiter);
 	ft_printf("| nb_cmd = %i\n\n", mini->nb_cmd);
 	//ft_printf("input = %s\n",t_mini->cmd_table);
 	return (0);

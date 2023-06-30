@@ -29,10 +29,15 @@ t_lexer	*check_redir_file(t_minishell *mini, t_lexer *lexer_pos)
 	}
 	if (mini->error_redir == 0)
 	{
-		if (mini->input_redirection == 1)
-			mini->in_file = ft_strdup(curr->content);
-		if (mini->input_redirection == 2)
-			mini->limiter = ft_strdup(curr->content);
+		if (mini->input_redirection == 1 || mini->input_redirection == 2)
+		{
+			if (mini->input_redirection == 1)
+				mini->in_file = ft_strdup(curr->content);
+			else if (mini->input_redirection == 2)
+				mini->limiter = ft_strdup(curr->content);
+			mini->input_redirection -= mini->input_redirection * 2;
+			return (curr->next);
+		}
 		if (mini->output_redirection != 0)
 			mini->out_file = ft_strdup(curr->content);
 		return (curr->next);
@@ -42,27 +47,26 @@ t_lexer	*check_redir_file(t_minishell *mini, t_lexer *lexer_pos)
 
 int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
 {
-/* 	ft_printf("HERE\n"); */
-	if (cmd_nb == 0 || cmd_nb == mini->nb_cmd - 1) // edge case where in and out are inversed ?
+	if (redir[0] == redir[1])
 	{
-		if (redir[0] == redir[1])
-		{
-			if (redir[0] == '<')
-				mini->input_redirection = 2;
-			if (redir[0] == '>')
-				mini->output_redirection = 2;
-		}
-		else 
-		{
-			if (redir[0] == '<')
-				mini->input_redirection = 1;
-			if (redir[0] == '>')
-				mini->output_redirection = 1;
-		}
-		if ((redir[0] == '<' && redir[1] == '>') ||
-			(redir[0] == '>' && redir[1] == '<'))
-				mini->error_redir = 1;
+		if (redir[0] == '<')
+			mini->input_redirection = 2;
+		if (redir[0] == '>')
+			mini->output_redirection = 2;
 	}
+	else 
+	{
+		if (redir[0] == '<')
+			mini->input_redirection = 1;
+		if (redir[0] == '>')
+			mini->output_redirection = 1;
+	}
+	if ((redir[0] == '<' && redir[1] == '>') ||
+		(redir[0] == '>' && redir[1] == '<'))
+		mini->error_redir = 1;
+	if ((redir[0] == '<' && cmd_nb != 0)  ||
+		(redir[0] == '>' && cmd_nb != mini->nb_cmd - 1))
+		mini->error_redir = 1;
 	if (mini->input_redirection != 0 || mini->output_redirection != 0)
 		return (1);
 	return (0);
@@ -109,7 +113,6 @@ int	check_pipe_error(t_minishell *mini)
 	t_lexer	*curr;
 	
 	curr = mini->lexer_table;
-
 	if (curr->content[0] == '|') //check for pipe at begining
 		mini->error_pipe = 1;
 	if(last_token_is_pipe(curr) == 1)
