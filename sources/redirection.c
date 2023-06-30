@@ -38,36 +38,49 @@ void	here_doc(char *limiter)
 	}
 }
 
-int     input_redirection(t_minishell mini)
+int	input_redirection(t_minishell mini)
 {
-    int fd_infile;
+	int fd_infile;
 
-	fd_infile = open(mini.in_file, O_RDONLY, 0777);
-	if (fd_infile == -1)
+	if (mini.input_redirection == 1)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		perror(mini.in_file);
-		return (EXIT_FAILURE);
+		fd_infile = open(mini.in_file, O_RDONLY, 0777);
+		if (fd_infile == -1)
+		{
+			ft_putstr_fd("minishell: ", 2);
+			perror(mini.in_file);
+			return (EXIT_FAILURE);
+		}
+		if (dup2(fd_infile, 0) == -1)
+			return(EXIT_FAILURE);
+		close(fd_infile);
 	}
-    return (fd_infile);
+	else if (mini.input_redirection == 2)
+		here_doc(mini.limiter);
+	return(EXIT_SUCCESS);
 }
 
-int     output_redirection(t_minishell mini)
+int	output_redirection(t_minishell mini)
 {
-    int fd_outfile;
+	int fd_outfile = 0;
 
-    fd_outfile = 1;
-    if (mini.output_redirection == 1)
-    {
-	    fd_outfile = open(mini.out_file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-        if (fd_outfile == -1)
-		    perror(NULL);
-    }
-    else if (mini.output_redirection == 2)
-    {
-	    fd_outfile = open(mini.out_file, O_WRONLY | O_CREAT | O_APPEND, 0777);
-        if (fd_outfile == -1)
-		    perror(NULL);
-    }
-    return (fd_outfile);
+	if (mini.output_redirection)
+	{
+		if (mini.output_redirection == 1)
+		{
+			fd_outfile = open(mini.out_file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			if (fd_outfile == -1)
+				perror(NULL);
+		}
+		else if (mini.output_redirection == 2)
+		{
+			fd_outfile = open(mini.out_file, O_WRONLY | O_CREAT | O_APPEND, 0777);
+			if (fd_outfile == -1)
+				perror(NULL);
+		}
+		if (dup2(fd_outfile, 1) == -1)
+			return(EXIT_FAILURE);
+		close(fd_outfile);
+	}
+	return(EXIT_SUCCESS);
 }
