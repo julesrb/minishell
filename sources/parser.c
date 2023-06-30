@@ -29,11 +29,11 @@ t_lexer	*check_redir_file(t_minishell *mini, t_lexer *lexer_pos)
 	}
 	if (mini->error_redir == 0)
 	{
-		if (mini->input_redirection == 1 || mini->input_redirection == 2)
+		if (mini->input_redirection == -1 || mini->input_redirection == -2)
 		{
-			if (mini->input_redirection == 1)
+			if (mini->input_redirection == -1)
 				mini->in_file = ft_strdup(curr->content);
-			else if (mini->input_redirection == 2)
+			else if (mini->input_redirection == -2)
 				mini->limiter = ft_strdup(curr->content);
 			mini->input_redirection -= mini->input_redirection * 2;
 			return (curr->next);
@@ -50,14 +50,14 @@ int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
 	if (redir[0] == redir[1])
 	{
 		if (redir[0] == '<')
-			mini->input_redirection = 2;
+			mini->input_redirection = -2;
 		if (redir[0] == '>')
 			mini->output_redirection = 2;
 	}
 	else 
 	{
 		if (redir[0] == '<')
-			mini->input_redirection = 1;
+			mini->input_redirection = -1;
 		if (redir[0] == '>')
 			mini->output_redirection = 1;
 	}
@@ -79,7 +79,7 @@ t_lexer	*build_command(t_minishell *mini, int cmd, t_lexer *lexer_pos)
 
 	curr = lexer_pos;
 	command = ft_strdup("");
-	if (curr->content[0] == '|') // as first // as midle // as last // double
+	if (curr->content[0] == '|')
 		curr = curr->next;
 	while (curr != NULL && curr->content[0] != '|')
 	{
@@ -88,7 +88,7 @@ t_lexer	*build_command(t_minishell *mini, int cmd, t_lexer *lexer_pos)
 			if (check_redirection(mini, curr->content, cmd) == 1)
 				curr = check_redir_file(mini, curr);
 		}
-		if (curr != NULL)
+		if (curr != NULL && curr->content[0] != '|')
 		{
 			command = ft_strjoin(command, curr->content);
 			command = ft_strjoin(command, " ");
