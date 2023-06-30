@@ -64,14 +64,14 @@ char	**ft_access_list(char **cmd)
 	len = 0;
 	cmd_2 = (char *)malloc(sizeof(cmd_2) * (ft_strlen(cmd[0]) + 2));
 	if (!cmd_2)
-		ft_free_exit(NULL, NULL, cmd, NULL);
+		ft_free(NULL, NULL, cmd, NULL);
 	cmd_2[0] = '/';
 	ft_strlcpy(cmd_2 + 1, cmd[0], ft_strlen(cmd[0]) + 1);
 	path_from_envp = ft_split(getenv("PATH"), ':');
 	while (path_from_envp[len] != NULL)
 		len++;
 	result = ft_access_list_help(cmd_2, path_from_envp, len, 0);
-	ft_free(cmd_2, NULL, NULL, path_from_envp);
+	ft_free(cmd_2, NULL, NULL, NULL);
 	return (result);
 }
 

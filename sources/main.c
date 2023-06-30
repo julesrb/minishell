@@ -45,7 +45,7 @@ int main(int argc, char **argv, char **envp)
 		parser(&mini);
  			//print_t_mini(&mini);
 			//print_cmd_table(&mini, mini.nb_cmd);
-		if (mini.error_pipe == 0 && mini.error_redir == 0)
+		if ((mini.error_pipe == 0 && mini.error_redir == 0) || mini.nb_cmd > 0)
 				executor(mini, envp);
 		else
 			ft_printf("Parsing ERROR\n");
