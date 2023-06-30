@@ -2,19 +2,20 @@
 
 void	here_doc_put_in(char *limiter, int *fds)
 {
-	char	*ret;
+	char	*heredoc_line;
 
 	close(fds[0]);
 	while (1)
 	{
-		ret = get_next_line(0);
-		if (ft_strncmp(ret, limiter, ft_strlen(limiter)) == 0)
+		heredoc_line = readline("heredoc ");
+		if (ft_strncmp(heredoc_line, limiter, ft_strlen(limiter)) == EXIT_SUCCESS)
 		{
-			free(ret);
-			exit(0);
+			free(heredoc_line);
+			exit(EXIT_SUCCESS);
 		}
-		ft_putstr_fd(ret, fds[1]);
-		free(ret);
+		ft_putstr_fd(heredoc_line, fds[1]);
+        ft_putchar_fd('\n', fds[1]);
+		free(heredoc_line);
 	}
 }
 

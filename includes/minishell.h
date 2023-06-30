@@ -53,7 +53,7 @@ typedef struct s_minishell
 
 int	print_opening(void);
 
-int	prompt(char **envp, t_minishell *mini);
+int	prompt(t_minishell *mini);
 
 // Lexer related functions
 int	lexer(t_minishell *mini);

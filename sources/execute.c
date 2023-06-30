@@ -47,7 +47,7 @@ int	exec(char *cmd, char **envp)
 	cmd_split = ft_split(cmd, ' ');
 	if (is_builtin(cmd) == EXIT_SUCCESS)
 	{
-		if (!execute_builtin(cmd_split, envp))
+		if (execute_builtin(cmd_split, envp) == EXIT_SUCCESS)
 		{
 			ft_free_tab(cmd_split);
 			return(EXIT_SUCCESS);
@@ -66,14 +66,14 @@ int	exec(char *cmd, char **envp)
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(cmd_split[0], 2);
 			ft_putendl_fd(": command not found", 2);
-			ft_free(path, NULL, cmd_split, NULL);
+			exit(ft_free(path, NULL, cmd_split, NULL));
 		}
 		else if(execve(path, cmd_split, envp) == -1)
 		{   
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(cmd_split[0], 2);
 			ft_putendl_fd(": command not found", 2);
-			ft_free(path, NULL, cmd_split, NULL);
+			exit(ft_free(path, NULL, cmd_split, NULL));
 		}
 	}
 	return(EXIT_FAILURE);

@@ -39,7 +39,7 @@ int main(int argc, char **argv, char **envp)
     while(1)
     {
 		init_t_mini(&mini);
-		prompt(envp, &mini);
+		prompt(&mini);
 		lexer(&mini);
 /*  			print_lst(mini.lexer_table);  */
 		parser(&mini);
