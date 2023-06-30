@@ -89,6 +89,7 @@ int	exec(char *cmd, char **envp);
 int    pwd_builtin(void);
 int     env_builtin(char **envp);
 int     echo_builtin(char **cmd_split);
+int     export_builtin(char **cmd, char **envp);
 
 int	input_redirection(t_minishell mini);
 int	output_redirection(t_minishell mini);
