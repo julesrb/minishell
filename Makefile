@@ -52,4 +52,7 @@ fclean: clean
 
 re: clean all
 
+log:
+	git log -n 10 --pretty=format:"Author: %an - Date: %ad%nCommit ID: %H%nComment: %s%n%n" --date=format:"%d/%m/%Y à %H:%M"
+
 .PHONY: all, clean, fclean, re, libft
