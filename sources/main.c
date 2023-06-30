@@ -35,6 +35,8 @@ int main(int argc, char **argv, char **envp)
 	t_minishell mini;
 
 	arg_check(argc, argv);
+	if (env_mini(&mini, envp) == EXIT_FAILURE)
+		printf("Error initializing the minishell environment\n");
 	print_opening();
     while(1)
     {
