@@ -146,14 +146,14 @@ int    executor(t_minishell mini, char **envp)
 
 	if (mini.input_redirection)
 	{
-		if (mini.input_redirection == 1)
+		if (mini.input_redirection == -1)
 		{
 			fd_infile = input_redirection(mini);
 			if (dup2(fd_infile, 0) == -1)
 				return(EXIT_FAILURE);
 			close(fd_infile);
 		}
-		else if (mini.input_redirection == 2)
+		else if (mini.input_redirection == -2)
 			here_doc(mini.limiter);
 	}
 	index = 0;
