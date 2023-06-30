@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                             :+:      :+:    :+:   */
+/*   arg1.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,11 +10,44 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "unistd.h"
 
-int	prompt(t_minishell *t_mini)
+int	ft_put_char(char c)
 {
-    t_mini->input = readline("[Minishell] ");
-	add_history(t_mini->input);
+	write(1, &c, 1);
+	return (1);
+}
+
+int	ft_put_str(char *s)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return (ft_put_str("(null)"));
+	while (s[i] != '\0')
+	{
+		write(1, &s[i], 1);
+		i++;
+	}
+	return (i);
+}
+
+int	main(int argc, char **argv)
+{
+
+	if (argc == 2)
+	{
+		ft_put_str("arg 1 = ");
+		ft_put_str(argv[1]);
+		ft_put_str("\n");
+	}
+	else
+	{
+		ft_put_str("arg error\n");
+		return (1);
+	}
 	return (0);
 }
+
+

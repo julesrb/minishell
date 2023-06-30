@@ -168,6 +168,5 @@ int	lexer(t_minishell *mini)
 			i++;
 	}
 	mini->nb_cmd = mini->pipe + 1;
-	free(input);
 	return (0);
 }

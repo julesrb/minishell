@@ -29,12 +29,21 @@ int		execute_builtin(char **cmd_split, char **envp)
 	// 	return (EXIT_SUCCESS);
 	else if(!ft_strncmp(cmd_split[0], "export", ft_strlen(cmd_split[0])))
 		return (EXIT_SUCCESS);
+<<<<<<< HEAD
 	// else if(!ft_strncmp(cmd_split[0], "unset", ft_strlen(cmd_split[0])))
 	// 	return (EXIT_SUCCESS);
 	// else if(!ft_strncmp(cmd_split[0], "echo", ft_strlen(cmd_split[0])))
 	// 	return (EXIT_SUCCESS);
 	// else if(!ft_strncmp(cmd_split[0], "exit", ft_strlen(cmd_split[0])))
 	// 	return (EXIT_SUCCESS);
+=======
+	else if(!ft_strncmp(cmd_split[0], "unset", ft_strlen(cmd_split[0])))
+		return (EXIT_SUCCESS); */
+	else if(!ft_strncmp(cmd_split[0], "echo", ft_strlen(cmd_split[0])))
+		return (echo_builtin(cmd_split));
+/* 	else if(!ft_strncmp(cmd_split[0], "exit", ft_strlen(cmd_split[0])))
+		return (EXIT_SUCCESS); */
+>>>>>>> 3d4788d92eed271f132439f802991c43c175c3af
 	return(EXIT_FAILURE);
 }
 

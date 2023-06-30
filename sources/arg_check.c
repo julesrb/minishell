@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                             :+:      :+:    :+:   */
+/*   arg_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,9 +12,11 @@
 
 #include "minishell.h"
 
-int	prompt(t_minishell *t_mini)
+void	arg_check(int argc, char **argv)
 {
-    t_mini->input = readline("[Minishell] ");
-	add_history(t_mini->input);
-	return (0);
+	(void)argv;
+	if (argc != 1)
+		exit (1);
 }
+
+
