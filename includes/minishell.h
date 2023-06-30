@@ -59,6 +59,8 @@ int	lexer(t_minishell *mini);
 
 int	parser(t_minishell *mini);
 
+void	arg_check(int argc, char **argv);
+
 
 // Utils
 void	deallocate(t_lexer **head);
