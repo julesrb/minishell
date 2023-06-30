@@ -25,16 +25,16 @@ int		execute_builtin(char **cmd_split, char **envp)
 		return (pwd_builtin());
 	else if(ft_strncmp(cmd_split[0], "env", ft_strlen(cmd_split[0])) == EXIT_SUCCESS)
 		return (env_builtin(envp));
-/* 	else if(!ft_strncmp(cmd_split[0], "cd", ft_strlen(cmd_split[0])))
-		return (EXIT_SUCCESS);
+	// else if(!ft_strncmp(cmd_split[0], "cd", ft_strlen(cmd_split[0])))
+	// 	return (EXIT_SUCCESS);
 	else if(!ft_strncmp(cmd_split[0], "export", ft_strlen(cmd_split[0])))
 		return (EXIT_SUCCESS);
-	else if(!ft_strncmp(cmd_split[0], "unset", ft_strlen(cmd_split[0])))
-		return (EXIT_SUCCESS);
-	else if(!ft_strncmp(cmd_split[0], "echo", ft_strlen(cmd_split[0])))
-		return (EXIT_SUCCESS);
-	else if(!ft_strncmp(cmd_split[0], "exit", ft_strlen(cmd_split[0])))
-		return (EXIT_SUCCESS); */
+	// else if(!ft_strncmp(cmd_split[0], "unset", ft_strlen(cmd_split[0])))
+	// 	return (EXIT_SUCCESS);
+	// else if(!ft_strncmp(cmd_split[0], "echo", ft_strlen(cmd_split[0])))
+	// 	return (EXIT_SUCCESS);
+	// else if(!ft_strncmp(cmd_split[0], "exit", ft_strlen(cmd_split[0])))
+	// 	return (EXIT_SUCCESS);
 	return(EXIT_FAILURE);
 }
 
