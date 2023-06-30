@@ -57,7 +57,10 @@ int	exec(char *cmd, char **envp)
 	}
 	else
 	{
-		path = ft_access_path(cmd_split, 0);
+		if (ft_strchr(cmd_split[0], '/') != NULL)
+			path = cmd_split[0];
+		else
+			path = ft_access_path(cmd_split, 0);
 		if (!path)
 		{   
 			ft_putstr_fd("minishell: ", 2);
@@ -111,6 +114,8 @@ int    executor(t_minishell mini, char **envp)
 
 	index = 0;
 	pid = fork();
+	if (pid == -1)
+		return(EXIT_FAILURE);
 	if (pid == 0)
 	{
 		if (input_redirection(mini) == EXIT_FAILURE)

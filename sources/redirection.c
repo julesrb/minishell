@@ -28,7 +28,7 @@ void	here_doc(char *limiter)
 	pid = fork();
 	if (pid == -1)
 		exit(0);
-	if (!pid)
+	if (pid == EXIT_SUCCESS)
 		here_doc_put_in(limiter, fds);
 	else
 	{
@@ -52,7 +52,10 @@ int	input_redirection(t_minishell mini)
 			return (EXIT_FAILURE);
 		}
 		if (dup2(fd_infile, 0) == -1)
+		{
+			perror(NULL);
 			return(EXIT_FAILURE);
+		}
 		close(fd_infile);
 	}
 	else if (mini.input_redirection == 2)
@@ -70,16 +73,25 @@ int	output_redirection(t_minishell mini)
 		{
 			fd_outfile = open(mini.out_file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 			if (fd_outfile == -1)
+			{
 				perror(NULL);
+				return(EXIT_FAILURE);
+			}
 		}
 		else if (mini.output_redirection == 2)
 		{
 			fd_outfile = open(mini.out_file, O_WRONLY | O_CREAT | O_APPEND, 0777);
 			if (fd_outfile == -1)
+			{
 				perror(NULL);
+				return(EXIT_FAILURE);
+			}
 		}
 		if (dup2(fd_outfile, 1) == -1)
+		{
+			perror(NULL);
 			return(EXIT_FAILURE);
+		}
 		close(fd_outfile);
 	}
 	return(EXIT_SUCCESS);
