@@ -16,10 +16,7 @@ int	prompt(char **envp, t_minishell *t_mini)
 {
     t_mini->input = readline("[Minishellsd] ");
 	(void)envp;
-    //execute_command(input, envp);
 	add_history(t_mini->input);
-
-	//free(input);
 	return (0);
 }
 
