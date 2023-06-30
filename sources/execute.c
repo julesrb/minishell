@@ -8,14 +8,14 @@ int	is_builtin(char *cmd)
 		return (EXIT_SUCCESS);
 	else if(ft_strncmp(cmd, "pwd", ft_strlen(cmd)) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
-	else if(ft_strncmp(cmd, "export", ft_strlen(cmd)) == EXIT_SUCCESS)
+/* 	else if(ft_strncmp(cmd, "export", ft_strlen(cmd)) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	else if(ft_strncmp(cmd, "unset", ft_strlen(cmd)) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	else if(ft_strncmp(cmd, "env", ft_strlen(cmd)) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	else if(ft_strncmp(cmd, "exit", ft_strlen(cmd)) == EXIT_SUCCESS)
-		return (EXIT_SUCCESS);
+		return (EXIT_SUCCESS); */
 	return(EXIT_FAILURE);
 }
 
@@ -104,64 +104,24 @@ int	insert_pipe(char *cmd, char **envp)
 	return(EXIT_FAILURE);
 }
 
-
-int		execute_last_command(t_minishell mini, char **envp, int index)
-{
-	int fd[2];
-	pid_t pid;
-	int fd_outfile;
-
-	pipe(fd);
-	pid = fork();
-	if (pid == 0)
-	{
-		close(fd[0]);
-		close(fd[1]);
-		if (mini.output_redirection)
-		{
-			fd_outfile = output_redirection(mini);
-			if (fd_outfile == -1)
-				perror(NULL);
-			if (dup2(fd_outfile, 1) == -1)
-				return(EXIT_FAILURE);
-			close(fd_outfile);
-		}
-		exec(mini.cmd_table[index], envp);
-	}
-	else
-	{
-		wait(NULL);
-		close(fd[1]);
-		close(fd[0]);
-		return(EXIT_SUCCESS);
-	}
-	return(EXIT_SUCCESS);
-}
-
-
 int    executor(t_minishell mini, char **envp)
 {
 	int index;
-	int fd_infile = 0;
+	pid_t pid;
 
-	if (mini.input_redirection)
-	{
-		if (mini.input_redirection == 1)
-		{
-			fd_infile = input_redirection(mini);
-			if (dup2(fd_infile, 0) == -1)
-				return(EXIT_FAILURE);
-			close(fd_infile);
-		}
-		else if (mini.input_redirection == 2)
-			here_doc(mini.limiter);
-	}
 	index = 0;
-	while (index < mini.pipe)
+	pid = fork();
+	if (pid == 0)
 	{
-		insert_pipe(mini.cmd_table[index], envp);
-		index++;
+		if (input_redirection(mini) == EXIT_FAILURE)
+			exit(EXIT_FAILURE);
+		while (index < mini.pipe)
+			insert_pipe(mini.cmd_table[index++], envp);
+		if (output_redirection(mini) == EXIT_FAILURE)
+			exit(EXIT_FAILURE);
+		exec(mini.cmd_table[index], envp);
 	}
-	execute_last_command(mini, envp, index);
+	else	
+		wait(NULL);
 	return(EXIT_SUCCESS);
 }
