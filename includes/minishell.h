@@ -62,6 +62,7 @@ int	parser(t_minishell *mini);
 
 // Utils
 void	deallocate(t_lexer **head);
+void	free_mini(t_minishell *mini);
 
 // Debug
 int		print_t_mini(t_minishell *mini);
