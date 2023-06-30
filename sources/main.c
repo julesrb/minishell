@@ -51,5 +51,5 @@ int main(int argc, char **argv, char **envp)
 			ft_printf("Parsing ERROR\n");
 		free_mini(&mini);
     }
-    return(0);
+    return(EXIT_SUCCESS);
 } 
