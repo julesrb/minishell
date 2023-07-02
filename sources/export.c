@@ -10,11 +10,57 @@ int size_env(char **envp)
     return (i);
 }
 
+int    env_mini_export(t_minishell mini, char **export)
+{
+    int  i;
+    int j;
+    char **new_env;
+
+    i = 0;
+    j = 0;
+    while(mini.env_mini[i])
+        i++;
+    while(export[j])
+        j++;
+    new_env = (char **)malloc(sizeof(mini.env_mini) * (i + j + 1));
+    if (!mini.env_mini)
+        return(EXIT_FAILURE);
+    i = 0;
+    while (mini.env_mini[i] != NULL)
+    {
+        new_env[i] = ft_strdup(mini.env_mini[i]);
+        if (!new_env[i])
+        {
+            ft_free_tab(new_env);
+            return(EXIT_FAILURE);
+        }
+        i++;
+    }
+    j = 0;
+    while (export[j] != NULL)
+    {
+        new_env[i + j] = ft_strdup(export[j]);
+        printf("%s\n", export[j]);
+        printf("test1\n");
+        if (!new_env[i + j])
+        {
+            ft_free_tab(new_env);
+            return(EXIT_FAILURE);
+        }
+        j++;
+    }
+    new_env[i + j] = NULL;
+    ft_free_tab(mini.env_mini);
+    mini.env_mini = new_env;
+    printf("test2\n");
+    return(EXIT_SUCCESS);
+}
+
+
 int     export_builtin(char **cmd, t_minishell mini)
 {
     int i;
     int j;
-    int k;
     char **new_var;
 
     i = 0;
@@ -31,23 +77,21 @@ int     export_builtin(char **cmd, t_minishell mini)
         return (EXIT_SUCCESS);
     }
     new_var = (char **)malloc(sizeof(new_var) * i);
-    i = 0;
-    while (cmd[i + 1] != NULL)
+    if (!new_var)
+        return (EXIT_FAILURE);
+    j = 0;
+    while (cmd[j + 1] != NULL)
     {
-        new_var[i] = ft_strdup(cmd[i + 1]);
-        if (!new_var[i])
+        new_var[j] = ft_strdup(cmd[j + 1]);
+        if (!new_var[j])
         {
             ft_free_tab(new_var);
             return(EXIT_FAILURE);
         }
-        i++;
+        j++;
     }
-    new_var[i] = NULL;
-    k = 0;
-    while (new_var[k] != NULL)
-    {
-        mini.env_mini[size_env(mini.env_mini) + k] = new_var[k];
-        k++;
-    }
+    new_var[j] = NULL;
+    printf("test\n");
+    env_mini_export(mini, new_var);
     return(EXIT_SUCCESS);
 }
