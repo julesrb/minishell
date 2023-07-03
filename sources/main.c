@@ -36,6 +36,8 @@ int main(int argc, char **argv, char **envp)
 
 	mini.exit_status = 0;
 	arg_check(argc, argv);
+	if (env_mini(&mini, envp) == EXIT_FAILURE)
+		printf("Error initializing the minishell environment\n");
 	print_opening();
     while(1)
     {
@@ -47,7 +49,7 @@ int main(int argc, char **argv, char **envp)
  			print_t_mini(&mini);
 			print_cmd_table(&mini, mini.nb_cmd);
 		if ((mini.error_pipe == 0 && mini.error_redir == 0) || mini.nb_cmd > 0)
-				mini.exit_status = executor(mini, envp);
+				mini.exit_status = executor(&mini, envp);
 		else
 			ft_printf("Parsing ERROR\n");
 		free_mini(&mini);
