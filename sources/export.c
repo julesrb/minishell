@@ -22,8 +22,8 @@ int    env_mini_export(t_minishell *mini, char **export)
         i++;
     while(export[j])
         j++;
-    new_env = (char **)malloc(sizeof(mini->env_mini) * (i + j + 1));
-    if (!mini->env_mini)
+    new_env = (char **)malloc(sizeof(new_env) * (i + j + 1));
+    if (!new_env)
         return(EXIT_FAILURE);
     i = 0;
     while (mini->env_mini[i] != NULL)
@@ -49,6 +49,7 @@ int    env_mini_export(t_minishell *mini, char **export)
     }
     new_env[i + j] = NULL;
     ft_free_tab(mini->env_mini);
+    ft_free_tab(export);
     mini->env_mini = new_env;
     return(EXIT_SUCCESS);
 }
@@ -90,5 +91,5 @@ int     export_builtin(char **cmd, t_minishell *mini)
     }
     new_var[j] = NULL;
     env_mini_export(mini, new_var);
-    exit(EXIT_SUCCESS);
+    return(EXIT_SUCCESS);
 }

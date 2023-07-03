@@ -7,7 +7,7 @@ int     env_mini(t_minishell *mini, char **envp)
     i = 0;
     while(envp[i])
         i++;
-    mini->env_mini = (char **)malloc(sizeof(mini->env_mini) * i++);
+    mini->env_mini = (char **)malloc(sizeof(mini->env_mini) * (i + 1));
     if (!mini->env_mini)
         return(EXIT_FAILURE);
     i = 0;
