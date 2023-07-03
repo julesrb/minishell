@@ -12,9 +12,12 @@
 
 #include "minishell.h"
 
-int	prompt(t_minishell *t_mini)
+int	prompt(t_minishell *mini)
 {
-    t_mini->input = readline("[Minishell] ");
-	add_history(t_mini->input);
+    mini->input = readline("[Minishell] ");
+	if (mini->input[0] == 0)
+		add_lexer_table(&mini->lexer_table, ft_strdup(""));
+	else
+		add_history(mini->input);
 	return (0);
 }

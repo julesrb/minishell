@@ -31,8 +31,8 @@ int		execute_builtin(char **cmd_split, t_minishell *mini)
 		return (export_builtin(cmd_split, mini));
 	// else if(!ft_strncmp(cmd_split[0], "unset", ft_strlen(cmd_split[0])))
 	// 	return (EXIT_SUCCESS);
-	// else if(!ft_strncmp(cmd_split[0], "echo", ft_strlen(cmd_split[0])))
-	// 	return (EXIT_SUCCESS);
+	 else if(ft_strncmp(cmd_split[0], "echo", ft_strlen(cmd_split[0])) == EXIT_SUCCESS)
+	 	return (echo_builtin(cmd_split));
 	// else if(!ft_strncmp(cmd_split[0], "exit", ft_strlen(cmd_split[0])))
 	// 	return (EXIT_SUCCESS);
 	return(EXIT_FAILURE);
