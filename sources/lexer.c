@@ -39,7 +39,6 @@ int	yield_word(char *token, t_minishell *mini)
 	char *str;
 	
 	len = 0;
-	ft_printf("-");
 	while (token[len]!= ' ' && token[len]!= 0)
 	{
 		len++;
