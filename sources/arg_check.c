@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                             :+:      :+:    :+:   */
+/*   arg_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,12 +12,11 @@
 
 #include "minishell.h"
 
-int	prompt(t_minishell *mini)
+void	arg_check(int argc, char **argv)
 {
-    mini->input = readline("[Minishell] ");
-	if (mini->input[0] == 0)
-		add_lexer_table(&mini->lexer_table, ft_strdup(""));
-	else
-		add_history(mini->input);
-	return (0);
+	(void)argv;
+	if (argc != 1)
+		exit (1);
 }
+
+

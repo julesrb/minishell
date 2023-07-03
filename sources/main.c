@@ -12,8 +12,9 @@
 
 #include "minishell.h"
 
-int	init_t_mini(t_minishell *mini)
+int	init_t_mini(t_minishell *mini, char **envp)
 {
+	mini->envp = envp;
 	mini->input = NULL;
 	mini->lexer_table = NULL;
 	mini->cmd_table = NULL;
@@ -33,20 +34,22 @@ int main(int argc, char **argv, char **envp)
 {
 	t_minishell mini;
 
-	(void)argv;
-	(void)argc;
+	mini.exit_status = 0;
+	arg_check(argc, argv);
+	if (env_mini(&mini, envp) == EXIT_FAILURE)
+		printf("Error initializing the minishell environment\n");
 	print_opening();
     while(1)
     {
-		init_t_mini(&mini);
+		init_t_mini(&mini, envp);
 		prompt(&mini);
 		lexer(&mini);
-/*  			print_lst(mini.lexer_table);  */
+ 			//print_lst(mini.lexer_table); 
 		parser(&mini);
-/*  			 print_t_mini(&mini);
-			 print_cmd_table(&mini, mini.nb_cmd); */
+ 			//print_t_mini(&mini);
+			//print_cmd_table(&mini, mini.nb_cmd);
 		if ((mini.error_pipe == 0 && mini.error_redir == 0) || mini.nb_cmd > 0)
-				mini.exit_status = executor(mini, envp);
+				mini.exit_status = executor(&mini, envp);
 		else
 			ft_printf("Parsing ERROR\n");
 		free_mini(&mini);

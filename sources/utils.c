@@ -48,6 +48,8 @@ void	free_mini(t_minishell *mini)
 		free(mini->in_file);
 	if (mini->out_file != NULL)
 		free(mini->out_file);
+	if (mini->input != NULL)
+		free(mini->input);
 
 }
 

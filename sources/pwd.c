@@ -6,7 +6,7 @@ int    pwd_builtin(void)
 
     pwd = getenv("PWD");
     if (!pwd)
-        return(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     ft_putendl_fd(pwd, 1);
-    return(EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
