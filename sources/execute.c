@@ -19,7 +19,7 @@ int	is_builtin(char *cmd)
 	return(EXIT_FAILURE);
 }
 
-int		execute_builtin(char **cmd_split, t_minishell mini)
+int		execute_builtin(char **cmd_split, t_minishell *mini)
 {
 	if(ft_strncmp(cmd_split[0], "pwd", ft_strlen(cmd_split[0])) == EXIT_SUCCESS)
 		return (pwd_builtin());
@@ -39,7 +39,7 @@ int		execute_builtin(char **cmd_split, t_minishell mini)
 }
 
 
-int	exec(char *cmd, char **envp, t_minishell mini)
+int	exec(char *cmd, char **envp, t_minishell *mini)
 {
 	char **cmd_split;
     char *path;
@@ -79,7 +79,7 @@ int	exec(char *cmd, char **envp, t_minishell mini)
 	return(EXIT_FAILURE);
 }
 
-int	insert_pipe(char *cmd, char **envp, t_minishell mini)
+int	insert_pipe(char *cmd, char **envp, t_minishell *mini)
 {
 	int	fd[2];
 	pid_t	pid;
@@ -107,7 +107,7 @@ int	insert_pipe(char *cmd, char **envp, t_minishell mini)
 	return(EXIT_FAILURE);
 }
 
-int    executor(t_minishell mini, char **envp)
+int    executor(t_minishell *mini, char **envp)
 {
 	int index;
 	pid_t pid;
@@ -118,13 +118,13 @@ int    executor(t_minishell mini, char **envp)
 		return(EXIT_FAILURE);
 	if (pid == 0)
 	{
-		if (input_redirection(mini) == EXIT_FAILURE)
+		if (input_redirection(*mini) == EXIT_FAILURE)
 			exit(EXIT_FAILURE);
-		while (index < mini.pipe)
-			insert_pipe(mini.cmd_table[index++], envp, mini);
-		if (output_redirection(mini) == EXIT_FAILURE)
+		while (index < mini->pipe)
+			insert_pipe(mini->cmd_table[index++], envp, mini);
+		if (output_redirection(*mini) == EXIT_FAILURE)
 			exit(EXIT_FAILURE);
-		exec(mini.cmd_table[index], envp, mini);
+		exec(mini->cmd_table[index], envp, mini);
 	}
 	else	
 		wait(NULL);

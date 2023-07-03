@@ -77,21 +77,21 @@ int		print_cmd_table(t_minishell *mini, int cmd);
 
 
 // Path related functions
-int    executor(t_minishell mini, char **envp);
+int    executor(t_minishell *mini, char **envp);
 char	*ft_access_path(char **cmd, int i);
 char	**ft_access_list(char **cmd);
 char	**ft_access_list_help(char *cmd_2, char **path_from_envp, int len, int i);
 void	ft_free_tab(char **tab);
 void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2);
 int	ft_free(char *str1, char *str2, char **tab1, char **tab2);
-int	exec(char *cmd, char **envp, t_minishell mini);
+int	exec(char *cmd, char **envp, t_minishell *mini);
 
 // Builtin functions
 int    pwd_builtin(void);
 int     env_mini(t_minishell *mini, char **envp);
-int     env_builtin(t_minishell mini);
+int     env_builtin(t_minishell *mini);
 int     echo_builtin(char **cmd_split);
-int     export_builtin(char **cmd, t_minishell mini);
+int     export_builtin(char **cmd, t_minishell *mini);
 
 int	input_redirection(t_minishell mini);
 int	output_redirection(t_minishell mini);

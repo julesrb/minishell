@@ -25,14 +25,14 @@ int     env_mini(t_minishell *mini, char **envp)
     return(EXIT_SUCCESS);
 }
 
-int     env_builtin(t_minishell mini)
+int     env_builtin(t_minishell *mini)
 {
     int i;
 
     i = 0;
-    while (mini.env_mini[i] != NULL)
+    while (mini->env_mini[i] != NULL)
     {
-        ft_putendl_fd(mini.env_mini[i], 1);
+        ft_putendl_fd(mini->env_mini[i], 1);
         i++;
     }
     return(EXIT_SUCCESS);

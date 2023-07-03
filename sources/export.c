@@ -10,7 +10,7 @@ int size_env(char **envp)
     return (i);
 }
 
-int    env_mini_export(t_minishell mini, char **export)
+int    env_mini_export(t_minishell *mini, char **export)
 {
     int  i;
     int j;
@@ -18,17 +18,17 @@ int    env_mini_export(t_minishell mini, char **export)
 
     i = 0;
     j = 0;
-    while(mini.env_mini[i])
+    while(mini->env_mini[i])
         i++;
     while(export[j])
         j++;
-    new_env = (char **)malloc(sizeof(mini.env_mini) * (i + j + 1));
-    if (!mini.env_mini)
+    new_env = (char **)malloc(sizeof(mini->env_mini) * (i + j + 1));
+    if (!mini->env_mini)
         return(EXIT_FAILURE);
     i = 0;
-    while (mini.env_mini[i] != NULL)
+    while (mini->env_mini[i] != NULL)
     {
-        new_env[i] = ft_strdup(mini.env_mini[i]);
+        new_env[i] = ft_strdup(mini->env_mini[i]);
         if (!new_env[i])
         {
             ft_free_tab(new_env);
@@ -40,8 +40,6 @@ int    env_mini_export(t_minishell mini, char **export)
     while (export[j] != NULL)
     {
         new_env[i + j] = ft_strdup(export[j]);
-        printf("%s\n", export[j]);
-        printf("test1\n");
         if (!new_env[i + j])
         {
             ft_free_tab(new_env);
@@ -50,14 +48,13 @@ int    env_mini_export(t_minishell mini, char **export)
         j++;
     }
     new_env[i + j] = NULL;
-    ft_free_tab(mini.env_mini);
-    mini.env_mini = new_env;
-    printf("test2\n");
+    ft_free_tab(mini->env_mini);
+    mini->env_mini = new_env;
     return(EXIT_SUCCESS);
 }
 
 
-int     export_builtin(char **cmd, t_minishell mini)
+int     export_builtin(char **cmd, t_minishell *mini)
 {
     int i;
     int j;
@@ -69,9 +66,10 @@ int     export_builtin(char **cmd, t_minishell mini)
     if (i == 1)
     {
         j = 0;
-        while (mini.env_mini[j] != NULL)
+        while (mini->env_mini[j] != NULL)
         {
-            printf("declare -x %s\n", mini.env_mini[j]);
+            ft_putstr_fd("declare -x ", 1);
+            ft_putendl_fd(mini->env_mini[j], 1);
             j++;
         }
         return (EXIT_SUCCESS);
@@ -91,7 +89,6 @@ int     export_builtin(char **cmd, t_minishell mini)
         j++;
     }
     new_var[j] = NULL;
-    printf("test\n");
     env_mini_export(mini, new_var);
     return(EXIT_SUCCESS);
 }
