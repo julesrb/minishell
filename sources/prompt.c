@@ -16,7 +16,7 @@ int	prompt(t_minishell *mini)
 {
     mini->input = readline("[Minishell] ");
 	if (mini->input[0] == 0)
-		add_lexer_table(&mini->lexer_table, ft_strdup(""));
+		add_to_list(&mini->lexer_table, ft_strdup(""));
 	else
 		add_history(mini->input);
 	return (0);

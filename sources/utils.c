@@ -12,10 +12,10 @@
 
 #include "minishell.h"
 
-void	deallocate(t_lexer **head)
+void	deallocate_list(t_llist **head)
 {
-	t_lexer	*curr;
-	t_lexer	*trash;
+	t_llist	*curr;
+	t_llist	*trash;
 
 	curr = *head;
 	while (curr != NULL)
@@ -53,4 +53,18 @@ void	free_mini(t_minishell *mini)
 
 }
 
+int	lst_size(t_llist *lst)
+{
+	int	size;
+
+	size = 0;
+	if (lst == NULL)
+		return (0);
+	while (lst != NULL)
+	{
+		lst = lst->next;
+		size++;
+	}
+	return (size);
+}
 

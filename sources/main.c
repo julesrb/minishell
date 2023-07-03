@@ -39,20 +39,20 @@ int main(int argc, char **argv, char **envp)
 	if (env_mini(&mini, envp) == EXIT_FAILURE)
 		printf("Error initializing the minishell environment\n");
 	print_opening();
-    while(1)
-    {
+	while(1)
+	{
 		init_t_mini(&mini, envp);
 		prompt(&mini);
 		lexer(&mini);
- 			print_lst(mini.lexer_table); 
+ 			//print_lst(mini.lexer_table); 
 		parser(&mini);
- 			print_t_mini(&mini);
-			print_cmd_table(&mini, mini.nb_cmd);
-		if ((mini.error_pipe == 0 && mini.error_redir == 0) || mini.nb_cmd > 0)
+ 			//print_t_mini(&mini);
+			//print_cmd_table(&mini, mini.nb_cmd);
+/* 		if ((mini.error_pipe == 0 && mini.error_redir == 0) || mini.nb_cmd > 0)
 				mini.exit_status = executor(&mini, envp);
 		else
 			ft_printf("Parsing ERROR\n");
-		free_mini(&mini);
-    }
-    return(0);
-} 
+		free_mini(&mini); */
+	}
+	return(0);
+}

@@ -28,17 +28,17 @@
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1
 
-typedef struct s_lexer
+typedef struct s_llist
 {
 	char			*content;
-	struct s_lexer	*next;
-}t_lexer;
+	struct s_llist	*next;
+}t_llist;
 
 typedef struct s_minishell
 {
 	char *input;  //prompt input
-	t_lexer *lexer_table;
-	char **cmd_table; // output du parser
+	t_llist *lexer_table;
+	char ***cmd_table; // output du parser
 	int pipe; // nb de pipe
 	int input_redirection; // 1 si < 2 si <<
 	int output_redirection; // 1 si > 2 si >>
@@ -59,22 +59,25 @@ int	prompt(t_minishell *mini);
 
 // Lexer related functions
 int	lexer(t_minishell *mini);
-int	add_lexer_table(t_lexer **root, char *str);
+int	add_to_list(t_llist **root, char *str);
 
 int	parser(t_minishell *mini);
 
 void	arg_check(int argc, char **argv);
 
-int	var_translation(t_minishell *mini, t_lexer *curr);
+int	var_translation(t_minishell *mini, t_llist *curr);
+int	quote_translation(t_minishell *mini, t_llist *curr);
 
 // Utils
-void	deallocate(t_lexer **head);
+void	deallocate_list(t_llist **head);
 void	free_mini(t_minishell *mini);
+int	lst_size(t_llist *lst);
 
 // Debug
 int		print_t_mini(t_minishell *mini);
-int		print_lst(t_lexer *lst);
+int		print_lst(t_llist *lst);
 int		print_cmd_table(t_minishell *mini, int cmd);
+int	print_cmd(char **cmd_line);
 
 
 // Path related functions
