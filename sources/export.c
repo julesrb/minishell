@@ -72,7 +72,7 @@ int     export_builtin(char **cmd, t_minishell *mini)
             ft_putendl_fd(mini->env_mini[j], 1);
             j++;
         }
-        return (EXIT_SUCCESS);
+        exit (EXIT_SUCCESS);
     }
     new_var = (char **)malloc(sizeof(new_var) * i);
     if (!new_var)
@@ -84,11 +84,11 @@ int     export_builtin(char **cmd, t_minishell *mini)
         if (!new_var[j])
         {
             ft_free_tab(new_var);
-            return(EXIT_FAILURE);
+            exit(EXIT_FAILURE);
         }
         j++;
     }
     new_var[j] = NULL;
     env_mini_export(mini, new_var);
-    return(EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }

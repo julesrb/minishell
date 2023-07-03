@@ -35,5 +35,5 @@ int     env_builtin(t_minishell *mini)
         ft_putendl_fd(mini->env_mini[i], 1);
         i++;
     }
-    return(EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
