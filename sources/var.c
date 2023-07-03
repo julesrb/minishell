@@ -1,6 +1,30 @@
 #include "minishell.h"
 
-int	var_translation(t_minishell *mini, t_lexer *curr)
+int	quote_translation(t_minishell *mini, t_llist *curr)
+{
+	int i;
+	char *translation;
+	char quote;
+
+	i = 0;
+	translation = NULL;
+	(void)mini;
+	quote = curr->content[0];
+	if (quote == 34) // double quotes
+	{
+		//check for var
+	}
+	while (curr->content[i] != 0)
+	{
+		curr->content[i] = curr->content[i + 1];
+		if (curr->content[i] == quote)
+			curr->content[i] = 0;
+		i++;
+	}
+	return(EXIT_SUCCESS);
+}
+
+int	var_translation(t_minishell *mini, t_llist *curr)
 {
 	int i;
 	char *keyword;

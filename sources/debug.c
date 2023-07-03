@@ -27,7 +27,7 @@ int	print_t_mini(t_minishell *mini)
 	return (0);
 }
 
-int	print_lst(t_lexer *lst)
+int	print_lst(t_llist *lst)
 {
 	int i;
 
@@ -42,13 +42,26 @@ int	print_lst(t_lexer *lst)
 	return (0);
 }
 
+int	print_cmd(char **cmd_line)
+{
+	int i = 0;
+	while (cmd_line[i] != NULL)
+	{
+		ft_printf("%s ", cmd_line[i]);
+		i++;
+	}
+	return (0);
+}
+
 int	print_cmd_table(t_minishell *mini, int cmd)
 {
 	int i = 0;
 
 	while (i < cmd)
 	{
-		printf("command %i = %s\n", i, mini->cmd_table[i]);
+		ft_printf("command %i = ", i);
+		print_cmd(mini->cmd_table[i]);
+		ft_printf("\n");
 		i++;
 	}
 	return (0);
