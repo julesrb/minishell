@@ -26,10 +26,12 @@ int	var_translation(t_minishell *mini, t_lexer *curr)
 		i++;
 	}
 	free(keyword);
+	free(curr->content);
 	if (translation != NULL)
 	{
-		free(curr->content);
 		curr->content = translation;
 	}
+	else
+		curr->content = ft_strdup(" ");
 	return(EXIT_SUCCESS);
 }

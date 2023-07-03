@@ -152,7 +152,6 @@ int	lexer(t_minishell *mini)
 
 	i = 0;
 	input = mini->input;
-	add_lexer_table(&mini->lexer_table, ft_strdup(""));
 	while (input[i] != 0)
 	{
 		if (input[i] == '<' || input[i] == '>')
