@@ -34,6 +34,7 @@ int main(int argc, char **argv, char **envp)
 {
 	t_minishell mini;
 
+	mini.exit_status = 0;
 	arg_check(argc, argv);
 	print_opening();
     while(1)

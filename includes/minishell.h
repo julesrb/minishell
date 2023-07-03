@@ -58,6 +58,7 @@ int	prompt(t_minishell *mini);
 
 // Lexer related functions
 int	lexer(t_minishell *mini);
+int	add_lexer_table(t_lexer **root, char *str);
 
 int	parser(t_minishell *mini);
 
