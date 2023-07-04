@@ -78,7 +78,7 @@ int     export_builtin(char **cmd, t_minishell *mini)
         }
     }
     i = 1;
-    while(cmd[i] && check_arg_export(cmd[i]) == EXIT_SUCCESS)
+    while(cmd[i] && (check_arg_export(cmd[i]) == EXIT_SUCCESS))
     {
         if (check_update_var(cmd[i], mini->env_mini) == EXIT_SUCCESS)
         {
@@ -90,7 +90,7 @@ int     export_builtin(char **cmd, t_minishell *mini)
         }
         else
         {
-            new = ft_lstnew((void*)cmd[i]);
+            new = ft_lstnew((void*)ft_strdup(cmd[i]));
             if (!new)
             {
                 deallocate_env(&mini->env_mini);
