@@ -111,7 +111,6 @@ char	**malloc_command(t_llist *cmd_list)
 	i = 0;
 	cnt = cmd_list;
 	arg = lst_size(cnt);
-	ft_printf("*");
 	if (arg == 0)
 	{
 		cmd_arr = (char**)malloc(sizeof (char*) * 1);
