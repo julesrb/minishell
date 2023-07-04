@@ -116,9 +116,9 @@ t_llist	*build_command(t_minishell *mini, int cmd, t_llist *curr)
 			if (check_redirection(mini, curr->content, cmd) == 1)
 				curr = check_redir_file(mini, curr);
 		}
-		if (curr->content[0] == '$')
+		if (curr != NULL && curr->content[0] == '$')
 			curr->content= var_translation(mini, curr->content);
-		if (curr->content[0] == 34 || curr->content[0] == 39)
+		if (curr != NULL && ((curr->content[0] == 34 || curr->content[0] == 39)))
 			quote_translation(mini, curr);
 		if (curr != NULL && curr->content[0] != '|')
 		{
