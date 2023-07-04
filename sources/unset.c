@@ -2,7 +2,6 @@
 
 int  check_unset_var(char *cmd, t_list *env_mini)
 {
-    char *comp;
     while (env_mini != NULL)
     {
         if (ft_strncmp(cmd, (char *)(env_mini->content), strlen(cmd)) == 0)
