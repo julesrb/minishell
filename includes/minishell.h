@@ -88,7 +88,7 @@ char	**ft_access_list_help(char *cmd_2, char **path_from_envp, int len, int i);
 void	ft_free_tab(char **tab);
 void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2);
 int	ft_free(char *str1, char *str2, char **tab1, char **tab2);
-int	exec(char *cmd, char **envp, t_minishell *mini);
+int	exec(char **cmd, char **envp, t_minishell *mini);
 
 // Builtin functions
 int    pwd_builtin(void);

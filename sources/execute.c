@@ -39,47 +39,44 @@ int		execute_builtin(char **cmd_split, t_minishell *mini)
 }
 
 
-int	exec(char *cmd, char **envp, t_minishell *mini)
+int	exec(char **cmd, char **envp, t_minishell *mini)
 {
-	char **cmd_split;
     char *path;
 
-	cmd_split = ft_split(cmd, ' ');
-	if (is_builtin(cmd_split[0]) == EXIT_SUCCESS)
+	if (is_builtin(cmd[0]) == EXIT_SUCCESS)
 	{
-		if (execute_builtin(cmd_split, mini) == EXIT_SUCCESS)
+		if (execute_builtin(cmd, mini) == EXIT_SUCCESS)
 		{
-			ft_free_tab(cmd_split);
+			ft_free_tab(cmd);
 			return(EXIT_SUCCESS);
 		}
-		ft_free_tab(cmd_split);
+		ft_free_tab(cmd);
 		return(EXIT_FAILURE);
 	}
 	else
 	{
-		if (ft_strchr(cmd_split[0], '/') != NULL)
-			path = cmd_split[0];
-		else
-			path = ft_access_path(cmd_split, 0);
+		printf("test\n");
+		path = ft_access_path(cmd, 0);
+		printf("%s\n", path);
 		if (!path)
 		{   
 			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(cmd_split[0], 2);
+			ft_putstr_fd(cmd[0], 2);
 			ft_putendl_fd(": command not found", 2);
-			ft_free(path, NULL, cmd_split, NULL);
+			ft_free(path, NULL, NULL, NULL);
 		}
-		else if(execve(path, cmd_split, envp) == -1)
+		else if(execve(path, cmd, envp) == -1)
 		{   
 			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(cmd_split[0], 2);
+			ft_putstr_fd(cmd[0], 2);
 			ft_putendl_fd(": command not found", 2);
-			ft_free(path, NULL, cmd_split, NULL);
+			ft_free(path, NULL, NULL, NULL);
 		}
 	}
 	return(EXIT_FAILURE);
 }
 
-int	insert_pipe(char *cmd, char **envp, t_minishell *mini)
+int	insert_pipe(char **cmd, char **envp, t_minishell *mini)
 {
 	int	fd[2];
 	pid_t	pid;
