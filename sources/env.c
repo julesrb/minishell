@@ -1,27 +1,38 @@
 #include "minishell.h"
 
+void	deallocate_env(t_list **root)
+{
+	t_list	*aux;
+	t_list	*curr;
+
+	curr = *root;
+	while (curr != NULL)
+	{
+		aux = curr;
+		curr = curr->next;
+		free (aux);
+	}
+	*root = NULL;
+}
+
 int     env_mini(t_minishell *mini, char **envp)
 {
     int  i;
+    t_list *new;
 
     i = 0;
-    while(envp[i])
-        i++;
-    mini->env_mini = (char **)malloc(sizeof(mini->env_mini) * (i + 1));
-    if (!mini->env_mini)
-        return(EXIT_FAILURE);
-    i = 0;
+    mini->env_mini = NULL;
     while (envp[i] != NULL)
     {
-        mini->env_mini[i] = ft_strdup(envp[i]);
-        if (!mini->env_mini[i])
+        new = ft_lstnew((void *)envp[i]);
+        if (!new)
         {
-            ft_free_tab(mini->env_mini);
+            deallocate_env(&mini->env_mini);
             return(EXIT_FAILURE);
         }
+        ft_lstadd_back(&mini->env_mini, new);
         i++;
     }
-    mini->env_mini[i] = NULL;
     return(EXIT_SUCCESS);
 }
 
@@ -30,10 +41,10 @@ int     env_builtin(t_minishell *mini)
     int i;
 
     i = 0;
-    while (mini->env_mini[i] != NULL)
+    while (mini->env_mini)
     {
-        ft_putendl_fd(mini->env_mini[i], 1);
-        i++;
+        ft_putendl_fd(mini->env_mini->content, 1);
+        mini->env_mini = mini->env_mini->next;
     }
     exit(EXIT_SUCCESS);
 }

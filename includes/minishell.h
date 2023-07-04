@@ -50,7 +50,7 @@ typedef struct s_minishell
 	char *out_file;
 	int  exit_status;
 	char **envp;
-	char **env_mini;
+	t_list *env_mini;
 }t_minishell;
 
 int	print_opening(void);
@@ -97,5 +97,9 @@ int     export_builtin(char **cmd, t_minishell *mini);
 int	input_redirection(t_minishell mini);
 int	output_redirection(t_minishell mini);
 void	here_doc(char *limiter);
+
+//environment function
+void	deallocate_env(t_list **root);
+
 #endif
 

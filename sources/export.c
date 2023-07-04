@@ -10,85 +10,58 @@ int size_env(char **envp)
     return (i);
 }
 
-int    env_mini_export(t_minishell *mini, char **export)
+int     check_arg_export(char *export_arg)
 {
-    int  i;
-    int j;
-    char **new_env;
-
-    i = 0;
-    j = 0;
-    while(mini->env_mini[i])
-        i++;
-    while(export[j])
-        j++;
-    new_env = (char **)malloc(sizeof(new_env) * (i + j + 1));
-    if (!new_env)
-        return(EXIT_FAILURE);
-    i = 0;
-    while (mini->env_mini[i] != NULL)
-    {
-        new_env[i] = ft_strdup(mini->env_mini[i]);
-        if (!new_env[i])
-        {
-            ft_free_tab(new_env);
-            return(EXIT_FAILURE);
-        }
-        i++;
-    }
-    j = 0;
-    while (export[j] != NULL)
-    {
-        new_env[i + j] = ft_strdup(export[j]);
-        if (!new_env[i + j])
-        {
-            ft_free_tab(new_env);
-            return(EXIT_FAILURE);
-        }
-        j++;
-    }
-    new_env[i + j] = NULL;
-    ft_free_tab(mini->env_mini);
-    ft_free_tab(export);
-    mini->env_mini = new_env;
-    return(EXIT_SUCCESS);
+    if (export_arg[0] == '=')
+        return (EXIT_FAILURE);
+    return (EXIT_SUCCESS);
 }
+
+/* int  check_update_var(char *cmd, t_list *env_mini)
+{
+    while (env_mini != NULL)
+    {
+        if (strncmp(cmd[i]))
+        env_mini = env_mini->next;
+    }
+    return (EXIT_SUCCESS);
+} */
 
 int     export_builtin(char **cmd, t_minishell *mini)
 {
+    t_list *new;
+    t_list *curr;
     int i;
-    int j;
-    char **new_var;
 
+    curr = mini->env_mini;
     i = 0;
-    while(cmd[i] != NULL)
+    while (cmd[i] != NULL)
         i++;
     if (i == 1)
     {
-        j = 0;
-        while (mini->env_mini[j] != NULL)
+        while (curr)
         {
-            ft_putstr_fd("declare -x ", 1);
-            ft_putendl_fd(mini->env_mini[j], 1);
-            j++;
+            printf("declare -x %s\n", (char*)(curr->content));
+            curr = curr->next;
         }
-        exit (EXIT_SUCCESS);
     }
-    new_var = (char **)malloc(sizeof(new_var) * i);
-    if (!new_var)
-        return (EXIT_FAILURE);
-    j = 0;
-    while (cmd[j + 1] != NULL)
+    i = 1;
+    while(cmd[i] && check_arg_export(cmd[i]) == EXIT_SUCCESS)
     {
-        new_var[j] = ft_strdup(cmd[j + 1]);
-        if (!new_var[j])
+/*         if (check_update_var(cmd[i], mini->env_mini) == EXIT_SUCCESS)
         {
-            ft_free_tab(new_var);
-            exit(EXIT_FAILURE);
+            ft_list_update(cmd[i]);
         }
-        j++;
+        else */
+        new = ft_lstnew((void*)cmd[i]);
+        if (!new)
+        {
+            deallocate_env(&mini->env_mini);
+            return(EXIT_FAILURE);
+        }
+        //printf("new: %s\n", (char*)new->content);
+        ft_lstadd_back(&mini->env_mini, new);
+        i++;
     }
-    new_var[j] = NULL;
-    env_mini_export(mini, new_var);
     return(EXIT_SUCCESS);
 }

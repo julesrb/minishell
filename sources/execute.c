@@ -62,7 +62,6 @@ int	exec(char *cmd, char **envp, t_minishell *mini)
 	{
 		if (execute_builtin(cmd_split, mini) == EXIT_SUCCESS)
 		{
-			ft_free_tab(cmd_split);
 			return(EXIT_SUCCESS);
 		}
 		ft_free_tab(cmd_split);
