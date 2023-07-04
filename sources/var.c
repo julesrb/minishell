@@ -32,8 +32,10 @@ char	*var_translation(t_minishell *mini, char *var)
 	int i;
 	char *keyword;
 	char *translation;
+	t_list *curr;
 
 	i = 0;
+	curr = mini->env_mini;
 	translation = NULL;
 	if (var[1] == 0)
 		return(ft_strdup("$"));
@@ -47,11 +49,14 @@ char	*var_translation(t_minishell *mini, char *var)
 	while (keyword[i] != 0 && keyword[i] != ' ')
 		i++;
 	keyword[i] = 0;
-	while (mini->envp[i] != NULL)
+	while (curr != NULL)
 	{
-		if (ft_strncmp(mini->envp[i], keyword, ft_strlen(keyword)) == EXIT_SUCCESS)
-			translation = ft_strdup(&mini->envp[i][ft_strlen(keyword) + 1]);
-		i++;
+		if (ft_strncmp(curr->content, keyword, ft_strlen(keyword)) == EXIT_SUCCESS)
+		{
+			char *tmp = curr->content;
+			translation = ft_strdup(&tmp[ft_strlen(keyword) + 1]);
+		}
+		curr = curr->next;
 	}
 	free(keyword);
 	if (translation == NULL)

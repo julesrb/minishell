@@ -10,6 +10,7 @@ void	deallocate_env(t_list **root)
 	{
 		aux = curr;
 		curr = curr->next;
+        free (aux->content);
 		free (aux);
 	}
 	*root = NULL;
@@ -17,23 +18,25 @@ void	deallocate_env(t_list **root)
 
 int     env_mini(t_minishell *mini, char **envp)
 {
-	int  i;
-	t_list *new;
+    int  i;
+    t_list *new;
+    char *new_var = NULL;
 
-	i = 0;
-	mini->env_mini = NULL;
-	while (envp[i] != NULL)
-	{
-		new = ft_lstnew((void *)envp[i]);
-		if (!new)
-		{
-			deallocate_env(&mini->env_mini);
-			return(EXIT_FAILURE);
-		}
-		ft_lstadd_back(&mini->env_mini, new);
-		i++;
-	}
-	return(EXIT_SUCCESS);
+    i = 0;
+    mini->env_mini = NULL;
+    while (envp[i] != NULL)
+    {
+        new_var= ft_strdup(envp[i]);
+        new = ft_lstnew((void *)new_var);
+        if (!new)
+        {
+            deallocate_env(&mini->env_mini);
+            return(EXIT_FAILURE);
+        }
+        ft_lstadd_back(&mini->env_mini, new);
+        i++;
+    }
+    return(EXIT_SUCCESS);
 }
 
 int     env_builtin(t_minishell *mini)
