@@ -14,7 +14,8 @@
 
 int	prompt(t_minishell *mini)
 {
-    mini->input = readline("[Minishell] ");
+	mini->input = readline("[Minishell] ");
+	//mini->input = readline("");
 	if (mini->input[0] == 0)
 		add_to_list(&mini->lexer_table, ft_strdup(""));
 	else

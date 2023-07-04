@@ -72,35 +72,6 @@ int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
 	return (0);
 }
 
-/* t_lexer	*build_command(t_minishell *mini, int cmd, t_lexer *lexer_pos)
-{
-	t_lexer	*curr;
-	char *command;
-
-	curr = lexer_pos;
-	command = ft_strdup("");
-	if (curr->content[0] == '|')
-		curr = curr->next;
-	while (curr != NULL && curr->content[0] != '|')
-	{
-		if (curr->content[0] == '<' || curr->content[0] == '>')
-		{
-			if (check_redirection(mini, curr->content, cmd) == 1)
-				curr = check_redir_file(mini, curr);
-		}
-		if (curr->content[0] == '$')
-			var_translation(mini, curr);
-		if (curr != NULL && curr->content[0] != '|')
-		{
-			command = ft_strjoin(command, curr->content);
-			command = ft_strjoin(command, " ");
-			curr = curr->next;
-		}
-	}
-	mini->cmd_table[cmd] = command;
-	return (curr);
-} */
-
 char	**malloc_command(t_llist *cmd_list)
 {
 	int	arg;
@@ -136,7 +107,6 @@ t_llist	*build_command(t_minishell *mini, int cmd, t_llist *curr)
 	t_llist	*split_cmd;
 
 	split_cmd = NULL;
-	// add_to_list(split_cmd, "");
 	if (curr->content[0] == '|')
 		curr = curr->next;
 	while (curr != NULL && curr->content[0] != '|')
@@ -146,6 +116,8 @@ t_llist	*build_command(t_minishell *mini, int cmd, t_llist *curr)
 			if (check_redirection(mini, curr->content, cmd) == 1)
 				curr = check_redir_file(mini, curr);
 		}
+		if (curr->content[0] == '$')
+			curr->content= var_translation(mini, curr->content);
 		if (curr->content[0] == 34 || curr->content[0] == 39)
 			quote_translation(mini, curr);
 		if (curr != NULL && curr->content[0] != '|')
@@ -193,19 +165,18 @@ int	parser(t_minishell *mini)
 	cmd = 0;
 	curr = mini->lexer_table;
 	check_pipe_error(mini);
-	mini->nb_cmd = mini->pipe + 1;
-	mini->cmd_table = (char***)malloc(sizeof (char**) * (mini->nb_cmd));
-
-	// translate_var_token(curr); // translate the var
-
-	while (curr != NULL)
+	if (mini->error_pipe == 0)
 	{
-		curr = build_command(mini, cmd, curr);
-		cmd++;
+		mini->nb_cmd = mini->pipe + 1;
+		mini->cmd_table = (char***)malloc(sizeof (char**) * (mini->nb_cmd));
+		while (curr != NULL)
+		{
+			curr = build_command(mini, cmd, curr);
+			cmd++;
+		}
+		if (mini->cmd_table[0][0][0] == 0)
+			mini->nb_cmd = 0;
 	}
 	deallocate_list(&mini->lexer_table);
 	return (1);
 }
-
-// command error or empty
-// translate_var_token(curr); // translate the var
