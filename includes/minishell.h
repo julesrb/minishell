@@ -97,6 +97,7 @@ int     env_mini(t_minishell *mini, char **envp);
 int     env_builtin(t_minishell *mini);
 int     echo_builtin(char **cmd_split);
 int     export_builtin(char **cmd, t_minishell *mini);
+int     unset_builtin(char **cmd, t_minishell *mini);
 
 int	input_redirection(t_minishell mini);
 int	output_redirection(t_minishell mini);

@@ -42,8 +42,8 @@ int		execute_builtin(char **cmd_split, t_minishell *mini)
 	// 	return (EXIT_SUCCESS);
 	else if(ft_strncmp(cmd_split[0], "export", max_length("export", cmd_split[0])) == EXIT_SUCCESS)
 		return (export_builtin(cmd_split, mini));
-	// else if(!ft_strncmp(cmd_split[0], "unset", max_length("unset", cmd_split[0])))
-	// 	return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd_split[0], "unset", max_length("unset", cmd_split[0])))
+		return (unset_builtin(cmd_split, mini));
 	 else if(ft_strncmp(cmd_split[0], "echo", max_length("echo", cmd_split[0])) == EXIT_SUCCESS)
 	 	return (echo_builtin(cmd_split));
 	// else if(!ft_strncmp(cmd_split[0], "exit", max_length("exit", cmd_split[0])))
