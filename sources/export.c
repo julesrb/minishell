@@ -10,86 +10,95 @@ int size_env(char **envp)
     return (i);
 }
 
-int    env_mini_export(t_minishell *mini, char **export)
+int     check_arg_export(char *export_arg)
 {
-    int  i;
-    int j;
-    char **new_env;
-
-    i = 0;
-    j = 0;
-    while(mini->env_mini[i])
-        i++;
-    while(export[j])
-        j++;
-    new_env = (char **)malloc(sizeof(new_env) * (i + j + 1));
-    if (!new_env)
-        return(EXIT_FAILURE);
-    i = 0;
-    while (mini->env_mini[i] != NULL)
-    {
-        new_env[i] = ft_strdup(mini->env_mini[i]);
-        if (!new_env[i])
-        {
-            ft_free_tab(new_env);
-            return(EXIT_FAILURE);
-        }
-        i++;
-    }
-    j = 0;
-    while (export[j] != NULL)
-    {
-        new_env[i + j] = ft_strdup(export[j]);
-        if (!new_env[i + j])
-        {
-            ft_free_tab(new_env);
-            return(EXIT_FAILURE);
-        }
-        j++;
-    }
-    new_env[i + j] = NULL;
-    ft_free_tab(mini->env_mini);
-    ft_free_tab(export);
-    mini->env_mini = new_env;
-    return(EXIT_SUCCESS);
+    if (export_arg[0] == '=')
+        return (EXIT_FAILURE);
+    return (EXIT_SUCCESS);
 }
 
+int  check_update_var(char *cmd, t_list *env_mini)
+{
+    int i;
+    t_list *curr;
+
+    i = 0;
+    curr = env_mini;
+    while (cmd[i] != '=')
+        i++;
+    while (curr != NULL)
+    {
+        if (strncmp(cmd, (char*)(curr->content), i) == EXIT_SUCCESS)
+            return (EXIT_SUCCESS);
+        curr = curr->next;
+    }
+    return (EXIT_FAILURE);
+}
+
+int     list_env_update(t_minishell *mini, char *var_update)
+{
+    t_list *curr;
+    int i;
+    char *new_var;
+
+    i = 0;
+    curr = mini->env_mini;
+    while (var_update[i] != '=')
+        i++;
+    while (curr != NULL)
+    {
+        if (ft_strncmp(var_update, (char*)(curr->content), i) == EXIT_SUCCESS)
+        {
+            free(curr->content);
+            new_var = ft_strdup(var_update);
+            curr->content = (void*)new_var;
+            return (EXIT_SUCCESS);
+        }
+        curr = curr->next;
+    }
+    return(EXIT_FAILURE);
+}
 
 int     export_builtin(char **cmd, t_minishell *mini)
 {
+    t_list *new;
+    t_list *curr;
     int i;
-    int j;
-    char **new_var;
 
+    curr = mini->env_mini;
     i = 0;
-    while(cmd[i] != NULL)
+    while (cmd[i] != NULL)
         i++;
     if (i == 1)
     {
-        j = 0;
-        while (mini->env_mini[j] != NULL)
+        while (curr)
         {
-            ft_putstr_fd("declare -x ", 1);
-            ft_putendl_fd(mini->env_mini[j], 1);
-            j++;
+            printf("declare -x %s\n", (char*)(curr->content));
+            curr = curr->next;
         }
-        exit (EXIT_SUCCESS);
     }
-    new_var = (char **)malloc(sizeof(new_var) * i);
-    if (!new_var)
-        return (EXIT_FAILURE);
-    j = 0;
-    while (cmd[j + 1] != NULL)
+    i = 1;
+    while(cmd[i] && (check_arg_export(cmd[i]) == EXIT_SUCCESS))
     {
-        new_var[j] = ft_strdup(cmd[j + 1]);
-        if (!new_var[j])
+        if (check_update_var(cmd[i], mini->env_mini) == EXIT_SUCCESS)
         {
-            ft_free_tab(new_var);
-            exit(EXIT_FAILURE);
+            if(list_env_update(mini, cmd[i]) == EXIT_FAILURE)
+            {
+                deallocate_env(&mini->env_mini);
+                return(EXIT_FAILURE);
+            }
         }
-        j++;
+        else
+        {
+            new = ft_lstnew((void*)ft_strdup(cmd[i]));
+            if (!new)
+            {
+                deallocate_env(&mini->env_mini);
+                return(EXIT_FAILURE);
+            }
+            ft_lstadd_back(&mini->env_mini, new);
+        }
+        i++;
     }
-    new_var[j] = NULL;
-    env_mini_export(mini, new_var);
     return(EXIT_SUCCESS);
 }

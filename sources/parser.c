@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-t_lexer	*check_redir_file(t_minishell *mini, t_lexer *lexer_pos)
+t_llist	*check_redir_file(t_minishell *mini, t_llist *lexer_pos)
 {
-	t_lexer *curr;
+	t_llist *curr;
 	int i;
 
 	i = 0;
@@ -72,13 +72,41 @@ int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
 	return (0);
 }
 
-t_lexer	*build_command(t_minishell *mini, int cmd, t_lexer *lexer_pos)
+char	**malloc_command(t_llist *cmd_list)
 {
-	t_lexer	*curr;
-	char *command;
+	int	arg;
+	int	i;
+	char **cmd_arr;
+	t_llist *cnt;
 
-	curr = lexer_pos;
-	command = ft_strdup("");
+	i = 0;
+	cnt = cmd_list;
+	arg = lst_size(cnt);
+	if (arg == 0)
+	{
+		cmd_arr = (char**)malloc(sizeof (char*) * 1);
+		cmd_arr[0] = NULL;
+	}
+	else
+	{
+		cmd_arr = (char**)malloc(sizeof (char*) * arg + 1);
+		while (cmd_list != NULL)
+		{
+			cmd_arr[i] = ft_strdup(cmd_list->content);
+			cmd_list = cmd_list->next;
+			i++;
+		}
+		cmd_arr[i] = NULL;
+	}
+	deallocate_list(&cmd_list);
+	return (cmd_arr);
+}
+
+t_llist	*build_command(t_minishell *mini, int cmd, t_llist *curr)
+{
+	t_llist	*split_cmd;
+
+	split_cmd = NULL;
 	if (curr->content[0] == '|')
 		curr = curr->next;
 	while (curr != NULL && curr->content[0] != '|')
@@ -88,20 +116,21 @@ t_lexer	*build_command(t_minishell *mini, int cmd, t_lexer *lexer_pos)
 			if (check_redirection(mini, curr->content, cmd) == 1)
 				curr = check_redir_file(mini, curr);
 		}
-		if (curr->content[0] == '$')
-			var_translation(mini, curr);
+		if (curr != NULL && curr->content[0] == '$')
+			curr->content= var_translation(mini, curr->content);
+		if (curr != NULL && ((curr->content[0] == 34 || curr->content[0] == 39)))
+			quote_translation(mini, curr);
 		if (curr != NULL && curr->content[0] != '|')
 		{
-			command = ft_strjoin(command, curr->content);
-			command = ft_strjoin(command, " ");
+			add_to_list(&split_cmd, curr->content);
 			curr = curr->next;
 		}
 	}
-	mini->cmd_table[cmd] = command;
+	mini->cmd_table[cmd] = malloc_command(split_cmd);
 	return (curr);
 }
 
-int	last_token_is_pipe(t_lexer *curr)
+int	last_token_is_pipe(t_llist *curr)
 {
 	while (curr->next != NULL)
 		curr = curr->next;
@@ -112,7 +141,7 @@ int	last_token_is_pipe(t_lexer *curr)
 
 int	check_pipe_error(t_minishell *mini)
 {
-	t_lexer	*curr;
+	t_llist	*curr;
 	
 	curr = mini->lexer_table;
 	if (curr->content[0] == '|') //check for pipe at begining
@@ -131,24 +160,23 @@ int	check_pipe_error(t_minishell *mini)
 int	parser(t_minishell *mini)
 {
 	int cmd;
-	t_lexer	*curr;
+	t_llist	*curr;
 	
 	cmd = 0;
 	curr = mini->lexer_table;
 	check_pipe_error(mini);
-	mini->nb_cmd = mini->pipe + 1;
-	mini->cmd_table = (char**)malloc(sizeof (char*) * (mini->nb_cmd));
-
-	// translate_var_token(curr); // translate the var
-
-	while (curr != NULL)
+	if (mini->error_pipe == 0)
 	{
-		curr = build_command(mini, cmd, curr);
-		cmd++;
+		mini->nb_cmd = mini->pipe + 1;
+		mini->cmd_table = (char***)malloc(sizeof (char**) * (mini->nb_cmd));
+		while (curr != NULL)
+		{
+			curr = build_command(mini, cmd, curr);
+			cmd++;
+		}
+		if (mini->cmd_table[0][0][0] == 0)
+			mini->nb_cmd = 0;
 	}
-	deallocate(&mini->lexer_table);
+	deallocate_list(&mini->lexer_table);
 	return (1);
 }
-
-// command error or empty
-// translate_var_token(curr); // translate the var
