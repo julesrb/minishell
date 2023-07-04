@@ -7,13 +7,13 @@ void	here_doc_put_in(char *limiter, int *fds)
 	close(fds[0]);
 	while (1)
 	{
-		ret = get_next_line(0);
+		ret = readline("heredoc> ");
 		if (ft_strncmp(ret, limiter, ft_strlen(limiter)) == 0)
 		{
 			free(ret);
 			exit(0);
 		}
-		ft_putstr_fd(ret, fds[1]);
+		ft_putendl_fd(ret, fds[1]);
 		free(ret);
 	}
 }
