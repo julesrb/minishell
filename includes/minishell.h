@@ -65,7 +65,7 @@ int	parser(t_minishell *mini);
 
 void	arg_check(int argc, char **argv);
 
-int	var_translation(t_minishell *mini, t_llist *curr);
+int	add_var_translation(t_minishell *mini, t_llist *curr);
 int	quote_translation(t_minishell *mini, t_llist *curr);
 
 // Utils

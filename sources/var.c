@@ -3,17 +3,15 @@
 int	quote_translation(t_minishell *mini, t_llist *curr)
 {
 	int i;
-	char *translation;
 	char quote;
+	char flag_translation;
 
 	i = 0;
-	translation = NULL;
+	flag_translation = 0;
 	(void)mini;
 	quote = curr->content[0];
 	if (quote == 34) // double quotes
-	{
-		//check for var
-	}
+		flag_translation = 1;
 	while (curr->content[i] != 0)
 	{
 		curr->content[i] = curr->content[i + 1];
@@ -21,10 +19,15 @@ int	quote_translation(t_minishell *mini, t_llist *curr)
 			curr->content[i] = 0;
 		i++;
 	}
+	if (flag_translation == 1)
+	{
+		if (ft_strchr(curr->content, '$') != NULL)
+			add_var_translation(mini, curr->content);
+	}
 	return(EXIT_SUCCESS);
 }
 
-int	var_translation(t_minishell *mini, t_llist *curr)
+char	*var_translation2(t_minishell *mini, char *var)
 {
 	int i;
 	char *keyword;
@@ -32,15 +35,15 @@ int	var_translation(t_minishell *mini, t_llist *curr)
 
 	i = 0;
 	translation = NULL;
-	if (curr->content[1] == 0)
+	if (var[1] == 0)
 		return(EXIT_SUCCESS);
-	if (curr->content[1] == '?')
+	if (var[1] == '?')
 	{
-		curr->content[0] = mini->exit_status + '0';
-		curr->content[1] = 0;
+		var[0] = mini->exit_status + '0';
+		var[1] = 0;
 		return(EXIT_SUCCESS);
 	}
-	keyword = ft_strdup(&curr->content[1]);
+	keyword = ft_strdup(&var[1]);
 	while (mini->envp[i] != NULL)
 	{
 		if (ft_strncmp(mini->envp[i], keyword, ft_strlen(keyword)) == EXIT_SUCCESS)
@@ -49,7 +52,7 @@ int	var_translation(t_minishell *mini, t_llist *curr)
 		}
 		i++;
 	}
-	free(keyword);
+		free(keyword);
 	free(curr->content);
 	if (translation != NULL)
 	{
@@ -57,5 +60,19 @@ int	var_translation(t_minishell *mini, t_llist *curr)
 	}
 	else
 		curr->content = ft_strdup(" ");
+	return(EXIT_SUCCESS);
+}
+
+int	aad_var_translation(t_minishell *mini, char *str) // add var translation
+{
+	int i;
+	char *keyword;
+	char *translation;
+
+	i = 0;
+	translation = NULL;
+	while (str[i] != 0 && str[i] != '$')
+		i++;
+	
 	return(EXIT_SUCCESS);
 }
