@@ -85,7 +85,7 @@ char	**malloc_command(t_llist *cmd_list)
 	if (arg == 0)
 	{
 		cmd_arr = (char**)malloc(sizeof (char*) * 1);
-		cmd_arr[0] = NULL;
+		cmd_arr[0] = ft_strdup("");
 	}
 	else
 	{
@@ -98,7 +98,6 @@ char	**malloc_command(t_llist *cmd_list)
 		}
 		cmd_arr[i] = NULL;
 	}
-	deallocate_list(&cmd_list);
 	return (cmd_arr);
 }
 
@@ -122,11 +121,12 @@ t_llist	*build_command(t_minishell *mini, int cmd, t_llist *curr)
 			quote_translation(mini, curr);
 		if (curr != NULL && curr->content[0] != '|')
 		{
-			add_to_list(&split_cmd, curr->content);
+			add_to_list(&split_cmd, ft_strdup(curr->content));
 			curr = curr->next;
 		}
 	}
 	mini->cmd_table[cmd] = malloc_command(split_cmd);
+	deallocate_list(&split_cmd);
 	return (curr);
 }
 
@@ -168,7 +168,7 @@ int	parser(t_minishell *mini)
 	if (mini->error_pipe == 0)
 	{
 		mini->nb_cmd = mini->pipe + 1;
-		mini->cmd_table = (char***)malloc(sizeof (char**) * (mini->nb_cmd));
+		mini->cmd_table = (char***)malloc(sizeof (char**) * (mini->nb_cmd + 1));
 		while (curr != NULL)
 		{
 			curr = build_command(mini, cmd, curr);
@@ -176,6 +176,7 @@ int	parser(t_minishell *mini)
 		}
 		if (mini->cmd_table[0][0][0] == 0)
 			mini->nb_cmd = 0;
+		mini->cmd_table[cmd] = NULL;
 	}
 	deallocate_list(&mini->lexer_table);
 	return (1);

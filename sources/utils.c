@@ -31,12 +31,19 @@ void	deallocate_list(t_llist **head)
 void	free_mini(t_minishell *mini)
 {
 	int i;
+	int j;
 
 	i = 0;
 	if (mini->cmd_table != NULL)
 	{
-		while (i < mini->nb_cmd)
+		while (mini->cmd_table[i] != NULL)
 		{
+			j = 0;
+			while (mini->cmd_table[i][j] != NULL)
+			{
+				free(mini->cmd_table[i][j]);
+				j++;
+			}
 			free(mini->cmd_table[i]);
 			i++;
 		}
