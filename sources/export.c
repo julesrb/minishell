@@ -93,10 +93,40 @@ int     list_env_update(t_minishell *mini, char *var_update)
     return(EXIT_FAILURE);
 }
 
+char *adjust_var_env(t_minishell *mini, char *var_env)
+{
+    int i;
+    char *adjust_var_env = NULL;
+    char *temp = NULL;
+    char *single_quote = "\'";
+    char *double_quote = "\"";
+
+    i = 0;
+    while(var_env[i] != '=')
+        i++;
+    temp = ft_strdup(var_env + i + 1);
+    printf("temp is: %s\n", temp);
+    if (ft_strchr(var_env, '\"') != NULL)
+    {
+        temp = add_var_translation(mini, temp);
+        temp = ft_strtrim(temp, double_quote);    
+    }
+    else if (ft_strchr(var_env, '\'') != NULL)
+    {
+        temp = add_var_translation(mini, temp);
+        temp = ft_strtrim(temp, single_quote);    
+    }
+    else
+        adjust_var_env = var_env;
+
+    return (adjust_var_env);
+}
+
 int     export_builtin(char **cmd, t_minishell *mini)
 {
     t_list *new;
     t_list *curr;
+    char *new_var= NULL;
     int i;
 
     curr = mini->env_mini;
@@ -116,7 +146,8 @@ int     export_builtin(char **cmd, t_minishell *mini)
     {
         if (check_update_var(cmd[i], mini->env_mini) == EXIT_SUCCESS)
         {
-            if(list_env_update(mini, cmd[i]) == EXIT_FAILURE)
+            new_var = adjust_var_env(mini, cmd[i]);
+            if(list_env_update(mini, new_var) == EXIT_FAILURE)
             {
                 deallocate_env(&mini->env_mini);
                 return(EXIT_FAILURE);
@@ -124,7 +155,8 @@ int     export_builtin(char **cmd, t_minishell *mini)
         }
         else
         {
-            new = ft_lstnew((void*)ft_strdup(cmd[i]));
+            new_var = adjust_var_env(mini, cmd[i]);
+            new = ft_lstnew((void*)ft_strdup(new_var));
             if (!new)
             {
                 deallocate_env(&mini->env_mini);
