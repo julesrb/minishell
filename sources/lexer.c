@@ -17,9 +17,9 @@ int	yield_word(char *token, t_minishell *mini)
 	int		i;
 	int		len;
 	char	*str;
-	
+
 	len = 0;
-	while (token[len]!= ' ' && token[len]!= 0 && token[len]!= '|')
+	while (token[len] != ' ' && token[len] != 0 && token[len] != '|')
 	{
 		if (token[len] == 34 || token[len] == 39)
 			while ((token[len] != 34 && token[len] != 39) || token[len + 1] != 0)
@@ -42,17 +42,15 @@ int	yield_word(char *token, t_minishell *mini)
 
 int	yield_quote(char *token, t_minishell *mini)
 {
-	int i;
-	int len;
-	char *str;
+	int		i;
+	int		len;
+	char	*str;
 
 	i = 1;
-	while (token[i]!= token[0] && token[i]!= 0)
-	{
+	while (token[i] != token[0] && token[i] != 0)
 		i++;
-	}
 	len = i;
-	if (token[i]== token[0])
+	if (token[i] == token[0])
 		len++;
 	str = malloc(sizeof (char) * (len + 1));
 	if (!str)
@@ -65,17 +63,17 @@ int	yield_quote(char *token, t_minishell *mini)
 	}
 	str[i] = '\0';
 	add_to_list(&mini->lexer_table, str);
-	return (i + 1); // + 1 is go beyond the closing quote
+	return (i + 1);
 }
 
 int	yield_var(char *token, t_minishell *mini)
 {
-	char *str;
-	int i;
-	int len;
+	char	*str;
+	int		i;
+	int		len;
 
 	len = 0;
-	while (token[len]!= ' ' && token[len]!= 0)
+	while (token[len] != ' ' && token[len] != 0)
 		len++;
 	str = malloc(sizeof (char) * (len + 1));
 	if (!str)
@@ -93,7 +91,7 @@ int	yield_var(char *token, t_minishell *mini)
 
 int	yield_pipe(char *token, t_minishell *mini)
 {
-	char *str;
+	char	*str;
 
 	mini->pipe += 1;
 	str = malloc(sizeof (char) * (1 + 1));
@@ -105,7 +103,7 @@ int	yield_pipe(char *token, t_minishell *mini)
 
 int	yield_redirection(char *redir, t_minishell *mini)
 {
-	char *str;
+	char	*str;
 
 	if (redir[0] != redir[1])
 	{
@@ -129,8 +127,8 @@ int	yield_redirection(char *redir, t_minishell *mini)
 
 int	lexer(t_minishell *mini)
 {
-	char *input;
-	int i;
+	char	*input;
+	int		i;
 
 	i = 0;
 	input = mini->input;
@@ -142,7 +140,7 @@ int	lexer(t_minishell *mini)
 			i += yield_word(&input[i], mini);
 		else if (input[i] == 39 || input[i] == 34)
 			i += yield_quote(&input[i], mini);
-	 	else if (input[i] == '$')
+		else if (input[i] == '$')
 			i += yield_var(&input[i], mini);
 		else if (input[i] == '|' )
 			i += yield_pipe(&input[i], mini);

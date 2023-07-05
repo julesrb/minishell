@@ -50,8 +50,8 @@ typedef struct s_minishell
 	char	*out_file;
 	int		exit_status;
 	char	**envp;
+	int		exitq;
 	t_list	*env_mini;
-	int		pid_mini;
 }t_minishell;
 
 int		print_opening(void);

@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+int exitor= 5;
+
 int	init_t_mini(t_minishell *mini, char **envp)
 {
 	mini->envp = envp;
@@ -27,19 +29,40 @@ int	init_t_mini(t_minishell *mini, char **envp)
 	mini->nb_cmd = 0;
 	mini->error_redir = 0;
 	mini->error_pipe = 0;
+	mini->exitq = 5;
 	return (0);
 }
 
-int main(int argc, char **argv, char **envp)
+int	exit_builtin(char **cmd, t_minishell *mini)
 {
-	t_minishell mini;
+	int	i;
+
+	i = 0;
+	(void)mini;
+	while (cmd[i] != NULL)
+		i++;
+	if (i > 1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd[0], 2);
+		ft_putendl_fd(": too many arguments", 2);
+		return (0);
+	}
+	exitor = 1;
+	return (1);
+}
+
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_minishell	mini;
 
 	mini.exit_status = 0;
 	arg_check(argc, argv);
 	if (env_mini(&mini, envp) == EXIT_FAILURE)
 		printf("Error initializing the minishell environment\n");
-	print_opening();
-	while(1)
+	print_opening ();
+	while (1)
 	{
 		init_t_mini(&mini, envp);
 		prompt(&mini);
@@ -48,11 +71,18 @@ int main(int argc, char **argv, char **envp)
 		parser(&mini);
  			print_t_mini(&mini);
 			print_cmd_table(&mini, mini.nb_cmd);
- 		if ((mini.error_pipe == 0 && mini.error_redir == 0) && mini.nb_cmd > 0)
-				mini.exit_status = executor(&mini, envp);
+ 		/* if ((mini.error_pipe == 0 && mini.error_redir == 0) && mini.nb_cmd > 0)
+			mini.exit_status = executor(&mini, envp); 
 		else if (mini.nb_cmd != 0)
-			ft_printf("Parsing ERROR\n");
-		free_mini(&mini);
-    }
-    return(EXIT_SUCCESS);
-} 
+			ft_printf("Parsing ERROR\n"); */
+		executor(&mini, envp);
+		ft_printf("| quit = %i\n\n", mini.exitq);
+		if (exitor == 1)
+		{
+			ft_printf("SUCCES");
+			exit (1);
+		}
+		//free_mini(&mini);
+	}
+	return (EXIT_SUCCESS);
+}

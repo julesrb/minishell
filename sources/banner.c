@@ -25,24 +25,3 @@ int	print_opening(void)
 	ft_printf("/ ******************************************************* /\n");
 	return (EXIT_SUCCESS);
 }
-
-/* int	print_opening(void)
-{
-	int		fd;
-	char	*line;
-
-	fd = open("./sources/banner.txt", O_RDONLY);
-	if (fd < 0)
-	{
-		ft_printf("opening_failed");
-		return (0);
-	}
-	ft_printf("opening_ok");
-	line = get_next_line(fd);
-	while (!line)
-	{
-		line = get_next_line(fd);
-		ft_printf("%s", line);
-	}
-	return (EXIT_SUCCESS);
-} */
