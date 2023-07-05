@@ -36,21 +36,22 @@ typedef struct s_llist
 
 typedef struct s_minishell
 {
-	char *input;  //prompt input
-	t_llist *lexer_table;
-	char ***cmd_table; // output du parser
-	int pipe; // nb de pipe
-	int input_redirection; // 1 si < 2 si <<
-	int output_redirection; // 1 si > 2 si >>
-	int	error_redir;
-	int	error_pipe;
-	int nb_cmd; // nb de commande a executer
-	char *limiter;
-	char *in_file;
-	char *out_file;
-	int  exit_status;
-	char **envp;
-	t_list *env_mini;
+	char	*input;  //prompt input
+	t_llist	*lexer_table;
+	char	***cmd_table; // output du parser
+	int		pipe; // nb de pipe
+	int		input_redirection; // 1 si < 2 si <<
+	int		output_redirection; // 1 si > 2 si >>
+	int		error_redir;
+	int		error_pipe;
+	int		nb_cmd; // nb de commande a executer
+	char	*limiter;
+	char	*in_file;
+	char	*out_file;
+	int		exit_status;
+	char	**envp;
+	t_list	*env_mini;
+	int		pid_mini;
 }t_minishell;
 
 int		print_opening(void);

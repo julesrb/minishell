@@ -49,6 +49,7 @@ char	*var_translation(t_minishell *mini, char *var)
 	while (keyword[i] != 0 && keyword[i] != ' ')
 		i++;
 	keyword[i] = 0;
+	keyword = ft_strjoin(keyword, "=");
 	while (curr != NULL)
 	{
 		if (ft_strncmp(curr->content, keyword, ft_strlen(keyword)) == EXIT_SUCCESS)
@@ -68,9 +69,7 @@ char	*add_var_translation(t_minishell *mini, char *str) // add var translation
 {
 	int i;
 	char *translation;
-/* 	char *start;
-	char *end; */
-
+	
 	i = 0;
 	translation = NULL;
 	while (str[i] != 0 && str[i] != '$')
