@@ -12,19 +12,6 @@
 
 #include "libft.h"
 #include <stdlib.h>
-/*
-#include <stdio.h>
-#include <string.h>
-
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
-
-int	main(void)
-{
-	char (*ftest)(unsigned int, char);
-	
-	ftest
-}
-*/
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {

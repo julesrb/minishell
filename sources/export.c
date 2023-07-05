@@ -10,10 +10,44 @@ int size_env(char **envp)
     return (i);
 }
 
+char	*ft_strrchr_set(const char *s, char *set)
+{
+	long	i;
+    int j;
+	char	*str;
+
+	str = (char *)s;
+	i = ft_strlen(s);
+	while (i >= 0)
+	{
+        j = 0;
+        while (set[j] != '\0')
+        {
+            if (str[i] == (set[j] % 256))
+                return (str + i);
+
+            j++;
+        }
+        i--;
+	}
+	return (NULL);
+}
+
 int     check_arg_export(char *export_arg)
 {
-    if (export_arg[0] == '=')
+    char *var_name;
+    int i;
+    char *set = "$`\"'|><*?[]\\@#{}-+/^!()";
+
+    i = 0;
+    while(export_arg[i] != '=')
+        i++;
+    var_name = (char*)malloc(sizeof(var_name) * i + 1);
+    ft_strlcpy(var_name, export_arg, i + 1);
+    if (ft_isalpha(export_arg[0]) == 0)
         return (EXIT_FAILURE);
+    else if (ft_strrchr_set(var_name, set) != NULL)
+        return(ft_free(var_name, NULL, NULL, NULL));
     return (EXIT_SUCCESS);
 }
 

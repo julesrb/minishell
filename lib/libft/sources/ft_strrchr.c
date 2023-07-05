@@ -11,22 +11,6 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-/*
-#include <stdio.h>
-#include <string.h>
-
-char	*ft_strrchr(const char *s, int c);
-
-int	main(void)
-{
-	char str[] = "bonjour";
-	int c;
-
-	c = 'b';
-	printf ("%s\n", strrchr(str, c));
-	printf ("%s\n", ft_strrchr(str, c));
-}
-*/
 
 char	*ft_strrchr(const char *s, int c)
 {

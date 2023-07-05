@@ -11,22 +11,6 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-/*
-#include <stdio.h>
-#include <string.h>
-
-char	*ft_strnstr(const char	*big, const char *little, size_t len);
-
-int	main(void)
-{
-	char	big[] = "abcdefgh";
-	char	little[] = "abc";
-	size_t	len;
-
-	len = 2;
-	printf ("%s\n", ft_strnstr(big, little, len));
-}
-*/
 
 char	*ft_strnstr(const char	*big, const char *little, size_t len)
 {
