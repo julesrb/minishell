@@ -1,18 +1,77 @@
 #include "minishell.h"
 
+int     ft_count_trim(char *cmd)
+{
+    int count_trim;
+    int i;
+
+    i = 0;
+    count_trim = 0;
+    while (!ft_isalnum(cmd[i]) && !ft_isalnum(cmd[i + 1]) && !ft_isalnum(cmd[i + 2]))
+    {
+        if (cmd[i] == '.' && cmd[i + 1] == '.' && cmd[i + 2] == '/')
+            count_trim++;
+        i++;
+    }
+    return(count_trim);
+}
+
+char   *origine_path(int count_trim)
+{
+    char *current_path;
+    char *or_path;
+    int i;
+    int j;
+    int nb;
+
+    nb = 0;
+    i = 0;
+    j = 0;
+    current_path = ft_strdup(getenv("PWD"));
+    while (current_path[i] != '\0')
+    {
+        if (current_path[i] == '/')
+            nb++;
+        i++;
+    }
+    nb++;
+    i = 0;
+    while (current_path[i] != '\0')
+    {
+        if (current_path[i] == '/')
+            j++;
+        if (j == (nb - count_trim))
+            break;
+        i++;
+    }
+    or_path = (char*)malloc(sizeof(or_path) * (i + 1));
+    ft_strlcpy(or_path, current_path, i + 1);
+    return (or_path);
+}
+
 char    *ft_relative_path(char *cmd)
 {
     char *relative_path = NULL;
     char *path_trim = NULL;
     char *env_path;
+    char *path_root= NULL;
+    int count_trim;
 
+    count_trim = 0;
     if (ft_strncmp(cmd, "./", 2) == 0)
     {
         path_trim = ft_strtrim(cmd, "./");
         env_path = ft_strdup(getenv("PWD"));
         relative_path = ft_strjoin(env_path, (char*)"/");
         relative_path = ft_strjoin(relative_path, path_trim);
-        printf("relative path %s\n", relative_path);
+    }
+    else if (ft_strncmp(cmd, "../", 3) == 0)
+    {
+        path_trim = ft_strtrim(cmd, "../");
+        count_trim = ft_count_trim(cmd);
+        env_path = origine_path(count_trim);
+        path_root = ft_strjoin(env_path, (char*)"/");
+        relative_path = ft_strjoin(path_root, path_trim);
     }
     return(relative_path);
 }
@@ -33,11 +92,14 @@ int is_absolute_path(char *path)
 
 char *find_executable(char **cmd)
 {
+    char *result;
+
     if (is_absolute_path(cmd[0]) == EXIT_SUCCESS)
         return(cmd[0]);
-    else if(is_relative_path(cmd[0]) == EXIT_SUCCESS)
+    else if (is_relative_path(cmd[0]) == EXIT_SUCCESS)
     {
-        return(ft_relative_path(cmd[0]));
+        result = ft_relative_path(cmd[0]);
+        return(result);
     }
     else
         return(ft_access_path(cmd, 0));
