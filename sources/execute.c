@@ -27,8 +27,8 @@ int	is_builtin(char *cmd)
 		return (EXIT_SUCCESS);
 	else if(ft_strncmp(cmd, "echo", max_length("echo", cmd)) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
-	else if(ft_strncmp(cmd, "exit", max_length("exit", cmd)) == EXIT_SUCCESS)
-		return (EXIT_SUCCESS); 
+	// else if(ft_strncmp(cmd, "exit", max_length("exit", cmd)) == EXIT_SUCCESS)
+	// 	return (EXIT_SUCCESS); 
 	return(EXIT_FAILURE);
 }
 
@@ -42,8 +42,8 @@ int		execute_builtin(char **cmd_split, t_minishell *mini)
 	// 	return (EXIT_SUCCESS);
 	else if(ft_strncmp(cmd_split[0], "export", max_length("export", cmd_split[0])) == EXIT_SUCCESS)
 		return (export_builtin(cmd_split, mini));
-	// else if(!ft_strncmp(cmd_split[0], "unset", max_length("unset", cmd_split[0])))
-	// 	return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd_split[0], "unset", max_length("unset", cmd_split[0])))
+		return (unset_builtin(cmd_split, mini));
 	 else if(ft_strncmp(cmd_split[0], "echo", max_length("echo", cmd_split[0])) == EXIT_SUCCESS)
 	 	return (echo_builtin(cmd_split));
 	// else if(!ft_strncmp(cmd_split[0], "exit", max_length("exit", cmd_split[0])))
@@ -66,7 +66,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 	}
 	else
 	{
-		path = ft_access_path(cmd, 0);
+		path = find_executable(cmd);
 		if (!path)
 		{   
 			ft_putstr_fd("minishell: ", 2);
