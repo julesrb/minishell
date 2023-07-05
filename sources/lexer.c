@@ -135,7 +135,7 @@ int	lexer(t_minishell *mini)
 	{
 		if (input[i] == '<' || input[i] == '>')
 			i += yield_redirection(&input[i], mini);
-		else if (ft_isalpha(input[i]) == 1 || input[i] == '-' || input[i] == '.' || input[i] == '=')
+		else if (ft_isalpha(input[i]) == 1 || input[i] == '-' || input[i] == '.' || input[i] == '=' || input[i] == '/')
 			i += yield_word(&input[i], mini);
 		else if (input[i] == 39 || input[i] == 34)
 			i += yield_quote(&input[i], mini);

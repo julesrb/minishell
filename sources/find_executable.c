@@ -27,7 +27,7 @@ char *find_executable(char **cmd)
 {
     if (is_absolute_path(cmd[0]) == EXIT_SUCCESS)
         return(cmd[0]);
-/*     else if(is_relative_path(cmd[0]) = EXIT_SUCCESS)
+/*     else if(is_relative_path(cmd[0]) == EXIT_SUCCESS)
         return(ft_relative_path(cmd[0])); */
     else
         return(ft_access_path(cmd, 0));
