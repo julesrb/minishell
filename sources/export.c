@@ -169,6 +169,7 @@ int     export_builtin(char **cmd, t_minishell *mini)
             printf("declare -x %s\n", (char*)(curr->content));
             curr = curr->next;
         }
+        exit(EXIT_SUCCESS);
     }
     i = 1;
     while(cmd[i] && (check_arg_export(cmd[i]) == EXIT_SUCCESS))
