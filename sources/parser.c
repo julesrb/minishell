@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                            :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,10 +12,10 @@
 
 #include "minishell.h"
 
-t_llist	*check_redir_file(t_minishell *mini, t_llist *lexer_pos)
+t_llist	*check_redir_file(t_minishell *mini, t_llist *lexer_pos) // TOO LONG
 {
-	t_llist *curr;
-	int i;
+	t_llist	*curr;
+	int		i;
 
 	i = 0;
 	curr = lexer_pos;
@@ -61,11 +61,11 @@ int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
 		if (redir[0] == '>')
 			mini->output_redirection = 1;
 	}
-	if ((redir[0] == '<' && redir[1] == '>') ||
-		(redir[0] == '>' && redir[1] == '<'))
+	if ((redir[0] == '<' && redir[1] == '>')
+		|| (redir[0] == '>' && redir[1] == '<'))
 		mini->error_redir = 1;
-	if ((redir[0] == '<' && cmd_nb != 0)  ||
-		(redir[0] == '>' && cmd_nb != mini->nb_cmd - 1))
+	if ((redir[0] == '<' && cmd_nb != 0)
+		||(redir[0] == '>' && cmd_nb != mini->nb_cmd - 1))
 		mini->error_redir = 1;
 	if (mini->input_redirection != 0 || mini->output_redirection != 0)
 		return (1);
@@ -74,9 +74,9 @@ int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
 
 char	**malloc_command(t_llist *cmd_list)
 {
-	int	arg;
-	int	i;
-	char **cmd_arr;
+	int		arg;
+	int		i;
+	char	**cmd_arr;
 	t_llist *cnt;
 
 	i = 0;
@@ -144,7 +144,7 @@ int	check_pipe_error(t_minishell *mini)
 	t_llist	*curr;
 	
 	curr = mini->lexer_table;
-	if (curr->content[0] == '|') //check for pipe at begining
+	if (curr->content[0] == '|')
 		mini->error_pipe = 1;
 	if(last_token_is_pipe(curr) == 1)
 		mini->error_pipe = 1;
