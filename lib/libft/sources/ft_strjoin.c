@@ -12,20 +12,6 @@
 
 #include "libft.h"
 #include <stdlib.h>
-/*
-#include <stdio.h>
-#include <string.h>
-
-char	*ft_strjoin(char const *s1, char const *s2);
-
-int	main(void)
-{
-	char	s1[] = "lorem ipsum";
-	char	s2[] = "dolor sit amet";
-
-	printf ("%s", ft_strjoin(s1, s2));
-}
-*/
 
 char	*ft_strjoin(char *s1, char *s2)
 {

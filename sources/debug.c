@@ -63,6 +63,7 @@ int	print_cmd_table(t_minishell *mini, int cmd)
 		ft_printf("command %i = ", i);
 		print_cmd(mini->cmd_table[i]);
 		ft_printf("\n");
+
 		i++;
 	}
 	return (0);

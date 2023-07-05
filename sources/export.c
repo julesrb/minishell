@@ -93,32 +93,61 @@ int     list_env_update(t_minishell *mini, char *var_update)
     return(EXIT_FAILURE);
 }
 
-char *adjust_var_env(t_minishell *mini, char *var_env)
+char	*add_var_translation_export(t_minishell *mini, char *str)
 {
-    int i;
-    char *adjust_var_env = NULL;
-    char *temp = NULL;
-    char *single_quote = "\'";
-    char *double_quote = "\"";
+	int i;
+	char *translation;
+	
+	i = 0;
+	translation = NULL;
+	while (str[i] != 0 && str[i] != '$')
+		i++;
+	translation = var_translation(mini, &str[i]);
+	str[i] = 0;
+	i++;
+	while (str[i] != 0)
+		i++;
+	translation = ft_strjoin(translation, &str[i]);
+	translation = ft_strjoin(str, translation);
+	return(translation);
+}
 
-    i = 0;
-    while(var_env[i] != '=')
-        i++;
-    temp = ft_strdup(var_env + i + 1);
-    printf("temp is: %s\n", temp);
+
+char *adjust_var_env(t_minishell *mini, char *var_env, int count)
+{
+    char *adjust_var_env = NULL;
+    char *temp_end = NULL;
+    char *temp_trim = NULL;
+    char *temp_start = NULL;
+
+    while(var_env[count] != '=')
+        count++;
+    temp_start = (char*)malloc(sizeof(temp_start) * (count));
+    ft_strlcpy(temp_start, var_env, count + 2);
+    temp_end = ft_strdup(var_env + count + 1);
     if (ft_strchr(var_env, '\"') != NULL)
     {
-        temp = add_var_translation(mini, temp);
-        temp = ft_strtrim(temp, double_quote);    
+        temp_trim = ft_strtrim(temp_end, (const char*)"\"");
+        if (ft_strrchr(temp_trim, '$') > 0)
+            adjust_var_env = ft_strjoin(temp_start, add_var_translation_export(mini, temp_trim));
+        else
+        {
+            adjust_var_env = ft_strjoin(temp_start, temp_trim);
+            free(temp_trim);
+        }
     }
     else if (ft_strchr(var_env, '\'') != NULL)
     {
-        temp = add_var_translation(mini, temp);
-        temp = ft_strtrim(temp, single_quote);    
+        temp_trim = ft_strtrim(temp_end, (const char*)"\'");
+        adjust_var_env = ft_strjoin(temp_start, temp_trim);
+        free(temp_trim);
     }
     else
-        adjust_var_env = var_env;
-
+    {
+        free(temp_start);
+        adjust_var_env = ft_strdup(var_env);
+    }
+    free(temp_end);
     return (adjust_var_env);
 }
 
@@ -146,7 +175,7 @@ int     export_builtin(char **cmd, t_minishell *mini)
     {
         if (check_update_var(cmd[i], mini->env_mini) == EXIT_SUCCESS)
         {
-            new_var = adjust_var_env(mini, cmd[i]);
+            new_var = adjust_var_env(mini, cmd[i], 0);
             if(list_env_update(mini, new_var) == EXIT_FAILURE)
             {
                 deallocate_env(&mini->env_mini);
@@ -155,7 +184,7 @@ int     export_builtin(char **cmd, t_minishell *mini)
         }
         else
         {
-            new_var = adjust_var_env(mini, cmd[i]);
+            new_var = adjust_var_env(mini, cmd[i], 0);
             new = ft_lstnew((void*)ft_strdup(new_var));
             if (!new)
             {
@@ -165,6 +194,7 @@ int     export_builtin(char **cmd, t_minishell *mini)
             ft_lstadd_back(&mini->env_mini, new);
         }
         i++;
+        free(new_var);
     }
     return(EXIT_SUCCESS);
 }
