@@ -41,9 +41,9 @@ char	*var_translation(t_minishell *mini, char *var)
 		return (ft_strdup("$"));
 	if (var[1] == '?')
 	{
+		translation = ft_strdup("-");
 		translation[0] = mini->exit_status + '0';
-		translation[1] = 0;
-		return (ft_strdup(translation));
+		return (translation);
 	}
 	keyword = ft_strdup(&var[1]);
 	while (keyword[i] != 0 && keyword[i] != ' ')

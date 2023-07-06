@@ -12,23 +12,6 @@
 
 #include "libft.h"
 #include <stdlib.h>
-/*
-#include <string.h>
-#include <stdio.h>
-
-char	*ft_strtrim(char const *s1, char const *set);
-int		checkchar(const char c, char const *set);
-
-int	main(void)
-{
-	char const	s1[] = "  \t \t \n   \n\n\t";
-	char const	s2[] = "";
-	char const	set[] = " \n\t";
-
-	printf ("%s%s\n", "result test 1: ", ft_strtrim(s1, set));
-	printf ("%s%s\n", "result test 2: ", ft_strtrim(s2, set));
-}
-*/
 
 int	checkchar(const char c, char const *set)
 {

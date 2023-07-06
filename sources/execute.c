@@ -102,6 +102,7 @@ int	insert_pipe(char **cmd, char **envp, t_minishell *mini)
 			return(EXIT_FAILURE);
 		close(fd[1]);
 		exec(cmd, envp, mini);
+		exit(EXIT_SUCCESS);
 	}
 	else
 	{
