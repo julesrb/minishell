@@ -29,7 +29,7 @@ OBJS := $(addprefix $(OBJ_DIREC), $(notdir $(SRCS:.c=.o)))
 all: $(NAME)
 
 $(NAME): $(OBJ_DIREC) libft $(OBJS)
-	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME) -lreadline
+	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME) -lreadline -ltermcap -lncurses
 	@echo "Minishell compilation: 100%"
 
 libft:

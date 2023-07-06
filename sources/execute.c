@@ -35,7 +35,7 @@ int	is_builtin(char *cmd)
 int		execute_builtin(char **cmd_split, t_minishell *mini)
 {
 	if(ft_strncmp(cmd_split[0], "pwd", max_length("pwd", cmd_split[0])) == EXIT_SUCCESS)
-		return (pwd_builtin());
+		return (pwd_builtin(mini));
 	else if(ft_strncmp(cmd_split[0], "env", max_length("env", cmd_split[0])) == EXIT_SUCCESS)
 		return (env_builtin(mini));
 	else if(!ft_strncmp(cmd_split[0], "cd", max_length("cd", cmd_split[0])))
@@ -66,7 +66,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 	}
 	else
 	{
-		path = find_executable(cmd);
+		path = find_executable(cmd, mini);
 		if (!path)
 		{   
 			ft_putstr_fd("minishell: ", 2);

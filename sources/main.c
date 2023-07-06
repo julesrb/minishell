@@ -59,6 +59,7 @@ int main(int argc, char **argv, char **envp)
 		}
 		else if (mini.nb_cmd != 0)
 			ft_printf("Parsing ERROR\n");
+
 		free_mini(&mini);
     }
     return(EXIT_SUCCESS);

@@ -17,7 +17,8 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <unistd.h>
-# include <stdio.h>
+# include <termcap.h>
+# include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
@@ -91,10 +92,15 @@ void	ft_free_tab(char **tab);
 void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2);
 int		ft_free(char *str1, char *str2, char **tab1, char **tab2);
 int		exec(char **cmd, char **envp, t_minishell *mini);
-char	*find_executable(char **cmd);
+char *find_executable(char **cmd, t_minishell *mini);
+int is_absolute_path(char *path);
+int is_relative_path(char *path);
+char    *ft_relative_path(char *cmd, t_minishell *mini);
+char   *origine_path(int count_trim, t_minishell *mini);
+char *getenv_mini(char *env_mini, t_minishell *mini);
 
 // Builtin functions
-int		pwd_builtin(void);
+int    pwd_builtin(t_minishell *mini);
 int		env_mini(t_minishell *mini, char **envp);
 int		env_builtin(t_minishell *mini);
 int		echo_builtin(char **cmd_split);
