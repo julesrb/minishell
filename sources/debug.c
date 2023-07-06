@@ -23,8 +23,7 @@ int	print_t_mini(t_minishell *mini)
 	ft_printf("| out_file = %s\n", mini->out_file);
 	ft_printf("| limiter = %s\n", mini->limiter);
 	ft_printf("| nb_cmd = %i\n", mini->nb_cmd);
-	ft_printf("| PID = %i\n\n", mini->pid_mini);
-	//ft_printf("input = %s\n",t_mini->cmd_table);
+	ft_printf("| PID = %i\n\n", mini->main_pid);
 	return (0);
 }
 
@@ -62,10 +61,10 @@ int	print_cmd_table(t_minishell *mini, int cmd)
 	{
 		ft_printf("command %i = ", i);
 		print_cmd(mini->cmd_table[i]);
-		printf("\narg 0 est: %s\n", mini->cmd_table[i][0]);
+/* 		printf("\narg 0 est: %s\n", mini->cmd_table[i][0]);
 		printf("arg 1 est: %s\n", mini->cmd_table[i][1]);
 		printf("arg 2 est: %s\n", mini->cmd_table[i][2]);
-		printf("arg 3 est: %s\n", mini->cmd_table[i][3]);
+		printf("arg 3 est: %s\n", mini->cmd_table[i][3]); */
 		ft_printf("\n");
 
 		i++;

@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+t_minishell			*mini_global;
+
 int	init_t_mini(t_minishell *mini, char **envp)
 {
 	mini->envp = envp;
@@ -30,29 +32,32 @@ int	init_t_mini(t_minishell *mini, char **envp)
 	return (0);
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	t_minishell mini;
+	struct sigaction	sa_main;
+	t_minishell			mini;
 
+	signal_main(&mini, &sa_main);
+	signal(SIGQUIT, SIG_IGN);
 	mini.exit_status = 0;
 	arg_check(argc, argv);
 	if (env_mini(&mini, envp) == EXIT_FAILURE)
 		printf("Error initializing the minishell environment\n");
-	print_opening();
-	while(1)
+	print_opening ();
+	while (1)
 	{
 		init_t_mini(&mini, envp);
 		prompt(&mini);
 		lexer(&mini);
-/*  			print_lst(mini.lexer_table); */ 
+ 		//	print_lst(mini.lexer_table); 
 		parser(&mini);
-/*  			print_t_mini(&mini);
-			print_cmd_table(&mini, mini.nb_cmd); */
+ 		//	print_t_mini(&mini);
+		//	print_cmd_table(&mini, mini.nb_cmd);
  		if ((mini.error_pipe == 0 && mini.error_redir == 0) && mini.nb_cmd > 0)
-				mini.exit_status = executor(&mini, envp);
+			mini.exit_status = executor(&mini, envp); 
 		else if (mini.nb_cmd != 0)
 			ft_printf("Parsing ERROR\n");
-		free_mini(&mini);
-    }
-    return(EXIT_SUCCESS);
-} 
+		//free_mini(&mini);
+	}
+	return (EXIT_SUCCESS);
+}

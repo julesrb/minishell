@@ -24,7 +24,7 @@ int     env_mini(t_minishell *mini, char **envp)
 
 	i = 0;
 	mini->env_mini = NULL;
-	mini->pid_mini = getpid();
+	mini->main_pid = getpid();
 	while (envp[i] != NULL)
 	{
 		new_var= ft_strdup(envp[i]);

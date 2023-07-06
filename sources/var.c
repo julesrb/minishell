@@ -2,15 +2,15 @@
 
 int	quote_translation(t_minishell *mini, t_llist *curr)
 {
-	int i;
-	char quote;
-	char flag_translation;
+	int		i;
+	char	quote;
+	char	flag_translation;
 
 	i = 0;
 	flag_translation = 0;
 	(void)mini;
 	quote = curr->content[0];
-	if (quote == 34) // double quotes
+	if (quote == 34)
 		flag_translation = 1;
 	while (curr->content[i] != 0)
 	{
@@ -24,26 +24,26 @@ int	quote_translation(t_minishell *mini, t_llist *curr)
 		if (ft_strchr(curr->content, '$') != NULL)
 			curr->content = add_var_translation(mini, curr->content);
 	}
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 char	*var_translation(t_minishell *mini, char *var)
 {
-	int i;
-	char *keyword;
-	char *translation;
-	t_list *curr;
+	int		i;
+	char	*keyword;
+	char	*translation;
+	t_list	*curr;
 
 	i = 0;
 	curr = mini->env_mini;
 	translation = NULL;
 	if (var[1] == 0)
-		return(ft_strdup("$"));
+		return (ft_strdup("$"));
 	if (var[1] == '?')
 	{
+		translation = ft_strdup("E");
 		translation[0] = mini->exit_status + '0';
-		translation[1] = 0;
-		return(ft_strdup(translation));
+		return (translation);
 	}
 	keyword = ft_strdup(&var[1]);
 	while (keyword[i] != 0 && keyword[i] != ' ')
@@ -55,7 +55,7 @@ char	*var_translation(t_minishell *mini, char *var)
 		if (ft_strncmp(curr->content, keyword, ft_strlen(keyword)) == EXIT_SUCCESS)
 		{
 			char *tmp = curr->content;
-			translation = ft_strdup(&tmp[ft_strlen(keyword) + 1]);
+			translation = ft_strdup(&tmp[ft_strlen(keyword)]);
 		}
 		curr = curr->next;
 	}
@@ -65,11 +65,11 @@ char	*var_translation(t_minishell *mini, char *var)
 	return(translation);
 }
 
-char	*add_var_translation(t_minishell *mini, char *str) // add var translation
+char	*add_var_translation(t_minishell *mini, char *str)
 {
-	int i;
-	char *translation;
-	
+	int		i;
+	char	*translation;
+
 	i = 0;
 	translation = NULL;
 	while (str[i] != 0 && str[i] != '$')
@@ -81,5 +81,5 @@ char	*add_var_translation(t_minishell *mini, char *str) // add var translation
 		i++;
 	translation = ft_strjoin(translation, &str[i]);
 	translation = ft_strjoin(str, translation);
-	return(translation);
+	return (translation);
 }
