@@ -54,6 +54,8 @@ typedef struct s_minishell
 	t_list	*env_mini;
 }t_minishell;
 
+extern t_minishell			*mini_global;
+
 int		print_opening(void);
 
 int		prompt(t_minishell *mini);
@@ -110,7 +112,8 @@ void	here_doc(char *limiter);
 void	deallocate_env(t_list **root);
 
 // signal
-void mini_signal(struct sigaction *sa);
+void signal_main(t_minishell *mini, struct sigaction *sa);
+void signal_child(t_minishell *mini, struct sigaction *sa);
 
 #endif
 

@@ -19,12 +19,16 @@ int	yield_word(char *token, t_minishell *mini)
 	char	*str;
 
 	len = 0;
-	while (token[len] != ' ' && token[len] != 0 && token[len] != '|')
-	{
-		if (token[len] == 34 || token[len] == 39)
-			while ((token[len] != 34 && token[len] != 39) || token[len + 1] != 0)
-				len++;
+	while (token[len] != ' ' && token[len] != 0 && token[len] != '|'
+			&& token[len] != 34 && token[len] != 39)
 		len++;
+	if (token[len] == 34 || token[len] == 39)
+	{
+		len++;
+		while (token[len] != 34 && token[len] != 39 && token[len] != 0)
+			len++;
+		if (token[len] != 0)
+			len++;
 	}
 	str = malloc(sizeof (char) * (len + 1));
 	if (!str)

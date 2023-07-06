@@ -105,7 +105,7 @@ char	*add_var_translation_export(t_minishell *mini, char *str)
 	translation = var_translation(mini, &str[i]);
 	str[i] = 0;
 	i++;
-	while (str[i] != 0)
+	while (str[i] != 0 && str[i] != ' ')
 		i++;
 	translation = ft_strjoin(translation, &str[i]);
 	translation = ft_strjoin(str, translation);

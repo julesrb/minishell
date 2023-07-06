@@ -41,7 +41,7 @@ char	*var_translation(t_minishell *mini, char *var)
 		return (ft_strdup("$"));
 	if (var[1] == '?')
 	{
-		translation = ft_strdup("-");
+		translation = ft_strdup("E");
 		translation[0] = mini->exit_status + '0';
 		return (translation);
 	}
@@ -55,7 +55,7 @@ char	*var_translation(t_minishell *mini, char *var)
 		if (ft_strncmp(curr->content, keyword, ft_strlen(keyword)) == EXIT_SUCCESS)
 		{
 			char *tmp = curr->content;
-			translation = ft_strdup(&tmp[ft_strlen(keyword) + 1]);
+			translation = ft_strdup(&tmp[ft_strlen(keyword)]);
 		}
 		curr = curr->next;
 	}

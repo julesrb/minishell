@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int exitor= 5;
+t_minishell			*mini_global;
 
 int	init_t_mini(t_minishell *mini, char **envp)
 {
@@ -32,32 +32,13 @@ int	init_t_mini(t_minishell *mini, char **envp)
 	return (0);
 }
 
-void signal_handler_exit(int signum, siginfo_t *info, void *context)
-{
-	(void)signum;
-	(void)info;
-	(void)context;
-	printf("IM QUITTING !\n");
-	//free_mini(&mini);
-	exit (1);
-}
-
-void mini_signal(struct sigaction *sa)
-{
-	sa->sa_flags = SA_RESTART;
-
-	sa->sa_sigaction = &signal_handler_exit;
-	sigemptyset(&sa->sa_mask);
-	sigaction(SIGUSR1, sa, NULL);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
-	t_minishell	mini;
+	struct sigaction	sa_main;
+	t_minishell			mini;
 
-	struct sigaction	sa;
-
-	mini_signal(&sa);
+	signal_main(&mini, &sa_main);
+	signal(SIGQUIT, SIG_IGN);
 	mini.exit_status = 0;
 	arg_check(argc, argv);
 	if (env_mini(&mini, envp) == EXIT_FAILURE)
@@ -68,7 +49,7 @@ int	main(int argc, char **argv, char **envp)
 		init_t_mini(&mini, envp);
 		prompt(&mini);
 		lexer(&mini);
- 			//print_lst(mini.lexer_table); 
+ 		//	print_lst(mini.lexer_table); 
 		parser(&mini);
  		//	print_t_mini(&mini);
 		//	print_cmd_table(&mini, mini.nb_cmd);
@@ -76,12 +57,7 @@ int	main(int argc, char **argv, char **envp)
 			mini.exit_status = executor(&mini, envp); 
 		else if (mini.nb_cmd != 0)
 			ft_printf("Parsing ERROR\n");
-		if (exitor == 1)
-		{
-			ft_printf("SUCCES");
-			exit (1);
-		}
-		free_mini(&mini);
+		//free_mini(&mini);
 	}
 	return (EXIT_SUCCESS);
 }

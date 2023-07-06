@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "unistd.h"
+#include "stdio.h"
 
 int	ft_put_char(char c)
 {
@@ -61,17 +62,11 @@ int	ft_put_nbr(int nb)
 
 int	main(void)
 {
-	int i = 0;
+	char str[20];
 
 
-	while (i <= 5)
-	{
-		ft_put_nbr(i);
-		ft_put_str(" to 5");
-		ft_put_str("\n");
-		i++;
-		sleep(1);
-	}
+	scanf("%s", str);
+	printf("\ntext = %s\n", str);
 	return(0);
 }
 
