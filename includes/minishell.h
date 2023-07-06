@@ -101,6 +101,7 @@ int		echo_builtin(char **cmd_split);
 int		export_builtin(char **cmd, t_minishell *mini);
 int		unset_builtin(char **cmd, t_minishell *mini);
 int		exit_builtin(char **cmd, t_minishell *mini);
+int     cd_builtin(char *cmd, t_minishell *mini);
 
 int		input_redirection(t_minishell mini);
 int		output_redirection(t_minishell mini);
@@ -108,6 +109,7 @@ void	here_doc(char *limiter);
 
 //environment function
 void	deallocate_env(t_list **root);
+int     list_env_update(t_minishell *mini, char *var_update);
 
 #endif
 
