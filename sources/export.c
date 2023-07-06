@@ -62,7 +62,7 @@ int  check_update_var(char *cmd, t_list *env_mini)
         i++;
     while (curr != NULL)
     {
-        if (strncmp(cmd, (char*)(curr->content), i) == EXIT_SUCCESS)
+        if (ft_strncmp(cmd, (char*)(curr->content), i) == EXIT_SUCCESS)
             return (EXIT_SUCCESS);
         curr = curr->next;
     }

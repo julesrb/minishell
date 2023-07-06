@@ -4,7 +4,7 @@ int  check_unset_var(char *cmd, t_list *env_mini)
 {
     while (env_mini != NULL)
     {
-        if (ft_strncmp(cmd, (char *)(env_mini->content), strlen(cmd)) == 0)
+        if (ft_strncmp(cmd, (char *)(env_mini->content), ft_strlen(cmd)) == 0)
             return (EXIT_SUCCESS);
         env_mini = env_mini->next;
     }

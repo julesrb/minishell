@@ -14,7 +14,7 @@ int	exit_builtin(char **cmd, t_minishell *mini)
 		ft_putendl_fd(": too many arguments", 2);
 	}
 	free_mini(mini);
-	kill(mini->pid_mini, SIGTERM);
+	//kill(mini->pid_mini, SIGTERM);
 	exit (1);
 	return (0);
 }

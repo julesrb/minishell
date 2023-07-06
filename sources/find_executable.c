@@ -78,7 +78,7 @@ char    *ft_relative_path(char *cmd)
 
 int is_relative_path(char *path)
 {
-    if (strlen(path) >= 2 && (ft_strncmp(path, "./", 2) == 0 || ft_strncmp(path, "../", 3) == 0))
+    if (ft_strlen(path) >= 2 && (ft_strncmp(path, "./", 2) == 0 || ft_strncmp(path, "../", 3) == 0))
         return (EXIT_SUCCESS);
     return (EXIT_FAILURE);
 }

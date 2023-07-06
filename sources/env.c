@@ -45,6 +45,7 @@ int     env_builtin(t_minishell *mini)
 	int i;
 
 	i = 0;
+	(void)i;
 	while (mini->env_mini)
 	{
 		ft_putendl_fd(mini->env_mini->content, 1);
