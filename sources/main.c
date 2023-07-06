@@ -29,34 +29,35 @@ int	init_t_mini(t_minishell *mini, char **envp)
 	mini->nb_cmd = 0;
 	mini->error_redir = 0;
 	mini->error_pipe = 0;
-	mini->exitq = 5;
 	return (0);
 }
 
-int	exit_builtin(char **cmd, t_minishell *mini)
+void signal_handler_exit(int signum, siginfo_t *info, void *context)
 {
-	int	i;
-
-	i = 0;
-	(void)mini;
-	while (cmd[i] != NULL)
-		i++;
-	if (i > 1)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd[0], 2);
-		ft_putendl_fd(": too many arguments", 2);
-		return (0);
-	}
-	exitor = 1;
-	return (1);
+	(void)signum;
+	(void)info;
+	(void)context;
+	printf("IM QUITTING !\n");
+	//free_mini(&mini);
+	exit (1);
 }
 
+void mini_signal(struct sigaction *sa)
+{
+	sa->sa_flags = SA_RESTART;
+
+	sa->sa_sigaction = &signal_handler_exit;
+	sigemptyset(&sa->sa_mask);
+	sigaction(SIGUSR1, sa, NULL);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	mini;
 
+	struct sigaction	sa;
+
+	mini_signal(&sa);
 	mini.exit_status = 0;
 	arg_check(argc, argv);
 	if (env_mini(&mini, envp) == EXIT_FAILURE)
@@ -67,22 +68,20 @@ int	main(int argc, char **argv, char **envp)
 		init_t_mini(&mini, envp);
 		prompt(&mini);
 		lexer(&mini);
- 			print_lst(mini.lexer_table); 
+ 			//print_lst(mini.lexer_table); 
 		parser(&mini);
- 			print_t_mini(&mini);
-			print_cmd_table(&mini, mini.nb_cmd);
- 		/* if ((mini.error_pipe == 0 && mini.error_redir == 0) && mini.nb_cmd > 0)
+ 		//	print_t_mini(&mini);
+		//	print_cmd_table(&mini, mini.nb_cmd);
+ 		if ((mini.error_pipe == 0 && mini.error_redir == 0) && mini.nb_cmd > 0)
 			mini.exit_status = executor(&mini, envp); 
 		else if (mini.nb_cmd != 0)
-			ft_printf("Parsing ERROR\n"); */
-		executor(&mini, envp);
-		ft_printf("| quit = %i\n\n", mini.exitq);
+			ft_printf("Parsing ERROR\n");
 		if (exitor == 1)
 		{
 			ft_printf("SUCCES");
 			exit (1);
 		}
-		//free_mini(&mini);
+		free_mini(&mini);
 	}
 	return (EXIT_SUCCESS);
 }

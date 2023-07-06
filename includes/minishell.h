@@ -49,8 +49,8 @@ typedef struct s_minishell
 	char	*in_file;
 	char	*out_file;
 	int		exit_status;
+	int		main_pid;
 	char	**envp;
-	int		exitq;
 	t_list	*env_mini;
 }t_minishell;
 
@@ -108,6 +108,9 @@ void	here_doc(char *limiter);
 
 //environment function
 void	deallocate_env(t_list **root);
+
+// signal
+void mini_signal(struct sigaction *sa);
 
 #endif
 
