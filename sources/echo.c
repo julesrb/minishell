@@ -2,8 +2,8 @@
 
 int	echo_builtin(char **cmd_split)
 {
-	int i;
-	int n;
+	int	i;
+	int	n;
 
 	i = 1;
 	n = 1;
@@ -12,7 +12,8 @@ int	echo_builtin(char **cmd_split)
 		ft_putstr_fd("\n", 1);
 		exit (1);
 	}
-	else if (ft_strncmp(cmd_split[i], "-n", 2) == EXIT_SUCCESS && cmd_split[i][2] == 0)
+	else if (ft_strncmp(cmd_split[i], "-n", 2) == EXIT_SUCCESS
+			&& cmd_split[i][2] == 0)
 	{
 		n = 0;
 		i++;

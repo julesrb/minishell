@@ -50,8 +50,8 @@ void	deallocate_list(t_llist **head)
 
 void	free_mini(t_minishell *mini)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	if (mini->cmd_table != NULL)
@@ -77,7 +77,6 @@ void	free_mini(t_minishell *mini)
 		free(mini->out_file);
 	if (mini->input != NULL)
 		free(mini->input);
-
 }
 
 int	lst_size(t_llist *lst)
@@ -94,4 +93,3 @@ int	lst_size(t_llist *lst)
 	}
 	return (size);
 }
-

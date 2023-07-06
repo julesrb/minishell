@@ -72,6 +72,7 @@ int	main(void)
 		i++;
 		sleep(1);
 	}
+	return(0);
 }
 
 
