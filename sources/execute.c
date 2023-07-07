@@ -132,7 +132,6 @@ int    executor(t_minishell *mini, char **envp)
 		if (output_redirection(*mini) == EXIT_FAILURE)
 			exit(EXIT_FAILURE);
 		exec(mini->cmd_table[index], envp, mini);
-		exit(EXIT_SUCCESS);
 	}
 	else
 		wait(NULL);

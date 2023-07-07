@@ -57,6 +57,7 @@ int	main(int argc, char **argv, char **envp)
 			mini.exit_status = executor(&mini, envp); 
 		else if (mini.nb_cmd != 0)
 			ft_printf("Parsing ERROR\n");
+/* 		printf("test\n"); */
 		//free_mini(&mini);
 	}
 	return (EXIT_SUCCESS);
