@@ -99,8 +99,10 @@ int	insert_pipe(char **cmd, char **envp, t_minishell *mini)
 		if (dup2(fd[1], 1) == -1)
 			return(EXIT_FAILURE);
 		close(fd[1]);
-		exec(cmd, envp, mini);
-		exit(EXIT_FAILURE);
+		if (exec(cmd, envp, mini) == EXIT_SUCCESS)
+			exit(EXIT_SUCCESS);
+		else
+			exit(EXIT_FAILURE);
 	}
 	else
 	{
@@ -140,9 +142,11 @@ int    executor(t_minishell *mini, char **envp)
 				exit(EXIT_FAILURE);
 			if (exec(mini->cmd_table[index], envp, mini) == EXIT_SUCCESS)
 				exit(EXIT_SUCCESS);
+			else
+				exit(EXIT_FAILURE);
 		}
 		else
-			waitpid(pid, NULL, 0);
+			wait(NULL);
 	}
 	return(EXIT_SUCCESS);
 }

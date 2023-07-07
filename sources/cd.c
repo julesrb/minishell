@@ -11,6 +11,12 @@ char *convert_path_to_absolute(char *cmd, t_minishell *mini)
         result = ft_relative_path(cmd, mini);
         return(result);
     }
+    else if (ft_isalpha(cmd[0]))
+    {
+        result = ft_relative_path(cmd, mini);
+        printf("result is %s\n", result);
+        return(result);   
+    }
     return (NULL);
 }
 
