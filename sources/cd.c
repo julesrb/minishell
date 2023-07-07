@@ -32,7 +32,7 @@ int     update_env_mini(t_minishell *mini, char *env_mini_to_update, char *new_v
             temp2 = ft_strjoin(temp1, (char*)"=");
             temp3 = ft_strdup(new_value);
             new_var_env = ft_strjoin(temp2, temp3);
-            printf("%s: %s\n", env_mini_to_update, new_var_env);
+/*             printf("%s: %s\n", env_mini_to_update, new_var_env); */
             free(temp3);
             curr->content = (void*)new_var_env;
             return (EXIT_SUCCESS);
@@ -49,9 +49,9 @@ int     update_env_cd(t_minishell *mini, char *cd)
     char *pwd = NULL;
 
     pwd = convert_path_to_absolute(cd, mini);
-    printf("new pwd apres update %s\n", pwd);
+/*     printf("new pwd apres update %s\n", pwd); */
     oldpwd = ft_strdup(getenv_mini("PWD", mini));
-    printf("old pwd apres update %s\n", oldpwd);
+/*     printf("old pwd apres update %s\n", oldpwd); */
     if(update_env_mini(mini,"OLDPWD", oldpwd) == EXIT_FAILURE)
         return(EXIT_FAILURE);
     if(update_env_mini(mini,"PWD", pwd) == EXIT_FAILURE)

@@ -58,9 +58,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 	if (is_builtin(cmd[0]) == EXIT_SUCCESS)
 	{
 		if (execute_builtin(cmd, mini) == EXIT_SUCCESS)
-		{
 			return(EXIT_SUCCESS);
-		}
 		ft_free_tab(cmd);
 		return(EXIT_FAILURE);
 	}
@@ -102,7 +100,7 @@ int	insert_pipe(char **cmd, char **envp, t_minishell *mini)
 			return(EXIT_FAILURE);
 		close(fd[1]);
 		exec(cmd, envp, mini);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
@@ -110,7 +108,7 @@ int	insert_pipe(char **cmd, char **envp, t_minishell *mini)
 		dup2(fd[0], 0);
 		close(fd[0]);
 	}
-	return(EXIT_FAILURE);
+	return(EXIT_SUCCESS);
 }
 
 int    executor(t_minishell *mini, char **envp)
@@ -118,21 +116,33 @@ int    executor(t_minishell *mini, char **envp)
 	int index;
 	pid_t pid;
 
-	index = 0;
-	pid = fork();
-	if (pid == -1)
-		return(EXIT_FAILURE);
-	if (pid == 0)
+	if (mini->nb_cmd == 1 && (is_builtin(mini->cmd_table[0][0]) == EXIT_SUCCESS))
 	{
 		if (input_redirection(*mini) == EXIT_FAILURE)
 			exit(EXIT_FAILURE);
-		while (index < mini->pipe)
-			insert_pipe(mini->cmd_table[index++], envp, mini);
 		if (output_redirection(*mini) == EXIT_FAILURE)
 			exit(EXIT_FAILURE);
-		exec(mini->cmd_table[index], envp, mini);
+		exec(mini->cmd_table[0], envp, mini);
 	}
 	else
-		wait(NULL);
+	{
+		index = 0;
+		pid = fork();
+		if (pid == -1)
+			return(EXIT_FAILURE);
+		if (pid == 0)
+		{
+			if (input_redirection(*mini) == EXIT_FAILURE)
+				exit(EXIT_FAILURE);
+			while (index < mini->pipe)
+				insert_pipe(mini->cmd_table[index++], envp, mini);
+			if (output_redirection(*mini) == EXIT_FAILURE)
+				exit(EXIT_FAILURE);
+			if (exec(mini->cmd_table[index], envp, mini) == EXIT_SUCCESS)
+				exit(EXIT_SUCCESS);
+		}
+		else
+			waitpid(pid, NULL, 0);
+	}
 	return(EXIT_SUCCESS);
 }

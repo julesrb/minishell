@@ -10,7 +10,7 @@ int	echo_builtin(char **cmd_split)
 	if (cmd_split[i] == NULL)
 	{
 		ft_putstr_fd("\n", 1);
-		exit (1);
+		return (EXIT_SUCCESS);
 	}
 	else if (ft_strncmp(cmd_split[i], "-n", 2) == EXIT_SUCCESS
 			&& cmd_split[i][2] == 0)
@@ -27,5 +27,5 @@ int	echo_builtin(char **cmd_split)
 	}
 	if (n == 1)
 		ft_putstr_fd("\n", 1);
-	exit (1);
+	return (EXIT_SUCCESS);
 }
