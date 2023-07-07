@@ -19,8 +19,8 @@ int	is_builtin(char *cmd)
 		return (EXIT_SUCCESS);
 	else if(ft_strncmp(cmd, "env", max_length("env", cmd)) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
-	// else if(ft_strncmp(cmd, "cd", max_length("cd", cmd)) == EXIT_SUCCESS)
-	// 	return (EXIT_SUCCESS);
+	else if(ft_strncmp(cmd, "cd", max_length("cd", cmd)) == EXIT_SUCCESS)
+		return (EXIT_SUCCESS);
 	else if(ft_strncmp(cmd, "export", max_length("export", cmd)) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	else if(ft_strncmp(cmd, "unset", max_length("unset", cmd)) == EXIT_SUCCESS)
@@ -35,11 +35,11 @@ int	is_builtin(char *cmd)
 int		execute_builtin(char **cmd_split, t_minishell *mini)
 {
 	if(ft_strncmp(cmd_split[0], "pwd", max_length("pwd", cmd_split[0])) == EXIT_SUCCESS)
-		return (pwd_builtin());
+		return (pwd_builtin(mini));
 	else if(ft_strncmp(cmd_split[0], "env", max_length("env", cmd_split[0])) == EXIT_SUCCESS)
 		return (env_builtin(mini));
-	// else if(!ft_strncmp(cmd_split[0], "cd", max_length("cd", cmd_split[0])))
-	// 	return (EXIT_SUCCESS);
+	else if(!ft_strncmp(cmd_split[0], "cd", max_length("cd", cmd_split[0])))
+		return (cd_builtin(cmd_split[1], mini));
 	else if(ft_strncmp(cmd_split[0], "export", max_length("export", cmd_split[0])) == EXIT_SUCCESS)
 		return (export_builtin(cmd_split, mini));
 	else if(!ft_strncmp(cmd_split[0], "unset", max_length("unset", cmd_split[0])))
@@ -66,7 +66,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 	}
 	else
 	{
-		path = find_executable(cmd);
+		path = find_executable(cmd, mini);
 		if (!path)
 		{   
 			ft_putstr_fd("minishell: ", 2);
@@ -106,7 +106,6 @@ int	insert_pipe(char **cmd, char **envp, t_minishell *mini)
 	}
 	else
 	{
-		wait(NULL);
 		close(fd[1]);
 		dup2(fd[0], 0);
 		close(fd[0]);

@@ -1,12 +1,15 @@
 #include "minishell.h"
 
-int    pwd_builtin(void)
+int    pwd_builtin(t_minishell *mini)
 {
-    char *pwd;
+    t_list *curr;
 
-    pwd = getenv("PWD");
-    if (!pwd)
-        exit(EXIT_FAILURE);
-    ft_putendl_fd(pwd, 1);
+    curr = mini->env_mini;
+
+    while (ft_strncmp(curr->content, "PWD=", 4) != 0)
+    {
+        curr = curr->next;
+    }
+    ft_putendl_fd(curr->content + 4, 1);
     exit(EXIT_SUCCESS);
 }

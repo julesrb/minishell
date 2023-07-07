@@ -1,5 +1,19 @@
 #include "minishell.h"
 
+char *getenv_mini(char *env_mini, t_minishell *mini)
+{
+    t_list *curr;
+
+    curr = mini->env_mini;
+    while (curr != NULL)
+    {
+        if(ft_strncmp(env_mini, curr->content, ft_strlen(env_mini)) == 0)
+            break;
+        curr = curr->next;
+    }
+    return(curr->content + ft_strlen(env_mini) + 1);
+}
+
 int     ft_count_trim(char *cmd)
 {
     int count_trim;
@@ -16,7 +30,7 @@ int     ft_count_trim(char *cmd)
     return(count_trim);
 }
 
-char   *origine_path(int count_trim)
+char   *origine_path(int count_trim, t_minishell *mini)
 {
     char *current_path;
     char *or_path;
@@ -27,7 +41,7 @@ char   *origine_path(int count_trim)
     nb = 0;
     i = 0;
     j = 0;
-    current_path = ft_strdup(getenv("PWD"));
+    current_path = ft_strdup(getenv_mini("PWD", mini));
     while (current_path[i] != '\0')
     {
         if (current_path[i] == '/')
@@ -49,7 +63,7 @@ char   *origine_path(int count_trim)
     return (or_path);
 }
 
-char    *ft_relative_path(char *cmd)
+char    *ft_relative_path(char *cmd, t_minishell *mini)
 {
     char *relative_path = NULL;
     char *path_trim = NULL;
@@ -61,7 +75,7 @@ char    *ft_relative_path(char *cmd)
     if (ft_strncmp(cmd, "./", 2) == 0)
     {
         path_trim = ft_strtrim(cmd, "./");
-        env_path = ft_strdup(getenv("PWD"));
+        env_path = ft_strdup(getenv_mini("PWD", mini));
         relative_path = ft_strjoin(env_path, (char*)"/");
         relative_path = ft_strjoin(relative_path, path_trim);
     }
@@ -69,7 +83,7 @@ char    *ft_relative_path(char *cmd)
     {
         path_trim = ft_strtrim(cmd, "../");
         count_trim = ft_count_trim(cmd);
-        env_path = origine_path(count_trim);
+        env_path = origine_path(count_trim, mini);
         path_root = ft_strjoin(env_path, (char*)"/");
         relative_path = ft_strjoin(path_root, path_trim);
     }
@@ -78,7 +92,7 @@ char    *ft_relative_path(char *cmd)
 
 int is_relative_path(char *path)
 {
-    if (strlen(path) >= 2 && (ft_strncmp(path, "./", 2) == 0 || ft_strncmp(path, "../", 3) == 0))
+    if (ft_strlen(path) >= 2 && (ft_strncmp(path, "./", 2) == 0 || ft_strncmp(path, "../", 3) == 0))
         return (EXIT_SUCCESS);
     return (EXIT_FAILURE);
 }
@@ -90,7 +104,7 @@ int is_absolute_path(char *path)
     return (EXIT_FAILURE);
 }
 
-char *find_executable(char **cmd)
+char *find_executable(char **cmd, t_minishell *mini)
 {
     char *result;
 
@@ -98,7 +112,7 @@ char *find_executable(char **cmd)
         return(cmd[0]);
     else if (is_relative_path(cmd[0]) == EXIT_SUCCESS)
     {
-        result = ft_relative_path(cmd[0]);
+        result = ft_relative_path(cmd[0], mini);
         return(result);
     }
     else
