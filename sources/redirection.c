@@ -67,6 +67,7 @@ int	output_redirection(t_minishell mini)
 {
 	int fd_outfile = 0;
 
+	(void)mini;
 	if (mini.output_redirection)
 	{
 		if (mini.output_redirection == 1)

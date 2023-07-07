@@ -12,13 +12,44 @@
 
 #include "minishell.h"
 
-t_llist	*check_redir_file(t_minishell *mini, t_llist *lexer_pos) // TOO LONG
+int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
+{
+	int	type;
+
+	type = 0;
+	if (redir[0] == redir[1])
+	{
+		if (redir[0] == '<')
+			type = 12;
+		if (redir[0] == '>')
+			type = 22;
+	}
+	if ((redir[0] == '<' && redir[1] == '>')
+		|| (redir[0] == '>' && redir[1] == '<'))
+		return (-1);
+	if (redir[0] == '<')
+		type = 11;
+	if (redir[0] == '>')
+		type = 21;
+	if (cmd_nb != 0 || cmd_nb != mini->nb_cmd - 1)
+		return (-1);
+	return (type);
+}
+
+t_llist	*check_redir_file(t_minishell *mini, t_llist *lexer_pos, int cmd_nb)
 {
 	t_llist	*curr;
 	int		i;
+	int		type;
 
 	i = 0;
 	curr = lexer_pos;
+	type = check_redirection(mini, curr->content, cmd_nb);
+	if (type == -1)
+	{
+		mini->error_redir = 1;
+		return (curr);
+	}
 	if (curr->next != NULL)
 		curr = curr->next;
 	while (curr->content[i] != 0)
@@ -27,49 +58,26 @@ t_llist	*check_redir_file(t_minishell *mini, t_llist *lexer_pos) // TOO LONG
 			mini->error_redir = 1;
 		i++;
 	}
+
 	if (mini->error_redir == 0)
 	{
-		if (mini->input_redirection == -1 || mini->input_redirection == -2)
+		if (type == 11 || type == 12)
 		{
-			if (mini->input_redirection == -1)
-				mini->in_file = ft_strdup(curr->content);
-			else if (mini->input_redirection == -2)
-				mini->limiter = ft_strdup(curr->content);
-			mini->input_redirection -= mini->input_redirection * 2;
-			return (curr->next);
+			if (type == 11)
+				add_to_redir(&mini->redir_in, 1, ft_strdup(curr->content));
+			if (type == 12)
+				add_to_redir(&mini->redir_in, 2, ft_strdup(curr->content));
 		}
-		if (mini->output_redirection != 0)
-			mini->out_file = ft_strdup(curr->content);
+		if (type == 21 || type == 22)
+		{
+			if (type == 21)
+				add_to_redir(&mini->redir_in, 1, ft_strdup(curr->content));
+			if (type == 22)
+				add_to_redir(&mini->redir_in, 2, ft_strdup(curr->content));
+		}
 		return (curr->next);
 	}
 	return (curr);
-}
-
-int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
-{
-	if (redir[0] == redir[1])
-	{
-		if (redir[0] == '<')
-			mini->input_redirection = -2;
-		if (redir[0] == '>')
-			mini->output_redirection = 2;
-	}
-	else 
-	{
-		if (redir[0] == '<')
-			mini->input_redirection = -1;
-		if (redir[0] == '>')
-			mini->output_redirection = 1;
-	}
-	if ((redir[0] == '<' && redir[1] == '>')
-		|| (redir[0] == '>' && redir[1] == '<'))
-		mini->error_redir = 1;
-	if ((redir[0] == '<' && cmd_nb != 0)
-		|| (redir[0] == '>' && cmd_nb != mini->nb_cmd - 1))
-		mini->error_redir = 1;
-	if (mini->input_redirection != 0 || mini->output_redirection != 0)
-		return (1);
-	return (0);
 }
 
 char	**malloc_command(t_llist *cmd_list)
@@ -111,15 +119,13 @@ t_llist	*build_command(t_minishell *mini, int cmd, t_llist *curr)
 	while (curr != NULL && curr->content[0] != '|')
 	{
 		if (curr->content[0] == '<' || curr->content[0] == '>')
-		{
-			if (check_redirection(mini, curr->content, cmd) == 1)
-				curr = check_redir_file(mini, curr);
-		}
+			curr = check_redir_file(mini, curr, cmd);
 		if (curr != NULL && curr->content[0] == '$')
 			curr->content = var_translation(mini, curr->content);
 		if (curr != NULL && ((curr->content[0] == 34 || curr->content[0] == 39)))
 			quote_translation(mini, curr);
-		if (curr != NULL && curr->content[0] != '|')
+		if (curr != NULL && curr->content[0] != '|'
+			&& curr->content[0] != '<' && curr->content[0] != '>')
 		{
 			add_to_list(&split_cmd, ft_strdup(curr->content));
 			curr = curr->next;
@@ -178,6 +184,7 @@ int	parser(t_minishell *mini)
 			mini->nb_cmd = 0;
 		mini->cmd_table[cmd] = NULL;
 	}
+	// if redir_in or _out are nto empty its still one command;
 	deallocate_list(&mini->lexer_table);
 	return (1);
 }

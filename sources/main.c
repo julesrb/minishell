@@ -12,20 +12,22 @@
 
 #include "minishell.h"
 
-t_minishell			*mini_global;
+t_minishell	*mini_global;
 
 int	init_t_mini(t_minishell *mini, char **envp)
 {
-	mini->envp = envp;
 	mini->input = NULL;
-	mini->lexer_table = NULL;
+	mini->envp = envp;
 	mini->cmd_table = NULL;
-	mini->limiter = NULL;
-	mini->in_file = NULL;
-	mini->out_file = NULL;
+	mini->lexer_table = NULL;
+	mini->redir_in = NULL;
+	mini->redir_out = NULL;
+	//mini->limiter = NULL;
+	//mini->in_file = NULL;
+	//mini->out_file = NULL;
 	mini->pipe = 0;
-	mini->input_redirection = 0;
-	mini->output_redirection = 0;
+	//mini->input_redirection = 0;
+	//mini->output_redirection = 0;
 	mini->nb_cmd = 0;
 	mini->error_redir = 0;
 	mini->error_pipe = 0;
@@ -54,13 +56,10 @@ int	main(int argc, char **argv, char **envp)
  			print_t_mini(&mini);
 			print_cmd_table(&mini, mini.nb_cmd);
  		if ((mini.error_pipe == 0 && mini.error_redir == 0) && mini.nb_cmd > 0)
-		{
 			mini.exit_status = executor(&mini, envp);
-		}
 		else if (mini.nb_cmd != 0)
 			ft_printf("Parsing ERROR\n");
-
 		free_mini(&mini);
-    }
-    return(EXIT_SUCCESS);
-} 
+	}
+	return(EXIT_SUCCESS);
+}

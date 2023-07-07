@@ -35,11 +35,22 @@ typedef struct s_llist
 	struct s_llist	*next;
 }t_llist;
 
+typedef struct s_redir
+{
+	int				type;
+	char			*file;
+	struct s_redir	*next;
+}t_redir;
+
 typedef struct s_minishell
 {
 	char	*input;  //prompt input
-	t_llist	*lexer_table;
+	char	**envp;
 	char	***cmd_table; // output du parser
+	t_list	*env_mini;
+	t_llist	*lexer_table;
+	t_redir *redir_in;
+	t_redir *redir_out;
 	int		pipe; // nb de pipe
 	int		input_redirection; // 1 si < 2 si <<
 	int		output_redirection; // 1 si > 2 si >>
@@ -51,11 +62,9 @@ typedef struct s_minishell
 	char	*out_file;
 	int		exit_status;
 	int		main_pid;
-	char	**envp;
-	t_list	*env_mini;
 }t_minishell;
 
-extern t_minishell			*mini_global;
+extern t_minishell	*mini_global;
 
 int		print_opening(void);
 
@@ -77,6 +86,7 @@ int		quote_translation(t_minishell *mini, t_llist *curr);
 void	deallocate_list(t_llist **head);
 void	free_mini(t_minishell *mini);
 int		lst_size(t_llist *lst);
+int		add_to_redir(t_redir **root, int type, char *str);
 
 // Debug
 int		print_t_mini(t_minishell *mini);
