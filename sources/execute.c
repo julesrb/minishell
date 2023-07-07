@@ -106,7 +106,6 @@ int	insert_pipe(char **cmd, char **envp, t_minishell *mini)
 	}
 	else
 	{
-		wait(NULL);
 		close(fd[1]);
 		dup2(fd[0], 0);
 		close(fd[0]);
