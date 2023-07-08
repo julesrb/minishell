@@ -14,14 +14,17 @@
 
 int	print_opening(void)
 {
-	ft_printf("/ ******************************************************* /\n");
-	ft_printf("/                                                         /\n");
-	ft_printf("/   oo oo   o  o   o  o   oooo  o   o  ooooo  o     o     /\n");
-	ft_printf("/  o  o  o  |  oo  o  |  o      o   o  o      o     o     /\n");
-	ft_printf("/  o  o  o  |  o o o  |   ooo   ooooo  ooooo  o     o     /\n");
-	ft_printf("/  o  o  o  |  o  oo  |      o  o   o  o      o     o     /\n");
-	ft_printf("/  o  o  o  |  o   o  |  oooo   o   o  ooooo  oooo  oooo  /\n");
-	ft_printf("/                                                         /\n");
-	ft_printf("/ ******************************************************* /\n");
+    printf("╔════════════════════════════════════╗\n");
+    printf("║        WELCOME TO MINISHELL        ║\n");
+    printf("╚════════════════════════════════════╝\n");
+	return (EXIT_SUCCESS);
+}
+
+int	print_exit(void)
+{
+    printf("╔════════════════════════════════════╗\n");
+    printf("║  THANK YOU FOR CHOOSING MINISHELL, ║\n");
+	printf("║           SEE YOU SOON!            ║\n");
+    printf("╚════════════════════════════════════╝\n");
 	return (EXIT_SUCCESS);
 }
