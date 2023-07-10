@@ -58,6 +58,7 @@ typedef struct s_minishell
 extern t_minishell			*mini_global;
 
 int		print_opening(void);
+int		print_exit(void);
 
 int		prompt(t_minishell *mini);
 
@@ -87,8 +88,8 @@ int		print_cmd(char **cmd_line);
 
 // Path related functions
 int		executor(t_minishell *mini, char **envp);
-char	*ft_access_path(char **cmd, int i);
-char	**ft_access_list(char **cmd);
+char	*ft_access_path(char **cmd, int i, t_minishell *mini);
+char	**ft_access_list(char **cmd, t_minishell *mini);
 char	**ft_access_list_help(char *cmd_2, char **path_from_envp, int len, int i);
 void	ft_free_tab(char **tab);
 void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2);
@@ -100,6 +101,7 @@ int is_relative_path(char *path);
 char    *ft_relative_path(char *cmd, t_minishell *mini);
 char   *origine_path(int count_trim, t_minishell *mini);
 char *getenv_mini(char *env_mini, t_minishell *mini);
+int     ft_count_trim(char *cmd);
 
 // Builtin functions
 int    pwd_builtin(t_minishell *mini);

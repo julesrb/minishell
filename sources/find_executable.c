@@ -8,10 +8,10 @@ char *getenv_mini(char *env_mini, t_minishell *mini)
     while (curr != NULL)
     {
         if(ft_strncmp(env_mini, curr->content, ft_strlen(env_mini)) == 0)
-            break;
+             return(curr->content + ft_strlen(env_mini) + 1);
         curr = curr->next;
     }
-    return(curr->content + ft_strlen(env_mini) + 1);
+    return(NULL);
 }
 
 int     ft_count_trim(char *cmd)
@@ -21,7 +21,9 @@ int     ft_count_trim(char *cmd)
 
     i = 0;
     count_trim = 0;
-    while (!ft_isalnum(cmd[i]) && !ft_isalnum(cmd[i + 1]) && !ft_isalnum(cmd[i + 2]))
+    if (!cmd)
+        return(count_trim);
+    while (cmd[i] && (!ft_isalnum(cmd[i]) && !ft_isalnum(cmd[i + 1]) && !ft_isalnum(cmd[i + 2])))
     {
         if (cmd[i] == '.' && cmd[i + 1] == '.' && cmd[i + 2] == '/')
             count_trim++;
@@ -94,6 +96,10 @@ int is_relative_path(char *path)
 {
     if (ft_strlen(path) >= 2 && (ft_strncmp(path, "./", 2) == 0 || ft_strncmp(path, "../", 3) == 0))
         return (EXIT_SUCCESS);
+    else if (ft_strlen(path) == 1 && path[0] == '.')
+        return (EXIT_SUCCESS);
+    else if (ft_strlen(path) == 2 && ft_strncmp(path, "..", 2) == EXIT_SUCCESS)
+        return (EXIT_SUCCESS);
     return (EXIT_FAILURE);
 }
 
@@ -116,6 +122,6 @@ char *find_executable(char **cmd, t_minishell *mini)
         return(result);
     }
     else
-        return(ft_access_path(cmd, 0));
+        return(ft_access_path(cmd, 0, mini));
     return (NULL);
 }

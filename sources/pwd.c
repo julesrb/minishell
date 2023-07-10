@@ -11,5 +11,5 @@ int    pwd_builtin(t_minishell *mini)
         curr = curr->next;
     }
     ft_putendl_fd(curr->content + 4, 1);
-    exit(EXIT_SUCCESS);
+    return(EXIT_SUCCESS);
 }

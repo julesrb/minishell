@@ -10,7 +10,20 @@ int	ft_free(char *str1, char *str2, char **tab1, char **tab2)
 		ft_free_tab(tab1);
 	if (tab2)
 		ft_free_tab(tab2);
-	return (1);
+	return (EXIT_FAILURE);
+}
+
+void 	*ft_free_pointer(char *str1, char *str2, char **tab1, char **tab2)
+{
+	if (str1)
+		free(str1);
+	if (str2)
+		free(str2);
+	if (tab1)
+		ft_free_tab(tab1);
+	if (tab2)
+		ft_free_tab(tab2);
+	return (NULL);
 }
 
 void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2)
@@ -42,19 +55,19 @@ char	**ft_access_list_help(char *cmd_2, char **path_from_envp, int len, int i)
 
 	result = (char **)malloc(sizeof(result) * ++len);
 	if (!result)
-		ft_free_exit(cmd_2, NULL, NULL, path_from_envp);
+		return(ft_free_pointer(cmd_2, NULL, NULL, path_from_envp));
 	while (path_from_envp[i] != NULL)
 	{
 		result[i] = ft_strjoin(path_from_envp[i], cmd_2);
 		if (!result[i])
-			ft_free_exit(cmd_2, NULL, NULL, path_from_envp);
+			return(ft_free_pointer(cmd_2, NULL, NULL, path_from_envp));
 		i++;
 	}
 	result[i] = NULL;
 	return (result);
 }
 
-char	**ft_access_list(char **cmd)
+char	**ft_access_list(char **cmd, t_minishell *mini)
 {
 	int		len;
 	char	**result;
@@ -64,31 +77,35 @@ char	**ft_access_list(char **cmd)
 	len = 0;
 	cmd_2 = (char *)malloc(sizeof(cmd_2) * (ft_strlen(cmd[0]) + 2));
 	if (!cmd_2)
-		ft_free(NULL, NULL, cmd, NULL);
+		return(NULL);
 	cmd_2[0] = '/';
 	ft_strlcpy(cmd_2 + 1, cmd[0], ft_strlen(cmd[0]) + 1);
-	path_from_envp = ft_split(getenv("PATH"), ':');
+	path_from_envp = ft_split(getenv_mini("PATH", mini), ':');
+	if (!path_from_envp)
+		return(ft_free_pointer(cmd_2, NULL, NULL, NULL));
 	while (path_from_envp[len] != NULL)
 		len++;
 	result = ft_access_list_help(cmd_2, path_from_envp, len, 0);
-	ft_free(cmd_2, NULL, NULL, NULL);
+	ft_free_pointer(cmd_2, NULL, NULL, NULL);
 	return (result);
 }
 
-char	*ft_access_path(char **cmd, int i)
+char	*ft_access_path(char **cmd, int i, t_minishell *mini)
 {
 	char	*result;
     char **access_list;
 
 	result = NULL;
-	access_list = ft_access_list(cmd);
+	access_list = ft_access_list(cmd, mini);
+	if (!access_list)
+		return (NULL);
 	while (access_list[i] != NULL)
 	{
 		if (access(access_list[i], F_OK | X_OK) == 0)
 		{
 			result = malloc(sizeof(result) * ft_strlen(access_list[i]));
 			if (!result)
-				ft_free_exit(NULL, NULL, cmd, access_list);
+				return(ft_free_pointer(NULL, NULL, cmd, access_list));
 			ft_strlcpy(result, access_list[i],
 				ft_strlen(access_list[i]) + 1);
 			break ;
