@@ -125,5 +125,7 @@ int     list_env_update(t_minishell *mini, char *var_update);
 void signal_main(t_minishell *mini, struct sigaction *sa);
 void signal_child(t_minishell *mini, struct sigaction *sa);
 
+int	is_env_function(char *cmd);
+
 #endif
 
