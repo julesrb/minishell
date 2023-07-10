@@ -82,7 +82,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 	return(EXIT_FAILURE);
 }
 
-int	insert_pipe(char **cmd, char **envp, t_minishell *mini)
+int	insert_pipe(char **cmd, char **envp, t_minishell *mini, int index)
 {
 	int	fd[2];
 	pid_t	pid;
@@ -105,11 +105,30 @@ int	insert_pipe(char **cmd, char **envp, t_minishell *mini)
 	}
 	else
 	{
-		close(fd[1]);
-		dup2(fd[0], 0);
-		close(fd[0]);
+		if (is_env_function(cmd[0]) && (index == mini->nb_cmd - 1))
+		{
+			close(fd[1]);
+			close(fd[0]);
+		}
+		else
+		{
+			close(fd[1]);
+			dup2(fd[0], 0);
+			close(fd[0]);
+		}
 	}
 	return(EXIT_SUCCESS);
+}
+
+int	is_env_function(char *cmd)
+{
+	if(ft_strncmp(cmd, "cd", max_length("cd", cmd)) == EXIT_SUCCESS)
+		return (EXIT_SUCCESS);
+	else if(ft_strncmp(cmd, "export", max_length("export", cmd)) == EXIT_SUCCESS)
+		return (EXIT_SUCCESS);
+	else if(ft_strncmp(cmd, "unset", max_length("unset", cmd)) == EXIT_SUCCESS)
+		return (EXIT_SUCCESS);
+	return(EXIT_FAILURE);
 }
 
 int    executor(t_minishell *mini, char **envp)
@@ -118,23 +137,47 @@ int    executor(t_minishell *mini, char **envp)
 	pid_t pid;
 
 	index = 0;
-	pid = fork();
-	if (pid == -1)
-		return(EXIT_FAILURE);
-	if (pid == 0)
+	if (is_env_function(mini->cmd_table[mini->nb_cmd - 1][0]) == EXIT_SUCCESS)
 	{
 		if (input_redirection(*mini) == EXIT_FAILURE)
-			exit(EXIT_FAILURE);
+			return(EXIT_FAILURE);
 		while (index < mini->pipe)
-			insert_pipe(mini->cmd_table[index++], envp, mini);
+		{
+			insert_pipe(mini->cmd_table[index], envp, mini, index);
+			index++;
+		}
 		if (output_redirection(*mini) == EXIT_FAILURE)
 			exit(EXIT_FAILURE);
 		if (exec(mini->cmd_table[index], envp, mini) == EXIT_SUCCESS)
-			exit(EXIT_SUCCESS);
+			return(EXIT_SUCCESS);
 		else
-			exit(EXIT_FAILURE);
+			return(EXIT_FAILURE);
 	}
 	else
-		wait(NULL);
+	{
+		pid = fork();
+		if (pid == -1)
+			return(EXIT_FAILURE);
+		if (pid == 0)
+		{
+			if (input_redirection(*mini) == EXIT_FAILURE)
+				exit(EXIT_FAILURE);
+			while (index < mini->pipe)
+			{
+				insert_pipe(mini->cmd_table[index], envp, mini, index);
+				index++;
+			}
+			if (output_redirection(*mini) == EXIT_FAILURE)
+				exit(EXIT_FAILURE);
+			if (exec(mini->cmd_table[index], envp, mini) == EXIT_SUCCESS)
+				exit(EXIT_SUCCESS);
+			else
+				exit(EXIT_FAILURE);
+		}
+		else
+		{
+			wait(NULL);
+		}
+	}
 	return(EXIT_SUCCESS);
 }
