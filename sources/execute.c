@@ -91,55 +91,36 @@ int	insert_pipe(char **cmd, char **envp, t_minishell *mini, int index, int **fd)
 		return(EXIT_FAILURE);
 	if (pid == 0)
 	{
-		if (index == 0)
+		if ((index == 0) && (mini->input_redirection))
 		{
-			if (mini->input_redirection && mini->output_redirection)
-			{
-				input_redirection(mini);
-				close(fd[0][0]);
-				output_redirection(mini);
-				close(fd[index][1]);
-			}
-			else if (mini->input_redirection &&  (mini->output_redirection == 0))
-			{
-				input_redirection(mini);
-				close(fd[0][0]);
-				dup2(fd[index][1]);
-				close(fd[index][1]);
-			}
-			else if ((mini->input_redirection == 0) &&  (mini->output_redirection == 0))
-			{
-				close(fd[0][0]);
-				dup2(fd[index][1], 1);
-				close(fd[index][1]);
-			}
+			input_redirection(mini);
+			close(fd[0][0]);
 		}
-		else if ((index > 0) && (index < mini->nb_cmd -1))
+		else if ((index == 0) && (mini->input_redirection == 0))
+		{
+			close(fd[0][0]);
+		}
+		else
 		{
 			dup2(fd[index - 1][0], 0);
-			close(fd[index - 1][0]);
+			close(fd[index - 1][0]);			
 		}
-		if((index == mini->nb_cmd - 1) && mini->output_redirection)
+		if (index > 0 && (mini->output_redirection))
 		{
 			output_redirection(mini);
+			close(fd[index][1]);
 		}
-		else if (
-			dup2(fd[index][1], 1);
-			return(EXIT_FAILURE);
-		close(fd[1]);
+		else if (index > 0 &&  (mini->output_redirection == 0))
+		{
+			input_redirection(mini);
+			close(fd[0][0]);
+			dup2(fd[index][1]);
+			close(fd[index][1]);
+		}
 		if (exec(cmd, envp, mini) == EXIT_SUCCESS)
 			exit(EXIT_SUCCESS);
 		else
 			exit(EXIT_FAILURE);
-	}
-	else
-	{
-	else
-	{
-		close(fd[1]);
-		dup2(fd[0], 0);
-		close(fd[0]);
-	}
 	}
 	return(EXIT_SUCCESS);
 }
