@@ -122,8 +122,6 @@ char *find_executable(char **cmd, t_minishell *mini)
         return(result);
     }
     else
-    {
         return(ft_access_path(cmd, 0, mini));
-    }
     return (NULL);
 }
