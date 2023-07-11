@@ -86,6 +86,8 @@ char	**ft_access_list(char **cmd, t_minishell *mini)
 	while (path_from_envp[len] != NULL)
 		len++;
 	result = ft_access_list_help(cmd_2, path_from_envp, len, 0);
+	if (!result)
+		return(NULL);
 	ft_free_pointer(cmd_2, NULL, NULL, NULL);
 	return (result);
 }

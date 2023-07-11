@@ -82,45 +82,58 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 	return(EXIT_FAILURE);
 }
 
-int	insert_pipe(char **cmd, char **envp, t_minishell *mini, int index, int **fd)
+int	create_process_fd(char **cmd, char **envp, t_minishell *mini, int index, int **fd)
 {
 	pid_t	pid;
+	int i;
 
+	i = 0;
 	pid = fork();
 	if (pid == -1)
 		return(EXIT_FAILURE);
 	if (pid == 0)
 	{
-		if ((index == 0) && (mini->input_redirection))
+		if (index == 0)
 		{
-			input_redirection(mini);
-			close(fd[0][0]);
+			input_redirection(*mini);
+			dup2(fd[index][1], 1);
 		}
-		else if ((index == 0) && (mini->input_redirection == 0))
+		else if (index == mini->nb_cmd - 1)
 		{
-			close(fd[0][0]);
+			output_redirection(*mini);
+			dup2(fd[index - 1][0], 0);
 		}
 		else
 		{
 			dup2(fd[index - 1][0], 0);
-			close(fd[index - 1][0]);			
+			dup2(fd[index][1], 1);
 		}
-		if (index > 0 && (mini->output_redirection))
+		i = 0;
+		while (fd[i] != NULL)
 		{
-			output_redirection(mini);
-			close(fd[index][1]);
-		}
-		else if (index > 0 &&  (mini->output_redirection == 0))
-		{
-			input_redirection(mini);
-			close(fd[0][0]);
-			dup2(fd[index][1]);
-			close(fd[index][1]);
+			close(fd[i][0]);
+			close(fd[i][1]);
+			i++;
 		}
 		if (exec(cmd, envp, mini) == EXIT_SUCCESS)
 			exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		if (index == 0)
+		{
+			close(fd[index][1]);
+		}
+		else if (index == mini->nb_cmd - 1)
+		{
+			close(fd[index - 1][0]);				
+		}
 		else
-			exit(EXIT_FAILURE);
+		{
+			close(fd[index - 1][0]);
+			close(fd[index][1]);
+		}
 	}
 	return(EXIT_SUCCESS);
 }
@@ -139,41 +152,53 @@ int	is_env_function(char *cmd)
 int    executor(t_minishell *mini, char **envp)
 {
 	int index;
-	pid_t pid;
 	int **fd;
 	int i;
+	pid_t pid = 0;
 
 	i = 0;
 	index = 0;
-	fd = malloc(sizeof(int*) * (mini->nb_cmd - 1));
-	while(i < mini->nb_cmd - 1)
+	fd = NULL;
+	if (mini->nb_cmd == 1)
 	{
-		fd[i] = malloc(sizeof(int*) * 2);
-		pipe(fd[i]);
-		i++;
-	}
-	pid = fork();
-	if (pid == -1)
-		return(EXIT_FAILURE);
-	if (pid == 0)
-	{
-		if (input_redirection(*mini) == EXIT_FAILURE)
-			exit(EXIT_FAILURE);
-		while (index < mini->pipe)
+		if (is_env_function(mini->cmd_table[0][0]) == EXIT_SUCCESS)
 		{
-			insert_pipe(mini->cmd_table[index], envp, mini, index, fd);
-			index++;
+			infile_insert(*mini);
+			outfile_insert(*mini);
+			if (exec(mini->cmd_table[0], envp, mini) == EXIT_SUCCESS)
+				return(EXIT_SUCCESS);
+			return (EXIT_FAILURE);
 		}
-/* 			if (output_redirection(*mini) == EXIT_FAILURE)
-			exit(EXIT_FAILURE);
-		if (exec(mini->cmd_table[index], envp, mini) == EXIT_SUCCESS)
-			exit(EXIT_SUCCESS);
 		else
-			exit(EXIT_FAILURE); */
+		{
+			pid = fork();
+			if (pid == 0)
+			{
+				input_redirection(*mini);
+				output_redirection(*mini);
+				if (exec(mini->cmd_table[0], envp, mini) == EXIT_SUCCESS)
+					exit(EXIT_SUCCESS);
+			}
+			else
+				waitpid(pid, NULL, 0);
+		}
 	}
 	else
 	{
-		wait(NULL);
+		fd = malloc(sizeof(int*) * (mini->nb_cmd));
+		while(i < mini->nb_cmd - 1)
+		{
+			fd[i] = malloc(sizeof(int*) * 2);
+			pipe(fd[i]);
+			i++;
+		}
+		fd[i] = NULL;
+		while (index < mini->nb_cmd)
+		{
+			create_process_fd(mini->cmd_table[index], envp, mini, index, fd);
+			index++;
+		}
+		while (wait(NULL) != -1);
 	}
 	return(EXIT_SUCCESS);
 }
