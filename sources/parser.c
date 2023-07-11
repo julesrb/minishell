@@ -12,18 +12,13 @@
 
 #include "minishell.h"
 
-int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
+int	parser_redir_check(t_minishell *mini, char *redir, int cmd_nb)
 {
 	int	type;
 
 	type = 0;
-	if (redir[0] == redir[1])
-	{
-		if (redir[0] == '<')
-			type = 12;
-		if (redir[0] == '>')
-			type = 22;
-	}
+	if (cmd_nb != (mini->nb_cmd - 1) && cmd_nb != 0)
+		return (-1);
 	if ((redir[0] == '<' && redir[1] == '>')
 		|| (redir[0] == '>' && redir[1] == '<'))
 		return (-1);
@@ -31,12 +26,17 @@ int	check_redirection(t_minishell *mini, char *redir, int cmd_nb)
 		type = 11;
 	if (redir[0] == '>')
 		type = 21;
-	if (cmd_nb != 0 || cmd_nb != mini->nb_cmd - 1)
-		return (-1);
+	if (redir[0] == redir[1])
+	{
+		if (redir[0] == '<')
+			type = 12;
+		if (redir[0] == '>')
+			type = 22;
+	}
 	return (type);
 }
 
-t_llist	*check_redir_file(t_minishell *mini, t_llist *lexer_pos, int cmd_nb)
+t_llist	*parser_redir_file(t_minishell *mini, t_llist *lexer_pos, int cmd_nb)
 {
 	t_llist	*curr;
 	int		i;
@@ -44,7 +44,7 @@ t_llist	*check_redir_file(t_minishell *mini, t_llist *lexer_pos, int cmd_nb)
 
 	i = 0;
 	curr = lexer_pos;
-	type = check_redirection(mini, curr->content, cmd_nb);
+	type = parser_redir_check(mini, curr->content, cmd_nb);
 	if (type == -1)
 	{
 		mini->error_redir = 1;
@@ -58,29 +58,28 @@ t_llist	*check_redir_file(t_minishell *mini, t_llist *lexer_pos, int cmd_nb)
 			mini->error_redir = 1;
 		i++;
 	}
-
 	if (mini->error_redir == 0)
 	{
 		if (type == 11 || type == 12)
 		{
 			if (type == 11)
 				add_to_redir(&mini->redir_in, 1, ft_strdup(curr->content));
-			if (type == 12)
+			else if (type == 12)
 				add_to_redir(&mini->redir_in, 2, ft_strdup(curr->content));
 		}
 		if (type == 21 || type == 22)
 		{
 			if (type == 21)
-				add_to_redir(&mini->redir_in, 1, ft_strdup(curr->content));
-			if (type == 22)
-				add_to_redir(&mini->redir_in, 2, ft_strdup(curr->content));
+				add_to_redir(&mini->redir_out, 1, ft_strdup(curr->content));
+			else if (type == 22)
+				add_to_redir(&mini->redir_out, 2, ft_strdup(curr->content));
 		}
 		return (curr->next);
 	}
 	return (curr);
 }
 
-char	**malloc_command(t_llist *cmd_list)
+char	**parser_malloc_command(t_llist *cmd_list)
 {
 	int		arg;
 	int		i;
@@ -97,7 +96,7 @@ char	**malloc_command(t_llist *cmd_list)
 	}
 	else
 	{
-		cmd_arr = (char **)malloc(sizeof (char *) * arg + 1);
+		cmd_arr = (char **)malloc(sizeof (char *) * (arg + 1));
 		while (cmd_list != NULL)
 		{
 			cmd_arr[i] = ft_strdup(cmd_list->content);
@@ -109,82 +108,57 @@ char	**malloc_command(t_llist *cmd_list)
 	return (cmd_arr);
 }
 
-t_llist	*build_command(t_minishell *mini, int cmd, t_llist *curr)
+t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex)
 {
 	t_llist	*split_cmd;
 
 	split_cmd = NULL;
-	if (curr->content[0] == '|')
-		curr = curr->next;
-	while (curr != NULL && curr->content[0] != '|')
+	if (lex->content[0] == '|')
+		lex = lex->next;
+	while (lex != NULL && lex->content[0] != '|')
 	{
-		if (curr->content[0] == '<' || curr->content[0] == '>')
-			curr = check_redir_file(mini, curr, cmd);
-		if (curr != NULL && curr->content[0] == '$')
-			curr->content = var_translation(mini, curr->content);
-		if (curr != NULL && ((curr->content[0] == 34 || curr->content[0] == 39)))
-			quote_translation(mini, curr);
-		if (curr != NULL && curr->content[0] != '|'
-			&& curr->content[0] != '<' && curr->content[0] != '>')
+		if (lex->content[0] == '<' || lex->content[0] == '>')
+			lex = parser_redir_file(mini, lex, cmd);
+		if (lex != NULL && lex->content[0] == '$')
+			lex->content = var_translation(mini, lex->content);
+		if (lex != NULL && ((lex->content[0] == 34 || lex->content[0] == 39)))
+			quote_translation(mini, lex);
+		if (lex != NULL && lex->content[0] != '|'
+			&& lex->content[0] != '<' && lex->content[0] != '>')
 		{
-			add_to_list(&split_cmd, ft_strdup(curr->content));
-			curr = curr->next;
+			add_to_list(&split_cmd, ft_strdup(lex->content));
+			lex = lex->next;
 		}
 	}
-	mini->cmd_table[cmd] = malloc_command(split_cmd);
+	mini->cmd_table[cmd] = parser_malloc_command(split_cmd);
 	deallocate_list(&split_cmd);
-	return (curr);
-}
-
-int	last_token_is_pipe(t_llist *curr)
-{
-	while (curr->next != NULL)
-		curr = curr->next;
-	if (curr->content[0] == '|')
-		return (1);
-	return (0);
-}
-
-int	check_pipe_error(t_minishell *mini)
-{
-	t_llist	*curr;
-
-	curr = mini->lexer_table;
-	if (curr->content[0] == '|')
-		mini->error_pipe = 1;
-	if (last_token_is_pipe(curr) == 1)
-		mini->error_pipe = 1;
-	while (curr->next != NULL)
-	{
-		if (curr->content[0] == '|' && curr->next->content[0] == '|')
-			mini->error_pipe = 1;
-		curr = curr->next;
-	}
-	return (0);
+	return (lex);
 }
 
 int	parser(t_minishell *mini)
 {
 	int		cmd;
-	t_llist	*curr;
+	t_llist	*lexer;
 
 	cmd = 0;
-	curr = mini->lexer_table;
-	check_pipe_error(mini);
+	lexer = mini->lexer_table;
+	if (!lexer)
+		return (EXIT_FAILURE);
 	if (mini->error_pipe == 0)
 	{
 		mini->nb_cmd = mini->pipe + 1;
-		mini->cmd_table = (char ***)malloc(sizeof (char **) * (mini->nb_cmd + 1));
-		while (curr != NULL)
+		mini->cmd_table = (char ***)malloc
+			(sizeof (char **) * (mini->nb_cmd + 1));
+		if (!mini->cmd_table)
+			return (EXIT_FAILURE);
+		while (lexer != NULL)
 		{
-			curr = build_command(mini, cmd, curr);
+			lexer = parser_build_command(mini, cmd, lexer);
 			cmd++;
 		}
 		if (mini->cmd_table[0][0][0] == 0)
 			mini->nb_cmd = 0;
 		mini->cmd_table[cmd] = NULL;
 	}
-	// if redir_in or _out are nto empty its still one command;
-	deallocate_list(&mini->lexer_table);
-	return (1);
+	return (EXIT_SUCCESS);
 }

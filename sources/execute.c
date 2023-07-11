@@ -55,6 +55,8 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 {
     char *path;
 
+	if (cmd[0][0] == 0)
+		exit (EXIT_SUCCESS);
 	if (is_builtin(cmd[0]) == EXIT_SUCCESS)
 	{
 		if (execute_builtin(cmd, mini) == EXIT_SUCCESS)
@@ -118,6 +120,8 @@ int    executor(t_minishell *mini, char **envp)
 	int index;
 	pid_t pid;
 
+	if (!mini->cmd_table)
+		return (EXIT_FAILURE);
 	index = 0;
 	pid = fork();
 	if (pid == -1)

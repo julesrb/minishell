@@ -27,14 +27,35 @@ int	quote_translation(t_minishell *mini, t_llist *curr)
 	return (EXIT_SUCCESS);
 }
 
-char	*var_translation(t_minishell *mini, char *var)
+char	*var_find_translation(t_list *curr, char *var, char *translation)
 {
 	int		i;
 	char	*keyword;
+
+	i = 0;
+	keyword = ft_strdup(&var[1]);
+	while (keyword[i] != 0 && keyword[i] != ' ')
+		i++;
+	keyword[i] = 0;
+	keyword = ft_strjoin(keyword, "=");
+	while (curr != NULL)
+	{
+		if (ft_strncmp(curr->content, keyword, ft_strlen(keyword))
+			== EXIT_SUCCESS)
+			translation = ft_strdup(&curr->content[ft_strlen(keyword)]);
+		curr = curr->next;
+	}
+	free(keyword);
+	if (translation == NULL)
+		return (ft_strdup(""));
+	return (NULL);
+}
+
+char	*var_translation(t_minishell *mini, char *var)
+{
 	char	*translation;
 	t_list	*curr;
 
-	i = 0;
 	curr = mini->env_mini;
 	translation = NULL;
 	if (var[1] == 0)
@@ -45,24 +66,8 @@ char	*var_translation(t_minishell *mini, char *var)
 		translation[0] = mini->exit_status + '0';
 		return (translation);
 	}
-	keyword = ft_strdup(&var[1]);
-	while (keyword[i] != 0 && keyword[i] != ' ')
-		i++;
-	keyword[i] = 0;
-	keyword = ft_strjoin(keyword, "=");
-	while (curr != NULL)
-	{
-		if (ft_strncmp(curr->content, keyword, ft_strlen(keyword)) == EXIT_SUCCESS)
-		{
-			char *tmp = curr->content;
-			translation = ft_strdup(&tmp[ft_strlen(keyword)]);
-		}
-		curr = curr->next;
-	}
-	free(keyword);
-	if (translation == NULL)
-		return(ft_strdup(""));
-	return(translation);
+	translation = var_find_translation(curr, var, translation);
+	return (translation);
 }
 
 char	*add_var_translation(t_minishell *mini, char *str)

@@ -44,22 +44,16 @@ typedef struct s_redir
 
 typedef struct s_minishell
 {
-	char	*input;  //prompt input
-	char	**envp;
-	char	***cmd_table; // output du parser
+	char	*input;
+	char	***cmd_table;
 	t_list	*env_mini;
 	t_llist	*lexer_table;
 	t_redir *redir_in;
 	t_redir *redir_out;
-	int		pipe; // nb de pipe
-	int		input_redirection; // 1 si < 2 si <<
-	int		output_redirection; // 1 si > 2 si >>
+	int		pipe;
 	int		error_redir;
 	int		error_pipe;
-	int		nb_cmd; // nb de commande a executer
-	char	*limiter;
-	char	*in_file;
-	char	*out_file;
+	int		nb_cmd;
 	int		exit_status;
 	int		main_pid;
 }t_minishell;
@@ -94,6 +88,12 @@ int		print_lst(t_llist *lst);
 int		print_cmd_table(t_minishell *mini, int cmd);
 int		print_cmd(char **cmd_line);
 
+// Token
+int		token_yield_redir(char *redir, t_minishell *mini);
+int		token_yield_quote(char *token, t_minishell *mini);
+int		token_yield_pipe(char *token, t_minishell *mini);
+int		token_yield_word(char *token, t_minishell *mini);
+int		token_yield_var(char *token, t_minishell *mini);
 
 // Path related functions
 int		executor(t_minishell *mini, char **envp);

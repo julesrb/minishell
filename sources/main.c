@@ -14,20 +14,14 @@
 
 t_minishell	*mini_global;
 
-int	init_t_mini(t_minishell *mini, char **envp)
+int	init_t_mini(t_minishell *mini)
 {
 	mini->input = NULL;
-	mini->envp = envp;
 	mini->cmd_table = NULL;
 	mini->lexer_table = NULL;
 	mini->redir_in = NULL;
 	mini->redir_out = NULL;
-	//mini->limiter = NULL;
-	//mini->in_file = NULL;
-	//mini->out_file = NULL;
 	mini->pipe = 0;
-	//mini->input_redirection = 0;
-	//mini->output_redirection = 0;
 	mini->nb_cmd = 0;
 	mini->error_redir = 0;
 	mini->error_pipe = 0;
@@ -44,22 +38,23 @@ int	main(int argc, char **argv, char **envp)
 	mini.exit_status = 0;
 	arg_check(argc, argv);
 	if (env_mini(&mini, envp) == EXIT_FAILURE)
-		printf("Error initializing the minishell environment\n");
+		ft_putendl_fd("Error initializing the minishell environment", 2);
 	print_opening ();
 	while (1)
 	{
-		init_t_mini(&mini, envp);
+		init_t_mini(&mini);
 		prompt(&mini);
 		lexer(&mini);
- 			print_lst(mini.lexer_table); 
+ 			//print_lst(mini.lexer_table); 
 		parser(&mini);
- 			print_t_mini(&mini);
-			print_cmd_table(&mini, mini.nb_cmd);
- 		if ((mini.error_pipe == 0 && mini.error_redir == 0) && mini.nb_cmd > 0)
+ 			//print_t_mini(&mini);
+			//print_cmd_table(&mini, mini.nb_cmd);
+ 		if ((mini.error_pipe == 0 && mini.error_redir == 0)
+			&& (mini.nb_cmd > 0 || mini.redir_in || mini.redir_out))
 			mini.exit_status = executor(&mini, envp);
 		else if (mini.nb_cmd != 0)
-			ft_printf("Parsing ERROR\n");
+			ft_putendl_fd("minishell: parsing error", 2);
 		free_mini(&mini);
 	}
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }

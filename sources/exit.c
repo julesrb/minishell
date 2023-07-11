@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-
 int	exit_builtin(char **cmd, t_minishell *mini)
 {
 	int	i;
