@@ -47,7 +47,7 @@ int	main(int argc, char **argv, char **envp)
 		init_t_mini(&mini);
 		prompt(&mini);
 		lexer(&mini);
- 			//print_lst(mini.lexer_table); 
+/*  			print_lst(mini.lexer_table);  */
 		parser(&mini);
 /*  			print_t_mini(&mini);
 			print_cmd_table(&mini, mini.nb_cmd); */

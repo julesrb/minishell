@@ -42,13 +42,16 @@ char	*var_find_translation(t_list *curr, char *var, char *translation)
 	{
 		if (ft_strncmp(curr->content, keyword, ft_strlen(keyword))
 			== EXIT_SUCCESS)
+			{
 			translation = ft_strdup(&curr->content[ft_strlen(keyword)]);
+			break;
+			}
 		curr = curr->next;
 	}
 	free(keyword);
 	if (translation == NULL)
 		return (ft_strdup(""));
-	return (NULL);
+	return (translation);
 }
 
 char	*var_translation(t_minishell *mini, char *var)
