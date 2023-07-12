@@ -113,8 +113,7 @@ int	execute_several_commands(t_minishell *mini)
 		index++;
 	}
 	while (wait(NULL) != -1)
-	{
-	}
+		;;
 	return (EXIT_SUCCESS);
 }
 

@@ -36,6 +36,7 @@ int	main(int argc, char **argv, char **envp)
 	//signal_main(&mini, &sa_main);
 	//signal(SIGQUIT, SIG_IGN);
 	mini.exit_status = 0;
+	mini.envp = envp;
 	arg_check(argc, argv);
 	if (env_mini(&mini, envp) == EXIT_FAILURE)
 		ft_putendl_fd("Error initializing the minishell environment", 2);
