@@ -126,11 +126,13 @@ int	executor(t_minishell *mini)
 	{
 		if (execute_single_command(mini) == EXIT_SUCCESS)
 			return (EXIT_SUCCESS);
+		return (EXIT_FAILURE);
 	}
 	else
 	{
 		if (execute_several_commands(mini) == EXIT_SUCCESS)
 			return (EXIT_SUCCESS);
+		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
