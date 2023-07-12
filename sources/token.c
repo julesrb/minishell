@@ -38,7 +38,7 @@ int	token_yield_word(char *token, t_minishell *mini)
 		str[i] = token[i];
 	str[i] = '\0';
 	add_to_list(&mini->lexer_table, str);
-	return (EXIT_SUCCESS);
+	return (i);
 }
 
 int	token_yield_quote(char *token, t_minishell *mini)
