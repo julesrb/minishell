@@ -35,6 +35,7 @@ int	main(int argc, char **argv, char **envp)
 
 
 	mini.exit_status = 0;
+	mini.envp = envp;
 	arg_check(argc, argv);
 	signal_main(&mini);
 	if (env_mini(&mini, envp) == EXIT_FAILURE)
