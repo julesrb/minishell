@@ -136,7 +136,7 @@ int     list_env_update(t_minishell *mini, char *var_update);
 
 // signal
 void signal_main(t_minishell *mini);
-void signal_child(t_minishell *mini, struct sigaction *sa);
+void signal_cmd(t_minishell *mini);
 
 // execute_utils.c
 int max_length(const char* str1, const char* str2);

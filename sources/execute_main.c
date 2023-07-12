@@ -120,6 +120,9 @@ int	execute_several_commands(t_minishell *mini)
 
 int	executor(t_minishell *mini)
 {
+	if (!mini->cmd_table)
+		return (EXIT_FAILURE);
+
 	if (mini->nb_cmd == 1)
 	{
 		if (execute_single_command(mini) == EXIT_SUCCESS)

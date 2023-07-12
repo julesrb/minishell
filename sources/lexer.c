@@ -27,6 +27,8 @@ int	lexer_error_pipe_check(t_minishell *mini)
 	t_llist	*curr;
 
 	curr = mini->lexer_table;
+	if (!curr)
+		return (EXIT_FAILURE);
 	if (curr->content[0] == '|')
 		mini->error_pipe = 1;
 	if (lexer_last_token_is_pipe(curr) == 1)
@@ -37,7 +39,7 @@ int	lexer_error_pipe_check(t_minishell *mini)
 			mini->error_pipe = 1;
 		curr = curr->next;
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 int	lexer(t_minishell *mini)

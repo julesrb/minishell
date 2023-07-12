@@ -120,8 +120,11 @@ t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex)
 		if (lex->content[0] == '<' || lex->content[0] == '>')
 			lex = parser_redir_file(mini, lex, cmd);
 		if (lex != NULL && lex->content[0] == '$')
+		{
 			lex->content = var_translation(mini, lex->content);
-		if (lex != NULL && ((lex->content[0] == 34 || lex->content[0] == 39)))
+			lex = lex->next;
+		}
+		if (lex != NULL && (lex->content[0] == 34 || lex->content[0] == 39))
 			quote_translation(mini, lex);
 		if (lex != NULL && lex->content[0] != '|'
 			&& lex->content[0] != '<' && lex->content[0] != '>')

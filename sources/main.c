@@ -37,16 +37,17 @@ int	main(int argc, char **argv, char **envp)
 	mini.exit_status = 0;
 	mini.envp = envp;
 	arg_check(argc, argv);
-	signal_main(&mini);
 	if (env_mini(&mini, envp) == EXIT_FAILURE)
 		ft_putendl_fd("Error initializing the minishell environment", 2);
 	print_opening ();
+		ft_printf("main pid = %d\n", getpid());
 	while (1)
 	{
+		signal_main(&mini);
 		init_t_mini(&mini);
 		prompt(&mini);
 		lexer(&mini);
-/*  			print_lst(mini.lexer_table);  */
+ 			//print_lst(mini.lexer_table); 
 		parser(&mini);
 /*  			print_t_mini(&mini);
 			print_cmd_table(&mini, mini.nb_cmd); */

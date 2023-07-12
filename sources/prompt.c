@@ -14,11 +14,17 @@
 
 int	prompt(t_minishell *mini)
 {
+	rl_redisplay();
 	mini->input = readline("[Minishell] ");
-	if (!mini->input || mini->input[0] == 0)
+	if (!mini->input)
 	{
-		add_to_list(&mini->lexer_table, ft_strdup(""));
+		free_mini(mini_global);
+		if (mini_global->env_mini != NULL)
+			deallocate_env(&mini_global->env_mini);
+		exit (EXIT_SUCCESS);  // should it exit or terminate ?
 	}
+	if (mini->input[0] == 0)
+		add_to_list(&mini->lexer_table, ft_strdup(""));
 	else
 		add_history(mini->input);
 	return (EXIT_SUCCESS);
