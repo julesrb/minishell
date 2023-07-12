@@ -55,7 +55,7 @@ int	main(int argc, char **argv, char **envp)
 			print_cmd_table(&mini, mini.nb_cmd); */
  		if ((mini.error_pipe == 0 && mini.error_redir == 0) && mini.nb_cmd > 0)
 		{
-			mini.exit_status = executor(&mini, envp);
+			mini.exit_status = executor(&mini);
 		}
 		else if (mini.nb_cmd != 0)
 			ft_printf("Parsing ERROR\n");
