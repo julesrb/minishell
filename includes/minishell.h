@@ -88,7 +88,6 @@ int		print_cmd(char **cmd_line);
 
 
 // Path related functions
-int		executor(t_minishell *mini, char **envp);
 char	*ft_access_path(char **cmd, int i, t_minishell *mini);
 char	**ft_access_list(char **cmd, t_minishell *mini);
 char	**ft_access_list_help(char *cmd_2, char **path_from_envp, int len, int i);
