@@ -12,119 +12,30 @@
 
 #include "minishell.h"
 
-int	yield_word(char *token, t_minishell *mini)
+
+int	lexer_last_token_is_pipe(t_llist *curr)
 {
-	int		i;
-	int		len;
-	char	*str;
-
-	len = 0;
-	while (token[len] != ' ' && token[len] != 0 && token[len] != '|'
-			&& token[len] != 34 && token[len] != 39)
-		len++;
-	if (token[len] == 34 || token[len] == 39)
-	{
-		len++;
-		while (token[len] != 34 && token[len] != 39 && token[len] != 0)
-			len++;
-		if (token[len] != 0)
-			len++;
-	}
-	str = malloc(sizeof (char) * (len + 1));
-	if (!str)
-		return (0);
-	i = 0;
-	while (i < len)
-	{
-		str[i] = token[i];
-		i++;
-	}
-	str[i] = '\0';
-	add_to_list(&mini->lexer_table, str);
-	return (i);
-}
-
-int	yield_quote(char *token, t_minishell *mini)
-{
-	int		i;
-	int		len;
-	char	*str;
-
-	i = 1;
-	while (token[i] != token[0] && token[i] != 0)
-		i++;
-	len = i;
-	if (token[i] == token[0])
-		len++;
-	str = malloc(sizeof (char) * (len + 1));
-	if (!str)
-		return (0);
-	i = 0;
-	while (i < len)
-	{
-		str[i] = token[i];
-		i++;
-	}
-	str[i] = '\0';
-	add_to_list(&mini->lexer_table, str);
-	return (i + 1);
-}
-
-int	yield_var(char *token, t_minishell *mini)
-{
-	char	*str;
-	int		i;
-	int		len;
-
-	len = 0;
-	while (token[len] != ' ' && token[len] != 0)
-		len++;
-	str = malloc(sizeof (char) * (len + 1));
-	if (!str)
-		return (0);
-	i = 0;
-	while (i < len)
-	{
-		str[i] = token[i];
-		i++;
-	}
-	str[i] = '\0';
-	add_to_list(&mini->lexer_table, str);
-	return (i);
-}
-
-int	yield_pipe(char *token, t_minishell *mini)
-{
-	char	*str;
-
-	mini->pipe += 1;
-	str = malloc(sizeof (char) * (1 + 1));
-	str[0] = token[0];
-	str[1] = 0;
-	add_to_list(&mini->lexer_table, str);
-	return (1);
-}
-
-int	yield_redirection(char *redir, t_minishell *mini)
-{
-	char	*str;
-
-	if (redir[0] != redir[1])
-	{
-		str = malloc(sizeof (char) * (1 + 1));
-		str[0] = redir[0];
-		str[1] = 0;
-		add_to_list(&mini->lexer_table, str);
+	while (curr->next != NULL)
+		curr = curr->next;
+	if (curr->content[0] == '|')
 		return (1);
-	}
-	if (redir[0] == redir[1])
+	return (0);
+}
+
+int	lexer_error_pipe_check(t_minishell *mini)
+{
+	t_llist	*curr;
+
+	curr = mini->lexer_table;
+	if (curr->content[0] == '|')
+		mini->error_pipe = 1;
+	if (lexer_last_token_is_pipe(curr) == 1)
+		mini->error_pipe = 1;
+	while (curr->next != NULL)
 	{
-		str = malloc(sizeof (char) * (2 + 1));
-		str[0] = redir[0];
-		str[1] = redir[1];
-		str[2] = 0;
-		add_to_list(&mini->lexer_table, str);
-		return (2);
+		if (curr->content[0] == '|' && curr->next->content[0] == '|')
+			mini->error_pipe = 1;
+		curr = curr->next;
 	}
 	return (0);
 }
@@ -139,18 +50,21 @@ int	lexer(t_minishell *mini)
 	while (input[i] != 0)
 	{
 		if (input[i] == '<' || input[i] == '>')
-			i += yield_redirection(&input[i], mini);
-		else if (ft_isalpha(input[i]) == 1 || input[i] == '-' || input[i] == '.' || input[i] == '=' || input[i] == '/')
-			i += yield_word(&input[i], mini);
+			i += token_yield_redir(&input[i], mini);
+		else if (ft_isalnum(input[i]) != 0 || input[i] == '-' || input[i] == '.'
+			|| input[i] == '=' || input[i] == '/'
+			|| input[i] == '~' || input[i] == '(')
+			i += token_yield_word(&input[i], mini);
 		else if (input[i] == 39 || input[i] == 34)
-			i += yield_quote(&input[i], mini);
+			i += token_yield_quote(&input[i], mini);
 		else if (input[i] == '$')
-			i += yield_var(&input[i], mini);
+			i += token_yield_var(&input[i], mini);
 		else if (input[i] == '|' )
-			i += yield_pipe(&input[i], mini);
+			i += token_yield_pipe(&input[i], mini);
 		else
 			i++;
 	}
 	mini->nb_cmd = mini->pipe + 1;
-	return (0);
+	lexer_error_pipe_check(mini);
+	return (EXIT_SUCCESS);
 }

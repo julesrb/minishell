@@ -12,8 +12,7 @@ int	echo_builtin(char **cmd_split)
 		ft_putstr_fd("\n", 1);
 		return (EXIT_SUCCESS);
 	}
-	else if (ft_strncmp(cmd_split[i], "-n", 2) == EXIT_SUCCESS
-			&& cmd_split[i][2] == 0)
+	else if (ft_strncmp(cmd_split[i], "-n", 2) == EXIT_SUCCESS)
 	{
 		n = 0;
 		i++;

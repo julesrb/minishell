@@ -18,6 +18,8 @@ void signal_handler_main(int s)
 	{
 		ft_putendl_fd("._-Farewell my friend-_'", 2);
 		free_mini(mini_global);
+		if (mini_global->env_mini != NULL)
+			deallocate_env(&mini_global->env_mini);
 		exit (EXIT_SUCCESS);
 	}
 	if (s == SIGINT) // ctrl c

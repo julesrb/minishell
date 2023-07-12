@@ -35,27 +35,31 @@ typedef struct s_llist
 	struct s_llist	*next;
 }t_llist;
 
+typedef struct s_redir
+{
+	int				type;
+	char			*file;
+	struct s_redir	*next;
+}t_redir;
+
 typedef struct s_minishell
 {
-	char	*input;  //prompt input
+	char	*input;
+	char	***cmd_table;
+	t_list	*env_mini;
 	t_llist	*lexer_table;
-	char	***cmd_table; // output du parser
-	int		pipe; // nb de pipe
-	int		input_redirection; // 1 si < 2 si <<
-	int		output_redirection; // 1 si > 2 si >>
+	t_redir *redir_in;
+	t_redir *redir_out;
+	int		pipe;
 	int		error_redir;
 	int		error_pipe;
-	int		nb_cmd; // nb de commande a executer
-	char	*limiter;
-	char	*in_file;
-	char	*out_file;
+	int		nb_cmd;
 	int		exit_status;
 	int		main_pid;
 	char	**envp;
-	t_list	*env_mini;
 }t_minishell;
 
-extern t_minishell			*mini_global;
+extern t_minishell	*mini_global;
 
 int		print_opening(void);
 int		print_exit(void);
@@ -79,6 +83,7 @@ int		quote_translation(t_minishell *mini, t_llist *curr);
 void	deallocate_list(t_llist **head);
 void	free_mini(t_minishell *mini);
 int		lst_size(t_llist *lst);
+int		add_to_redir(t_redir **root, int type, char *str);
 
 // Debug
 int		print_t_mini(t_minishell *mini);
@@ -86,6 +91,12 @@ int		print_lst(t_llist *lst);
 int		print_cmd_table(t_minishell *mini, int cmd);
 int		print_cmd(char **cmd_line);
 
+// Token
+int		token_yield_redir(char *redir, t_minishell *mini);
+int		token_yield_quote(char *token, t_minishell *mini);
+int		token_yield_pipe(char *token, t_minishell *mini);
+int		token_yield_word(char *token, t_minishell *mini);
+int		token_yield_var(char *token, t_minishell *mini);
 
 // Path related functions
 char	*ft_access_path(char **cmd, int i, t_minishell *mini);
