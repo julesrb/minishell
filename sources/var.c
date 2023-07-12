@@ -66,7 +66,7 @@ char	*var_translation(t_minishell *mini, char *var)
 		translation[0] = mini->exit_status + '0';
 		return (translation);
 	}
-	translation = var_find_translation(curr, var, translation);
+	translation = var_find_translation(mini->env_mini, var, translation);
 	return (translation);
 }
 
