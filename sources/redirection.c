@@ -129,7 +129,6 @@ int	infile_insert(t_minishell mini)
 	int fd_infile;
 
 	t_redir	*redir;
-
 	redir = mini.redir_in;
 	if (!redir)
 		return (EXIT_SUCCESS);

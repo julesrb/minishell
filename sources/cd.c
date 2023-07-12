@@ -59,7 +59,7 @@ char    *ft_relative_path_cd(char *cmd, t_minishell *mini)
     }
     else if ((cmd[0] == '~' && ft_strlen(cmd) == 1))
     {
-        relative_path = ft_strdup((char*)"/");
+        relative_path = ft_strdup(getenv_mini("HOME", mini));
     }
     return(relative_path);
 }
@@ -79,7 +79,7 @@ char *convert_path_to_absolute(char *cmd, t_minishell *mini)
             result = ft_strdup(cmd);
         return(result);
     }
-    else if ((is_relative_path(cmd) == EXIT_SUCCESS) || ((ft_strlen(cmd) == 1) && (cmd[0] == '-')))
+    else if ((is_relative_path(cmd) == EXIT_SUCCESS) || ((ft_strlen(cmd) == 1) && (cmd[0] == '-')) || ((ft_strlen(cmd) == 1) && (cmd[0] == '~')))
     {
         result = ft_relative_path_cd(cmd, mini);
         return(result);
@@ -110,7 +110,6 @@ int     update_env_mini(t_minishell *mini, char *env_mini_to_update, char *new_v
             temp2 = ft_strjoin(temp1, (char*)"=");
             temp3 = ft_strdup(new_value);
             new_var_env = ft_strjoin(temp2, temp3);
-/*             printf("%s: %s\n", env_mini_to_update, new_var_env); */
             free(temp3);
             curr->content = (void*)new_var_env;
             return (EXIT_SUCCESS);
@@ -148,6 +147,7 @@ int     cd_builtin(char *cmd, t_minishell *mini)
     else if ((cmd[0] == '~') && (ft_strlen(cmd) == 1))
     {
         cmd_replace = ft_strdup(getenv_mini("HOME", mini));
+        printf("cmd replace is %s\n", cmd_replace);
         result = chdir(cmd_replace);
         free(cmd_replace);
     }
@@ -155,7 +155,6 @@ int     cd_builtin(char *cmd, t_minishell *mini)
         result = chdir(cmd);
     if (result == -1)
     {
-        printf("testerror\n");
         ft_putstr_fd("cd: ", 2);
         perror(cmd);
         return(EXIT_FAILURE);
