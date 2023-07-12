@@ -30,13 +30,13 @@ int	init_t_mini(t_minishell *mini)
 
 int	main(int argc, char **argv, char **envp)
 {
-	//struct sigaction	sa_main;
+
 	t_minishell			mini;
 
-	//signal_main(&mini, &sa_main);
-	//signal(SIGQUIT, SIG_IGN);
+
 	mini.exit_status = 0;
 	arg_check(argc, argv);
+	signal_main(&mini);
 	if (env_mini(&mini, envp) == EXIT_FAILURE)
 		ft_putendl_fd("Error initializing the minishell environment", 2);
 	print_opening ();

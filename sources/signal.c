@@ -31,13 +31,27 @@ void signal_handler_main(int s)
 	}
 }
 
-void signal_main(t_minishell *mini, struct sigaction *sa_main)
+void signal_main(t_minishell *mini)
 {
-	sa_main->sa_flags = SA_RESTART;
-
 	mini_global = mini;
-	sa_main->sa_handler = &signal_handler_main;
-	sigemptyset(&sa_main->sa_mask);
-	sigaction(SIGUSR1, sa_main, NULL);
-	sigaction(SIGINT, sa_main, NULL);
+
+	struct sigaction	sa_main;
+
+	sa_main.sa_handler = &signal_handler_main;
+	sigemptyset(&sa_main.sa_mask);
+	sa_main.sa_flags = SA_RESTART;
+
+	sigaction(SIGUSR1, &sa_main, NULL);
+	sigaction(SIGINT, &sa_main, NULL);
+
+	struct sigaction	sa_quit;
+
+	sa_quit.sa_handler = SIG_IGN;
+	sigemptyset(&sa_quit.sa_mask);
+	sa_quit.sa_flags = SA_RESTART;
+
+	sigaction(SIGQUIT, &sa_quit, NULL);
+
+	//signal_main(&mini, &sa_main);
+	//signal(SIGQUIT, SIG_IGN);
 }

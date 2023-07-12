@@ -135,7 +135,7 @@ void	deallocate_env(t_list **root);
 int     list_env_update(t_minishell *mini, char *var_update);
 
 // signal
-void signal_main(t_minishell *mini, struct sigaction *sa);
+void signal_main(t_minishell *mini);
 void signal_child(t_minishell *mini, struct sigaction *sa);
 
 // execute_utils.c
