@@ -87,7 +87,7 @@ int	token_yield_var(char *token, t_minishell *mini)
 	}
 	str[i] = '\0';
 	add_to_list(&mini->lexer_table, str);
-	return (EXIT_SUCCESS);
+	return (len);
 }
 
 int	token_yield_pipe(char *token, t_minishell *mini)
@@ -101,7 +101,7 @@ int	token_yield_pipe(char *token, t_minishell *mini)
 	str[0] = token[0];
 	str[1] = 0;
 	add_to_list(&mini->lexer_table, str);
-	return (EXIT_SUCCESS);
+	return (1);
 }
 
 int	token_yield_redir(char *redir, t_minishell *mini)
