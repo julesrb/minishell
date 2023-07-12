@@ -100,7 +100,6 @@ int	execute_several_commands(t_minishell *mini)
 	fd = create_pipe(mini);
 	while (index < mini->nb_cmd)
 	{
-/* 		printf("nb cmd = %d\n", mini->nb_cmd); */
 		if ((is_env_function(mini->cmd_table[index][0]) == EXIT_SUCCESS) && (index == mini->nb_cmd - 1))
 		{
 			outfile_insert(*mini);
