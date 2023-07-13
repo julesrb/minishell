@@ -48,8 +48,8 @@ typedef struct s_minishell
 	char	***cmd_table;
 	t_list	*env_mini;
 	t_llist	*lexer_table;
-	t_redir *redir_in;
-	t_redir *redir_out;
+	t_redir	*redir_in;
+	t_redir	*redir_out;
 	int		pipe;
 	int		error_redir;
 	int		error_pipe;
@@ -103,33 +103,36 @@ int		token_yield_var(char *token, t_minishell *mini);
 char	*ft_access_path(char **cmd, int i, t_minishell *mini);
 char	**ft_access_list(char **cmd, t_minishell *mini);
 char	**ft_access_list_help(char *cmd_2, char **path_from_envp, int len, int i);
-char *find_executable(char **cmd, t_minishell *mini);
-int is_absolute_path(char *path);
-int is_relative_path(char *path);
-char    *ft_relative_path(char *cmd, t_minishell *mini);
-char   *origine_path(int count_trim, t_minishell *mini);
-char *getenv_mini(char *env_mini, t_minishell *mini);
-int     ft_count_trim(char *cmd);
-int     ft_count_trim(char *cmd);
+void	ft_free_tab(char **tab);
+void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2);
+int		ft_free(char *str1, char *str2, char **tab1, char **tab2);
+char	*find_executable(char **cmd, t_minishell *mini);
+int		is_absolute_path(char *path);
+int		is_relative_path(char *path);
+char	*ft_relative_path(char *cmd, t_minishell *mini);
+char	*origine_path(int count_trim, t_minishell *mini);
+char	*getenv_mini(char *env_mini, t_minishell *mini);
+int		ft_count_trim(char *cmd);
+int		ft_count_trim(char *cmd);
 
 // Builtin functions
-int    pwd_builtin(t_minishell *mini);
+int		pwd_builtin(t_minishell *mini);
 int		env_mini(t_minishell *mini, char **envp);
 int		env_builtin(t_minishell *mini);
 int		echo_builtin(char **cmd_split);
 int		unset_builtin(char **cmd, t_minishell *mini);
 int		exit_builtin(char **cmd, t_minishell *mini);
-int     cd_builtin(char *cmd, t_minishell *mini);
+int		cd_builtin(char *cmd, t_minishell *mini);
 
 int		input_redirection(t_minishell mini);
 int		output_redirection(t_minishell mini);
-int	outfile_insert(t_minishell mini);
-int	infile_insert(t_minishell mini);
+int		outfile_insert(t_minishell mini);
+int		infile_insert(t_minishell mini);
 void	here_doc(char *limiter);
 
 //environment function
 void	deallocate_env(t_list **root);
-int     list_env_update(t_minishell *mini, char *var_update);
+int		list_env_update(t_minishell *mini, char *var_update);
 
 // signal
 void	signal_main(t_minishell *mini);
@@ -137,29 +140,29 @@ void	signal_command(t_minishell *mini);
 
 //free_functions.c
 void	ft_free_tab(char **tab);
-int	ft_free(char *str1, char *str2, char **tab1, char **tab2);
-int	ft_free_success(char *str1, char *str2, char **tab1, char **tab2);
-int	ft_free_fail(char *str1, char *str2, char **tab1, char **tab2);
-void 	*ft_free_pointer(char *str1, char *str2, char **tab1, char **tab2);
+int		ft_free(char *str1, char *str2, char **tab1, char **tab2);
+int		ft_free_success(char *str1, char *str2, char **tab1, char **tab2);
+int		ft_free_fail(char *str1, char *str2, char **tab1, char **tab2);
+void	*ft_free_pointer(char *str1, char *str2, char **tab1, char **tab2);
 void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2);
 
 // execute_utils.c
-int max_length(const char* str1, const char* str2);
-int	is_builtin(char *cmd);
-int	is_env_function(char *cmd);
+int		max_length(const char *str1, const char *str2);
+int		is_builtin(char *cmd);
+int		is_env_function(char *cmd);
 
 // execute_process.c
-int     child_process(t_minishell *mini, int index, char **cmd, int **fd);
-int	create_process_fd(char **cmd, t_minishell *mini, int index, int **fd);
+int		child_process(t_minishell *mini, int index, char **cmd, int **fd);
+int		create_process_fd(char **cmd, t_minishell *mini, int index, int **fd);
 int		**create_pipe(t_minishell *mini);
-int     close_fd(int **fd);
+int		close_fd(int **fd);
 
 //execute.c
 int		execute_builtin(char **cmd_split, t_minishell *mini);
-int	exec(char **cmd, char **envp, t_minishell *mini);
-int  execute_single_command(t_minishell *mini);
+int		exec(char **cmd, char **envp, t_minishell *mini);
+int		execute_single_command(t_minishell *mini);
 int		execute_several_commands(t_minishell *mini);
-int    executor(t_minishell *mini);
+int		executor(t_minishell *mini);
 
 //cd_relativepath.c
 char	*cd_relpath1(char *cmd, t_minishell *mini);
@@ -170,23 +173,25 @@ char	*ft_relative_path_cd(char *cmd, t_minishell *mini);
 
 //cd_builtin.c
 char	*convert_path_to_absolute(char *cmd, t_minishell *mini);
-int	update_env_mini(t_minishell *mini, char *up_var, char *new_value);
-int	update_env_cd(t_minishell *mini, char *cd);
-int	cd_builtin(char *cmd, t_minishell *mini);
+int		update_env_mini(t_minishell *mini, char *up_var, char *new_value);
+int		update_env_cd(t_minishell *mini, char *cd);
+int		cd_builtin(char *cmd, t_minishell *mini);
 
 //export_builtin.c
 char	*adjust_help2(t_minishell *mini, char *start, char *end);
 char	*adjust_help1(t_minishell *mini, char *var_env, char *start, char *end);
 char	*adjust_var_env(t_minishell *mini, char *var_env, int count);
-int	export_with_arg(t_minishell *mini, char **cmd, int i);
-int	export_builtin(char **cmd, t_minishell *mini);
+int		export_with_arg(t_minishell *mini, char **cmd, int i);
+int		export_builtin(char **cmd, t_minishell *mini);
 
 //export_utils.c
 char	*ft_strrchr_set(const char *s, char *set);
-int	check_arg_export(char *export_arg);
-int	check_update_var(char *cmd, t_list *env_mini);
-int	list_env_update(t_minishell *mini, char *var_update);
+int		check_arg_export(char *export_arg);
+int		check_update_var(char *cmd, t_list *env_mini);
+int		list_env_update(t_minishell *mini, char *var_update);
 char	*translate_var(t_minishell *mini, char *str);
 
+//parser_redir.c
+int		parser_redir_check(t_minishell *mini, char *redir, int cmd_nb);
+t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type);
 #endif
-

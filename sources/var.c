@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   var.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/22 13:05:00 by jubernar          #+#    #+#             */
+/*   Updated: 2023/06/22 13:05:02 by jubernar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	quote_translation(t_minishell *mini, t_llist *curr)
@@ -43,8 +55,9 @@ char	*var_find_translation(t_list *curr, char *var, char *translation)
 		if (ft_strncmp(curr->content, keyword, ft_strlen(keyword))
 			== EXIT_SUCCESS)
 		{
-			translation = ft_strdup((char *)((char *)curr->content + ft_strlen(keyword)));
-			break;
+			translation = ft_strdup((char *)
+					((char *)curr->content + ft_strlen(keyword)));
+			break ;
 		}
 		curr = curr->next;
 	}
@@ -62,11 +75,7 @@ char	*var_translation(t_minishell *mini, char *var)
 	if (var[1] == 0)
 		return (ft_strdup("$"));
 	if (var[1] == '?')
-	{
-		translation = ft_strdup("E");
-		translation[0] = mini->exit_status + '0';
-		return (translation);
-	}
+		return (ft_itoa(mini->exit_status));
 	translation = var_find_translation(mini->env_mini, var, translation);
 	return (translation);
 }

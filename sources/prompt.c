@@ -21,7 +21,7 @@ int	prompt(t_minishell *mini)
 		free_mini(mini_global);
 		if (mini_global->env_mini != NULL)
 			deallocate_env(&mini_global->env_mini);
-		exit (EXIT_SUCCESS);  // should it exit or terminate ?
+		exit (EXIT_SUCCESS);
 	}
 	if (mini->input[0] == 0)
 		add_to_list(&mini->lexer_table, ft_strdup(""));

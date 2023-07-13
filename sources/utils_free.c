@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_free.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,47 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	add_to_redir(t_redir **root, int type, char *str)
-{
-	t_redir	*new_node;
-	t_redir	*curr;
-
-	new_node = malloc(sizeof(t_redir));
-	new_node->next = NULL;
-	new_node->type = type;
-	new_node->file = str;
-	if (*root == NULL)
-	{
-		*root = new_node;
-		return (0);
-	}
-	curr = *root;
-	while (curr->next != NULL)
-		curr = curr->next;
-	curr->next = new_node;
-	return (0);
-}
-
-int	add_to_list(t_llist **root, char *str)
-{
-	t_llist	*new_node;
-	t_llist	*curr;
-
-	new_node = malloc(sizeof(t_llist));
-	new_node->next = NULL;
-	new_node->content = str;
-	if (*root == NULL)
-	{
-		*root = new_node;
-		return (0);
-	}
-	curr = *root;
-	while (curr->next != NULL)
-		curr = curr->next;
-	curr->next = new_node;
-	return (0);
-}
 
 void	deallocate_list(t_llist **head)
 {

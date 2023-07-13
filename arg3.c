@@ -35,7 +35,6 @@ int	ft_put_str(char *s)
 
 int	main(int argc, char **argv)
 {
-
 	if (argc == 4)
 	{
 		ft_put_str("arg 1 = ");
@@ -55,5 +54,3 @@ int	main(int argc, char **argv)
 	}
 	return (0);
 }
-
-

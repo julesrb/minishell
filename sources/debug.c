@@ -46,13 +46,15 @@ int	print_t_mini(t_minishell *mini)
 int	print_lst(t_llist *lst)
 {
 	int i;
+	t_llist *curr;
 
+	curr = lst;
 	i = 1;
 	ft_printf("\n");
-	while (lst != NULL)
+	while (curr != NULL)
 	{
-		ft_printf("token %i = %s;\n", i, lst->content);
-		lst = lst->next;
+		ft_printf("token %i = %s;\n", i, curr->content);
+		curr = curr->next;
 		i++;
 	}
 	return (0);
