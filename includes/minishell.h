@@ -56,6 +56,7 @@ typedef struct s_minishell
 	int		nb_cmd;
 	int		exit_status;
 	int		main_pid;
+	int		execute;
 	char	**envp;
 }t_minishell;
 
@@ -134,8 +135,8 @@ void	deallocate_env(t_list **root);
 int     list_env_update(t_minishell *mini, char *var_update);
 
 // signal
-void signal_main(t_minishell *mini);
-void signal_cmd(t_minishell *mini);
+void	signal_main(t_minishell *mini);
+void	signal_command(t_minishell *mini);
 
 // execute_utils.c
 int max_length(const char* str1, const char* str2);

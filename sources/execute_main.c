@@ -62,6 +62,12 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 	return (EXIT_FAILURE);
 }
 
+void	handler(int n)
+{
+	ft_putendl_fd("Quit in the child", 2);
+	(void)n;
+}
+
 int	execute_single_command(t_minishell *mini)
 {
 	pid_t	pid;
@@ -121,7 +127,7 @@ int	executor(t_minishell *mini)
 {
 	if (!mini->cmd_table)
 		return (EXIT_FAILURE);
-
+	signal_command(mini);
 	if (mini->nb_cmd == 1)
 	{
 		if (execute_single_command(mini) == EXIT_SUCCESS)

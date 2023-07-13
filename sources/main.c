@@ -23,6 +23,7 @@ int	init_t_mini(t_minishell *mini)
 	mini->redir_out = NULL;
 	mini->pipe = 0;
 	mini->nb_cmd = 0;
+	mini->execute = 0;
 	mini->error_redir = 0;
 	mini->error_pipe = 0;
 	return (0);

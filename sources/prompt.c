@@ -14,8 +14,8 @@
 
 int	prompt(t_minishell *mini)
 {
-	rl_redisplay();
 	mini->input = readline("[Minishell] ");
+	rl_redisplay();
 	if (!mini->input)
 	{
 		free_mini(mini_global);
