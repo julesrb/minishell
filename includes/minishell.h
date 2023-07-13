@@ -48,8 +48,8 @@ typedef struct s_minishell
 	char	***cmd_table;
 	t_list	*env_mini;
 	t_llist	*lexer_table;
-	t_redir *redir_in;
-	t_redir *redir_out;
+	t_redir	*redir_in;
+	t_redir	*redir_out;
 	int		pipe;
 	int		error_redir;
 	int		error_pipe;
@@ -140,14 +140,14 @@ void	signal_command(t_minishell *mini);
 
 //free_functions.c
 void	ft_free_tab(char **tab);
-int	ft_free(char *str1, char *str2, char **tab1, char **tab2);
-int	ft_free_success(char *str1, char *str2, char **tab1, char **tab2);
-int	ft_free_fail(char *str1, char *str2, char **tab1, char **tab2);
-void 	*ft_free_pointer(char *str1, char *str2, char **tab1, char **tab2);
+int		ft_free(char *str1, char *str2, char **tab1, char **tab2);
+int		ft_free_success(char *str1, char *str2, char **tab1, char **tab2);
+int		ft_free_fail(char *str1, char *str2, char **tab1, char **tab2);
+void	*ft_free_pointer(char *str1, char *str2, char **tab1, char **tab2);
 void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2);
 
 // execute_utils.c
-int		max_length(const char* str1, const char* str2);
+int		max_length(const char *str1, const char *str2);
 int		is_builtin(char *cmd);
 int		is_env_function(char *cmd);
 
@@ -162,7 +162,7 @@ int		execute_builtin(char **cmd_split, t_minishell *mini);
 int		exec(char **cmd, char **envp, t_minishell *mini);
 int		execute_single_command(t_minishell *mini);
 int		execute_several_commands(t_minishell *mini);
-int	executor(t_minishell *mini);
+int		executor(t_minishell *mini);
 
 //cd_relativepath.c
 char	*cd_relpath1(char *cmd, t_minishell *mini);
@@ -195,4 +195,3 @@ char	*translate_var(t_minishell *mini, char *str);
 int		parser_redir_check(t_minishell *mini, char *redir, int cmd_nb);
 t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type);
 #endif
-

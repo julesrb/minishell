@@ -62,12 +62,9 @@ int	ft_put_nbr(int nb)
 
 int	main(void)
 {
-	char str[20];
-
+	char	str[20];
 
 	scanf("%s", str);
 	printf("\ntext = %s\n", str);
-	return(0);
+	return (0);
 }
-
-

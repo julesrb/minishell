@@ -31,7 +31,6 @@ int	init_t_mini(t_minishell *mini)
 
 int	main(int argc, char **argv, char **envp)
 {
-
 	t_minishell			mini;
 
 	mini.exit_status = 0;

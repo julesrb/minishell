@@ -61,9 +61,9 @@ int	ft_put_nbr(int nb)
 
 int	main(void)
 {
-	int i = 0;
+	int	i;
 
-
+	i = 0;
 	while (i <= 5)
 	{
 		ft_put_nbr(i);
@@ -72,7 +72,5 @@ int	main(void)
 		i++;
 		sleep(1);
 	}
-	return(0);
+	return (0);
 }
-
-
