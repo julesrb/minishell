@@ -1,54 +1,5 @@
 #include "minishell.h"
 
-int	ft_free(char *str1, char *str2, char **tab1, char **tab2)
-{
-	if (str1)
-		free(str1);
-	if (str2)
-		free(str2);
-	if (tab1)
-		ft_free_tab(tab1);
-	if (tab2)
-		ft_free_tab(tab2);
-	return (EXIT_FAILURE);
-}
-
-void 	*ft_free_pointer(char *str1, char *str2, char **tab1, char **tab2)
-{
-	if (str1)
-		free(str1);
-	if (str2)
-		free(str2);
-	if (tab1)
-		ft_free_tab(tab1);
-	if (tab2)
-		ft_free_tab(tab2);
-	return (NULL);
-}
-
-void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2)
-{
-	perror(NULL);
-	ft_free(str1, str2, tab1, tab2);
-	exit(EXIT_FAILURE);
-}
-
-void	ft_free_tab(char **tab)
-{
-	size_t	i;
-
-	i = 0;
-	if (tab)
-	{
-		while (tab[i])
-		{
-			free(tab[i]);
-			i++;
-		}
-		free(tab);
-	}
-}
-
 char	**ft_access_list_help(char *cmd_2, char **path_from_envp, int len, int i)
 {
 	char	**result;

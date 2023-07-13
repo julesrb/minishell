@@ -61,7 +61,7 @@ char	*adjust_var_env(t_minishell *mini, char *var_env, int count)
 	char	*temp_start;
 
 	rslt = NULL;
-	while (var_env[count] != '=')
+	while (var_env[count] && (var_env[count] != '='))
 		count++;
 	temp_start = (char *)malloc(sizeof(temp_start) * (count));
 	ft_strlcpy(temp_start, var_env, count + 2);
@@ -82,14 +82,14 @@ int	export_with_arg(t_minishell *mini, char **cmd, int i)
 		{
 			new_var = adjust_var_env(mini, cmd[i], 0);
 			if (list_env_update(mini, new_var) == EXIT_FAILURE)
-				return (ft_free(new_var, NULL, NULL, NULL));
+				return (ft_free_fail(new_var, NULL, NULL, NULL));
 		}
 		else
 		{
 			new_var = adjust_var_env(mini, cmd[i], 0);
 			new = ft_lstnew((void *)ft_strdup(new_var));
 			if (!new)
-				return (ft_free(new_var, NULL, NULL, NULL));
+				return (ft_free_fail(new_var, NULL, NULL, NULL));
 			ft_lstadd_back(&mini->env_mini, new);
 		}
 		i++;
@@ -118,7 +118,7 @@ int	export_builtin(char **cmd, t_minishell *mini)
 	}
 	else
 	{
-		if (export_with_arg(mini, cmd, 0) == EXIT_SUCCESS)
+		if (export_with_arg(mini, cmd, 1) == EXIT_SUCCESS)
 			return (EXIT_SUCCESS);
 		return (EXIT_FAILURE);
 	}
