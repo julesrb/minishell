@@ -48,8 +48,8 @@ typedef struct s_minishell
 	char	***cmd_table;
 	t_list	*env_mini;
 	t_llist	*lexer_table;
-	t_redir	*redir_in;
-	t_redir	*redir_out;
+	t_redir	*redir_start;
+	t_redir	*redir_end;
 	int		pipe;
 	int		error_redir;
 	int		error_pipe;

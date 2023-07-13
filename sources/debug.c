@@ -34,10 +34,10 @@ int	print_t_mini(t_minishell *mini)
 	ft_printf("| redir_error = %i\n", mini->error_redir);
 	ft_printf("| nb_cmd = %i\n", mini->nb_cmd);
 	ft_printf("| redir_in = ");
-	print_lst_redir(mini->redir_in);
+	print_lst_redir(mini->redir_start);
 	ft_printf("\n");
 	ft_printf("| redir_out = ");
-	print_lst_redir(mini->redir_out);
+	print_lst_redir(mini->redir_end);
 	ft_printf("\n\n");
 
 	return (0);

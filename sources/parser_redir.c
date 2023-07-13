@@ -23,35 +23,25 @@ int	parser_redir_check(t_minishell *mini, char *redir, int cmd_nb)
 		|| (redir[0] == '>' && redir[1] == '<'))
 		return (-1);
 	if (redir[0] == '<')
-		type = 11;
+		type = 1;
 	if (redir[0] == '>')
-		type = 21;
+		type = 3;
 	if (redir[0] == redir[1])
 	{
 		if (redir[0] == '<')
-			type = 12;
+			type = 2;
 		if (redir[0] == '>')
-			type = 22;
+			type = 4;
 	}
 	return (type);
 }
 
-int	parser_redir_add_lst(t_minishell *mini, int type, char *file)
+int	parser_redir_add_lst(t_minishell *mini, int type, char *file, int cmd_n)
 {
-	if (type == 11 || type == 12)
-	{
-		if (type == 11)
-			add_to_redir(&mini->redir_in, 1, ft_strdup(file));
-		else if (type == 12)
-			add_to_redir(&mini->redir_in, 2, ft_strdup(file));
-	}
-	if (type == 21 || type == 22)
-	{
-		if (type == 21)
-			add_to_redir(&mini->redir_out, 1, ft_strdup(file));
-		else if (type == 22)
-			add_to_redir(&mini->redir_out, 2, ft_strdup(file));
-	}
+	if (cmd == 0)
+		add_to_redir(&mini->redir_start, type, ft_strdup(file));
+	else
+		add_to_redir(&mini->redir_end, type, ft_strdup(file));
 	return (EXIT_SUCCESS);
 }
 
@@ -78,7 +68,7 @@ t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type)
 	}
 	if (mini->error_redir == 0)
 	{
-		parser_redir_add_lst(mini, type, curr->content);
+		parser_redir_add_lst(mini, type, curr->content, cmd_n);
 		return (curr->next);
 	}
 	return (curr);
