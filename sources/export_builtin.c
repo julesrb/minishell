@@ -6,7 +6,7 @@
 /*   By: gbussier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 17:59:32 by gbussier          #+#    #+#             */
-/*   Updated: 2023/07/12 19:11:54 by gbussier         ###   ########.fr       */
+/*   Updated: 2023/07/13 19:12:25 by gbussier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	export_with_arg(t_minishell *mini, char **cmd, int i)
 		i++;
 		free(new_var);
 		if (!cmd[i])
-			return(EXIT_SUCCESS);
+			return (EXIT_SUCCESS);
 	}
 	return (EXIT_FAILURE);
 }

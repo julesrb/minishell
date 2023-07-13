@@ -157,11 +157,11 @@ int		create_process_fd(char **cmd, t_minishell *mini, int index, int **fd);
 int		**create_pipe(t_minishell *mini);
 int		close_fd(int **fd);
 
-//execute.c
+//execute_main.c
 int		execute_builtin(char **cmd_split, t_minishell *mini);
 int		exec(char **cmd, char **envp, t_minishell *mini);
 int		execute_single_command(t_minishell *mini);
-int		execute_several_commands(t_minishell *mini);
+int		execute_several_commands(t_minishell *mini, int index);
 int		executor(t_minishell *mini);
 
 //cd_relativepath.c

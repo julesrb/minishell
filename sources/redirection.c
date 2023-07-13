@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbussier <gbussier@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/13 19:06:50 by gbussier          #+#    #+#             */
+/*   Updated: 2023/07/13 19:06:51 by gbussier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	here_doc_put_in(char *limiter, int *fds)
@@ -77,20 +89,21 @@ int	input_redirection(t_minishell mini)
 		if (dup2(fd_infile, 0) == -1)
 		{
 			perror(NULL);
-			return(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		close(fd_infile);
 	}
 	else if (redir->type == 2)
 		here_doc(redir->file);
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int	output_redirection(t_minishell mini)
 {
-	int		fd_outfile = 0;
+	int		fd_outfile ;
 	t_redir	*redir;
 
+	fd_outfile = 0;
 	redir = mini.redir_end;
 	if (!redir)
 		return (EXIT_SUCCESS);
@@ -102,7 +115,7 @@ int	output_redirection(t_minishell mini)
 			if (fd_outfile == -1)
 			{
 				perror(NULL);
-				return(EXIT_FAILURE);
+				return (EXIT_FAILURE);
 			}
 		}
 		else if (redir->type == 2)
@@ -111,24 +124,24 @@ int	output_redirection(t_minishell mini)
 			if (fd_outfile == -1)
 			{
 				perror(NULL);
-				return(EXIT_FAILURE);
+				return (EXIT_FAILURE);
 			}
 		}
 		if (dup2(fd_outfile, 1) == -1)
 		{
 			perror(NULL);
-			return(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		close(fd_outfile);
 	}
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int	infile_insert(t_minishell mini)
 {
-	int fd_infile;
-
+	int		fd_infile;
 	t_redir	*redir;
+
 	redir = mini.redir_start;
 	if (!redir)
 		return (EXIT_SUCCESS);
@@ -145,14 +158,15 @@ int	infile_insert(t_minishell mini)
 	}
 	else if (redir->type == 2)
 		here_doc(redir->file);
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int	outfile_insert(t_minishell mini)
 {
-	int fd_outfile = 0;
+	int		fd_outfile;
 	t_redir	*redir;
 
+	fd_outfile = 0;
 	redir = mini.redir_end;
 	if (!redir)
 		return (EXIT_SUCCESS);
@@ -164,7 +178,7 @@ int	outfile_insert(t_minishell mini)
 			if (fd_outfile == -1)
 			{
 				perror(NULL);
-				return(EXIT_FAILURE);
+				return (EXIT_FAILURE);
 			}
 		}
 		else if (redir->type == 2)
@@ -173,10 +187,10 @@ int	outfile_insert(t_minishell mini)
 			if (fd_outfile == -1)
 			{
 				perror(NULL);
-				return(EXIT_FAILURE);
+				return (EXIT_FAILURE);
 			}
 		}
 		close(fd_outfile);
 	}
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }

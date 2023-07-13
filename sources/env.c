@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbussier <gbussier@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/13 18:39:33 by gbussier          #+#    #+#             */
+/*   Updated: 2023/07/13 18:40:21 by gbussier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	deallocate_env(t_list **root)
@@ -33,23 +45,23 @@ int	env_mini(t_minishell *mini, char **envp)
 		if (!new)
 		{
 			deallocate_env(&mini->env_mini);
-			return(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		ft_lstadd_back(&mini->env_mini, new);
 		i++;
 	}
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int	env_builtin(t_minishell *mini)
 {
-	t_list *curr;
+	t_list	*curr;
 
-	curr= mini->env_mini;
+	curr = mini->env_mini;
 	while (curr != NULL)
 	{
 		ft_putendl_fd(curr->content, 1);
 		curr = curr->next;
 	}
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }

@@ -6,28 +6,28 @@
 /*   By: gbussier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 19:06:56 by gbussier          #+#    #+#             */
-/*   Updated: 2023/07/11 19:14:43 by gbussier         ###   ########.fr       */
+/*   Updated: 2023/07/13 18:59:54 by gbussier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	execute_builtin(char **cmd_split, t_minishell *mini)
+int	execute_builtin(char **cmd, t_minishell *mini)
 {
-	if (ft_strncmp(cmd_split[0], "pwd", max_length("pwd", cmd_split[0])) == EXIT_SUCCESS)
+	if (!ft_strncmp(cmd[0], "pwd", max_length("pwd", cmd[0])))
 		return (pwd_builtin(mini));
-	else if (ft_strncmp(cmd_split[0], "env", max_length("env", cmd_split[0])) == EXIT_SUCCESS)
+	else if (!ft_strncmp(cmd[0], "env", max_length("env", cmd[0])))
 		return (env_builtin(mini));
-	else if (!ft_strncmp(cmd_split[0], "cd", max_length("cd", cmd_split[0])))
-		return (cd_builtin(cmd_split[1], mini));
-	else if (ft_strncmp(cmd_split[0], "export", max_length("export", cmd_split[0])) == EXIT_SUCCESS)
-		return (export_builtin(cmd_split, mini));
-	else if (!ft_strncmp(cmd_split[0], "unset", max_length("unset", cmd_split[0])))
-		return (unset_builtin(cmd_split, mini));
-	else if (ft_strncmp(cmd_split[0], "echo", max_length("echo", cmd_split[0])) == EXIT_SUCCESS)
-		return (echo_builtin(cmd_split));
-	else if (!ft_strncmp(cmd_split[0], "exit", max_length("exit", cmd_split[0])))
-		return (exit_builtin(cmd_split, mini));
+	else if (!ft_strncmp(cmd[0], "cd", max_length("cd", cmd[0])))
+		return (cd_builtin(cmd[1], mini));
+	else if (!ft_strncmp(cmd[0], "export", max_length("export", cmd[0])))
+		return (export_builtin(cmd, mini));
+	else if (!ft_strncmp(cmd[0], "unset", max_length("unset", cmd[0])))
+		return (unset_builtin(cmd, mini));
+	else if (!ft_strncmp(cmd[0], "echo", max_length("echo", cmd[0])))
+		return (echo_builtin(cmd));
+	else if (!ft_strncmp(cmd[0], "exit", max_length("exit", cmd[0])))
+		return (exit_builtin(cmd, mini));
 	return (EXIT_FAILURE);
 }
 
@@ -36,7 +36,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 	char	*path;
 
 	if (is_builtin(cmd[0]) == EXIT_SUCCESS)
-		return(execute_builtin(cmd, mini));
+		return (execute_builtin(cmd, mini));
 	else
 	{
 		path = find_executable(cmd, mini);
@@ -46,7 +46,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 			ft_putstr_fd(cmd[0], 2);
 			ft_putendl_fd(": command not found", 2);
 			ft_free(path, NULL, NULL, NULL);
-			return(127);
+			return (127);
 		}
 		else if (execve(path, cmd, envp) == -1)
 		{
@@ -54,7 +54,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 			ft_putstr_fd(cmd[0], 2);
 			ft_putendl_fd(": command not found", 2);
 			ft_free(path, NULL, NULL, NULL);
-			return(127);
+			return (127);
 		}
 	}
 	return (EXIT_FAILURE);
@@ -70,7 +70,7 @@ int	execute_single_command(t_minishell *mini)
 {
 	pid_t	pid;
 	int		exit_status;
-	int status;
+	int		status;
 
 	if (is_env_function(mini->cmd_table[0][0]) == EXIT_SUCCESS)
 	{
@@ -98,20 +98,22 @@ int	execute_single_command(t_minishell *mini)
 	return (exit_status);
 }
 
-int	execute_several_commands(t_minishell *mini)
+int	execute_several_commands(t_minishell *mini, int index)
 {
-	int	index;
-	int	**fd;
-	int exit_status = 0;
-	int status;
-	int exit_status2 = 0;
-	pid_t pid = 0;
+	int		**fd;
+	int		exit_status;
+	int		status;
+	int		exit_status2;
+	pid_t	pid;
 
-	index = 0;
+	pid = 0;
+	exit_status = 0;
+	exit_status2 = 0;
 	fd = create_pipe(mini);
 	while (index < mini->nb_cmd)
 	{
-		if ((is_env_function(mini->cmd_table[index][0]) == EXIT_SUCCESS) && (index == mini->nb_cmd - 1))
+		if ((is_env_function(mini->cmd_table[index][0]) == 0)
+			&& (index == mini->nb_cmd - 1))
 		{
 			outfile_insert(*mini);
 			close(fd[index - 1][0]);
@@ -128,16 +130,16 @@ int	execute_several_commands(t_minishell *mini)
 		waitpid(pid, &status, 0);
 		exit_status = WEXITSTATUS(status);
 	}
-    while (wait(NULL) != -1) 
-		;;
+	while (wait(NULL) != -1)
+		;
 	if ((is_env_function(mini->cmd_table[mini->nb_cmd - 1][0]) == EXIT_SUCCESS))
-		return(exit_status2);
+		return (exit_status2);
 	return (exit_status);
 }
 
 int	executor(t_minishell *mini)
 {
-	int exit_status;
+	int	exit_status;
 
 	exit_status = 0;
 	if (!mini->cmd_table)
@@ -150,7 +152,7 @@ int	executor(t_minishell *mini)
 	}
 	else
 	{
-		exit_status = execute_several_commands(mini);
+		exit_status = execute_several_commands(mini, 0);
 		return (exit_status);
 	}
 	return (EXIT_SUCCESS);

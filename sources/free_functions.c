@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_functions.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbussier <gbussier@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/13 18:52:49 by gbussier          #+#    #+#             */
+/*   Updated: 2023/07/13 18:53:23 by gbussier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_free_tab(char **tab)
@@ -55,7 +67,7 @@ int	ft_free_success(char *str1, char *str2, char **tab1, char **tab2)
 	return (EXIT_SUCCESS);
 }
 
-void 	*ft_free_pointer(char *str1, char *str2, char **tab1, char **tab2)
+void	*ft_free_pointer(char *str1, char *str2, char **tab1, char **tab2)
 {
 	if (str1)
 		free(str1);
