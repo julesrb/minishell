@@ -65,7 +65,7 @@ int	child_process(t_minishell *mini, int index, char **cmd, int **fd)
 	exit(mini->exit_status);
 }
 
-int	create_process_fd(char **cmd, t_minishell *mini, int index, int **fd)
+pid_t	create_process_fd(char **cmd, t_minishell *mini, int index, int **fd)
 {
 	pid_t	pid;
 
@@ -86,5 +86,5 @@ int	create_process_fd(char **cmd, t_minishell *mini, int index, int **fd)
 			close(fd[index][1]);
 		}
 	}
-	return (EXIT_SUCCESS);
+	return (pid);
 }

@@ -19,8 +19,8 @@ int	init_t_mini(t_minishell *mini)
 	mini->input = NULL;
 	mini->cmd_table = NULL;
 	mini->lexer_table = NULL;
-	mini->redir_in = NULL;
-	mini->redir_out = NULL;
+	mini->redir_start = NULL;
+	mini->redir_end = NULL;
 	mini->pipe = 0;
 	mini->nb_cmd = 0;
 	mini->execute = 0;
@@ -50,7 +50,7 @@ int	main(int argc, char **argv, char **envp)
  	/* 		print_t_mini(&mini);
 			print_cmd_table(&mini, mini.nb_cmd); */
  		if ((mini.error_pipe == 0 && mini.error_redir == 0)
-			&& (mini.nb_cmd > 0 || mini.redir_in || mini.redir_out))
+			&& (mini.nb_cmd > 0 || mini.redir_start || mini.redir_end))
 			mini.exit_status = executor(&mini);
 		else if (mini.nb_cmd != 0)
 			ft_putendl_fd("minishell: parsing error", 2);

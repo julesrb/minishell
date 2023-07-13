@@ -54,10 +54,10 @@ void	free_mini(t_minishell *mini)
 		free(mini->input);
 	if (mini->lexer_table != NULL)
 		deallocate_list(&mini->lexer_table);
-	if (mini->redir_in != NULL)
-		deallocate_redir(&mini->redir_in);
-	if (mini->redir_out != NULL)
-		deallocate_redir(&mini->redir_out);
+	if (mini->redir_start != NULL)
+		deallocate_redir(&mini->redir_start);
+	if (mini->redir_end != NULL)
+		deallocate_redir(&mini->redir_end);
 	if (mini->cmd_table != NULL)
 	{
 		while (mini->cmd_table[i] != NULL)

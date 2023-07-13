@@ -62,7 +62,7 @@ int	input_redirection(t_minishell mini)
 	int		fd_infile;
 	t_redir	*redir;
 
-	redir = mini.redir_in;
+	redir = mini.redir_start;
 	if (!redir)
 		return (EXIT_SUCCESS);
 	if (redir->type == 1)
@@ -91,7 +91,7 @@ int	output_redirection(t_minishell mini)
 	int		fd_outfile = 0;
 	t_redir	*redir;
 
-	redir = mini.redir_out;
+	redir = mini.redir_end;
 	if (!redir)
 		return (EXIT_SUCCESS);
 	if (redir->type)
@@ -129,7 +129,7 @@ int	infile_insert(t_minishell mini)
 	int fd_infile;
 
 	t_redir	*redir;
-	redir = mini.redir_in;
+	redir = mini.redir_start;
 	if (!redir)
 		return (EXIT_SUCCESS);
 	if (redir->type == 1)
@@ -153,7 +153,7 @@ int	outfile_insert(t_minishell mini)
 	int fd_outfile = 0;
 	t_redir	*redir;
 
-	redir = mini.redir_out;
+	redir = mini.redir_end;
 	if (!redir)
 		return (EXIT_SUCCESS);
 	if (redir->type)

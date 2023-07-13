@@ -94,8 +94,10 @@ int	export_with_arg(t_minishell *mini, char **cmd, int i)
 		}
 		i++;
 		free(new_var);
+		if (!cmd[i])
+			return(EXIT_SUCCESS);
 	}
-	return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }
 
 int	export_builtin(char **cmd, t_minishell *mini)

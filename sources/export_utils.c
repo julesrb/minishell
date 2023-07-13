@@ -54,7 +54,7 @@ int	check_arg_export(char *export_arg)
 	{
 		ft_putstr_fd("export: not valid in this context: ", 2);
 		ft_putendl_fd(export_arg, 2);
-		return (ft_free(var_name, NULL, NULL, NULL));
+		return (ft_free_fail(var_name, NULL, NULL, NULL));
 	}
 	return (EXIT_SUCCESS);
 }

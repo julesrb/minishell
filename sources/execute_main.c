@@ -104,6 +104,8 @@ int	execute_several_commands(t_minishell *mini)
 	int	**fd;
 	int exit_status = 0;
 	int status;
+	int exit_status2 = 0;
+	pid_t pid = 0;
 
 	index = 0;
 	fd = create_pipe(mini);
@@ -113,22 +115,23 @@ int	execute_several_commands(t_minishell *mini)
 		{
 			outfile_insert(*mini);
 			close(fd[index - 1][0]);
-			exit_status = exec(mini->cmd_table[index], mini->envp, mini);
+			exit_status2 = exec(mini->cmd_table[index], mini->envp, mini);
 		}
+		else if (index == mini->nb_cmd - 1)
+			pid = create_process_fd(mini->cmd_table[index], mini, index, fd);
 		else
 			create_process_fd(mini->cmd_table[index], mini, index, fd);
 		index++;
 	}
-	while (wait(&status) != -1)
+	if (pid != 0)
 	{
+		waitpid(pid, &status, 0);
 		exit_status = WEXITSTATUS(status);
-/* 		printf("exit status is...%d\n", exit_status);
-		if (WEXITSTATUS(status) && (index == mini->nb_cmd - 1))
-		{
-			exit_status = WEXITSTATUS(status);
-			printf("Code de sortie du dernier processus fils : %d\n", exit_status);
-		} */
 	}
+    while (wait(NULL) != -1) 
+		;;
+	if ((is_env_function(mini->cmd_table[mini->nb_cmd - 1][0]) == EXIT_SUCCESS))
+		return(exit_status2);
 	return (exit_status);
 }
 
