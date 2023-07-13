@@ -128,7 +128,7 @@ int		input_redirection(t_minishell mini);
 int		output_redirection(t_minishell mini);
 int		outfile_insert(t_minishell mini);
 int		infile_insert(t_minishell mini);
-void	here_doc(char *limiter);
+void	here_doc(char *limiter, t_minishell mini);
 
 //environment function
 void	deallocate_env(t_list **root);
