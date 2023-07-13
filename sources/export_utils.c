@@ -40,7 +40,7 @@ int	check_arg_export(char *export_arg)
 	int		i;
 
 	i = 0;
-	while (export_arg[i] != '=')
+	while (export_arg[i] && (export_arg[i] != '='))
 		i++;
 	var_name = (char *)malloc(sizeof(var_name) * i + 1);
 	ft_strlcpy(var_name, export_arg, i + 1);
@@ -66,7 +66,7 @@ int	check_update_var(char *cmd, t_list *env_mini)
 
 	i = 0;
 	curr = env_mini;
-	while (cmd[i] != '=')
+	while (cmd[i] && (cmd[i] != '='))
 		i++;
 	while (curr != NULL)
 	{
@@ -85,7 +85,7 @@ int	list_env_update(t_minishell *mini, char *var_update)
 
 	i = 0;
 	curr = mini->env_mini;
-	while (var_update[i] != '=')
+	while (var_update[i] && (var_update[i] != '='))
 		i++;
 	while (curr != NULL)
 	{

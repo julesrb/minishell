@@ -138,6 +138,14 @@ int		list_env_update(t_minishell *mini, char *var_update);
 void	signal_main(t_minishell *mini);
 void	signal_command(t_minishell *mini);
 
+//free_functions.c
+void	ft_free_tab(char **tab);
+int	ft_free(char *str1, char *str2, char **tab1, char **tab2);
+int	ft_free_success(char *str1, char *str2, char **tab1, char **tab2);
+int	ft_free_fail(char *str1, char *str2, char **tab1, char **tab2);
+void 	*ft_free_pointer(char *str1, char *str2, char **tab1, char **tab2);
+void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2);
+
 // execute_utils.c
 int		max_length(const char* str1, const char* str2);
 int		is_builtin(char *cmd);
