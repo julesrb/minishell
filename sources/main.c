@@ -33,7 +33,6 @@ int	main(int argc, char **argv, char **envp)
 
 	t_minishell			mini;
 
-
 	mini.exit_status = 0;
 	mini.envp = envp;
 	arg_check(argc, argv);
@@ -47,10 +46,10 @@ int	main(int argc, char **argv, char **envp)
 		init_t_mini(&mini);
 		prompt(&mini);
 		lexer(&mini);
-/*  			print_lst(mini.lexer_table);  */
+ 		//	print_lst(mini.lexer_table); 
 		parser(&mini);
-/*  			print_t_mini(&mini);
-			print_cmd_table(&mini, mini.nb_cmd); */
+ 		//	print_t_mini(&mini);
+		//	print_cmd_table(&mini, mini.nb_cmd);
  		if ((mini.error_pipe == 0 && mini.error_redir == 0)
 			&& (mini.nb_cmd > 0 || mini.redir_in || mini.redir_out))
 			mini.exit_status = executor(&mini);
