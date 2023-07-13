@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   utils_add.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jubernar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,31 +12,43 @@
 
 #include "minishell.h"
 
-int	echo_builtin(char **cmd_split)
+int	add_to_redir(t_redir **root, int type, char *str)
 {
-	int	i;
-	int	n;
+	t_redir	*new_node;
+	t_redir	*curr;
 
-	i = 1;
-	n = 1;
-	if (cmd_split[i] == NULL)
+	new_node = malloc(sizeof(t_redir));
+	new_node->next = NULL;
+	new_node->type = type;
+	new_node->file = str;
+	if (*root == NULL)
 	{
-		ft_putstr_fd("\n", 1);
-		return (EXIT_SUCCESS);
+		*root = new_node;
+		return (0);
 	}
-	else if (ft_strncmp(cmd_split[i], "-n", 2) == EXIT_SUCCESS)
+	curr = *root;
+	while (curr->next != NULL)
+		curr = curr->next;
+	curr->next = new_node;
+	return (0);
+}
+
+int	add_to_list(t_llist **root, char *str)
+{
+	t_llist	*new_node;
+	t_llist	*curr;
+
+	new_node = malloc(sizeof(t_llist));
+	new_node->next = NULL;
+	new_node->content = str;
+	if (*root == NULL)
 	{
-		n = 0;
-		i++;
+		*root = new_node;
+		return (0);
 	}
-	while (cmd_split[i] != NULL)
-	{
-		ft_putstr_fd(cmd_split[i], 1);
-		if (cmd_split[i + 1] != NULL)
-			ft_putstr_fd(" ", 1);
-		i++;
-	}
-	if (n == 1)
-		ft_putstr_fd("\n", 1);
-	return (EXIT_SUCCESS);
+	curr = *root;
+	while (curr->next != NULL)
+		curr = curr->next;
+	curr->next = new_node;
+	return (0);
 }

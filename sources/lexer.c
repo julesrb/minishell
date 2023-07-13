@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 int	lexer_last_token_is_pipe(t_llist *curr)
 {
 	while (curr->next != NULL)

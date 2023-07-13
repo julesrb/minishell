@@ -16,18 +16,19 @@ void	deallocate_env(t_list **root)
 	*root = NULL;
 }
 
-int     env_mini(t_minishell *mini, char **envp)
+int	env_mini(t_minishell *mini, char **envp)
 {
-	int	i;
-	t_list *new;
-	char *new_var = NULL;
+	int		i;
+	t_list	*new;
+	char	*new_var;
 
 	i = 0;
+	new_var = NULL;
 	mini->env_mini = NULL;
 	mini->main_pid = getpid();
 	while (envp[i] != NULL)
 	{
-		new_var= ft_strdup(envp[i]);
+		new_var = ft_strdup(envp[i]);
 		new = ft_lstnew((void *)new_var);
 		if (!new)
 		{
@@ -40,7 +41,7 @@ int     env_mini(t_minishell *mini, char **envp)
 	return(EXIT_SUCCESS);
 }
 
-int     env_builtin(t_minishell *mini)
+int	env_builtin(t_minishell *mini)
 {
 	t_list *curr;
 
