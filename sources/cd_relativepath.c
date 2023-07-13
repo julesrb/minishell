@@ -89,10 +89,8 @@ char	*cd_relpath4(char *cmd, t_minishell *mini)
 char	*ft_relative_path_cd(char *cmd, t_minishell *mini)
 {
 	char	*relative_path;
-	int		count_trim;
 
 	relative_path = NULL;
-	count_trim = 0;
 	if (ft_strncmp(cmd, "./", 2) == 0)
 		relative_path = cd_relpath1(cmd, mini);
 	else if (ft_strncmp(cmd, "../", 3) == 0)

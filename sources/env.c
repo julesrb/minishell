@@ -42,11 +42,9 @@ int     env_mini(t_minishell *mini, char **envp)
 
 int     env_builtin(t_minishell *mini)
 {
-	int i;
 	t_list *curr;
 
 	curr= mini->env_mini;
-	i = 0;
 	while (curr != NULL)
 	{
 		ft_putendl_fd(curr->content, 1);
