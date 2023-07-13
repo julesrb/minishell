@@ -36,11 +36,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 	char	*path;
 
 	if (is_builtin(cmd[0]) == EXIT_SUCCESS)
-	{
-		if (execute_builtin(cmd, mini) == EXIT_SUCCESS)
-			return (EXIT_SUCCESS);
-		return (EXIT_FAILURE);
-	}
+		return(execute_builtin(cmd, mini));
 	else
 	{
 		path = find_executable(cmd, mini);
@@ -50,6 +46,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 			ft_putstr_fd(cmd[0], 2);
 			ft_putendl_fd(": command not found", 2);
 			ft_free(path, NULL, NULL, NULL);
+			return(127);
 		}
 		else if (execve(path, cmd, envp) == -1)
 		{
@@ -57,6 +54,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 			ft_putstr_fd(cmd[0], 2);
 			ft_putendl_fd(": command not found", 2);
 			ft_free(path, NULL, NULL, NULL);
+			return(127);
 		}
 	}
 	return (EXIT_FAILURE);
@@ -71,14 +69,15 @@ void	handler(int n)
 int	execute_single_command(t_minishell *mini)
 {
 	pid_t	pid;
+	int		exit_status;
+	int status;
 
 	if (is_env_function(mini->cmd_table[0][0]) == EXIT_SUCCESS)
 	{
 		infile_insert(*mini);
 		outfile_insert(*mini);
-		if (exec(mini->cmd_table[0], mini->envp, mini) == EXIT_SUCCESS)
-			return (EXIT_SUCCESS);
-		return (EXIT_FAILURE);
+		exit_status = exec(mini->cmd_table[0], mini->envp, mini);
+		return (exit_status);
 	}
 	else
 	{
@@ -87,20 +86,24 @@ int	execute_single_command(t_minishell *mini)
 		{
 			input_redirection(*mini);
 			output_redirection(*mini);
-			if (exec(mini->cmd_table[0], mini->envp, mini) == EXIT_SUCCESS)
-				exit(EXIT_SUCCESS);
-			exit(EXIT_FAILURE);
+			exit_status = exec(mini->cmd_table[0], mini->envp, mini);
+			exit(exit_status);
 		}
 		else
-			waitpid(pid, NULL, 0);
+		{
+			waitpid(pid, &status, 0);
+			exit_status = WEXITSTATUS(status);
+		}
 	}
-	return (EXIT_SUCCESS);
+	return (exit_status);
 }
 
 int	execute_several_commands(t_minishell *mini)
 {
 	int	index;
 	int	**fd;
+	int exit_status = 0;
+	int status;
 
 	index = 0;
 	fd = create_pipe(mini);
@@ -110,35 +113,42 @@ int	execute_several_commands(t_minishell *mini)
 		{
 			outfile_insert(*mini);
 			close(fd[index - 1][0]);
-			if (exec(mini->cmd_table[index], mini->envp, mini) == EXIT_SUCCESS)
-				return (EXIT_SUCCESS);
-			return (EXIT_FAILURE);
+			exit_status = exec(mini->cmd_table[index], mini->envp, mini);
 		}
 		else
 			create_process_fd(mini->cmd_table[index], mini, index, fd);
 		index++;
 	}
-	while (wait(NULL) != -1)
-		;;
-	return (EXIT_SUCCESS);
+	while (wait(&status) != -1)
+	{
+		exit_status = WEXITSTATUS(status);
+/* 		printf("exit status is...%d\n", exit_status);
+		if (WEXITSTATUS(status) && (index == mini->nb_cmd - 1))
+		{
+			exit_status = WEXITSTATUS(status);
+			printf("Code de sortie du dernier processus fils : %d\n", exit_status);
+		} */
+	}
+	return (exit_status);
 }
 
 int	executor(t_minishell *mini)
 {
+	int exit_status;
+
+	exit_status = 0;
 	if (!mini->cmd_table)
 		return (EXIT_FAILURE);
 	signal_command(mini);
 	if (mini->nb_cmd == 1)
 	{
-		if (execute_single_command(mini) == EXIT_SUCCESS)
-			return (EXIT_SUCCESS);
-		return (EXIT_FAILURE);
+		exit_status = execute_single_command(mini);
+		return (exit_status);
 	}
 	else
 	{
-		if (execute_several_commands(mini) == EXIT_SUCCESS)
-			return (EXIT_SUCCESS);
-		return (EXIT_FAILURE);
+		exit_status = execute_several_commands(mini);
+		return (exit_status);
 	}
 	return (EXIT_SUCCESS);
 }

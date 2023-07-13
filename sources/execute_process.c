@@ -61,9 +61,8 @@ int	child_process(t_minishell *mini, int index, char **cmd, int **fd)
 		dup2(fd[index][1], 1);
 	}
 	close_fd(fd);
-	if (exec(cmd, mini->envp, mini) == EXIT_SUCCESS)
-		exit(EXIT_SUCCESS);
-	exit(EXIT_FAILURE);
+	mini->exit_status = exec(cmd, mini->envp, mini);
+	exit(mini->exit_status);
 }
 
 int	create_process_fd(char **cmd, t_minishell *mini, int index, int **fd)
