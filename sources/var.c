@@ -42,10 +42,10 @@ char	*var_find_translation(t_list *curr, char *var, char *translation)
 	{
 		if (ft_strncmp(curr->content, keyword, ft_strlen(keyword))
 			== EXIT_SUCCESS)
-			{
-			translation = ft_strdup(&curr->content[ft_strlen(keyword)]);
+		{
+			translation = ft_strdup((char *)((char *)curr->content + ft_strlen(keyword)));
 			break;
-			}
+		}
 		curr = curr->next;
 	}
 	free(keyword);
@@ -57,9 +57,7 @@ char	*var_find_translation(t_list *curr, char *var, char *translation)
 char	*var_translation(t_minishell *mini, char *var)
 {
 	char	*translation;
-	t_list	*curr;
 
-	curr = mini->env_mini;
 	translation = NULL;
 	if (var[1] == 0)
 		return (ft_strdup("$"));
