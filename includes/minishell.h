@@ -119,7 +119,6 @@ int    pwd_builtin(t_minishell *mini);
 int		env_mini(t_minishell *mini, char **envp);
 int		env_builtin(t_minishell *mini);
 int		echo_builtin(char **cmd_split);
-int		export_builtin(char **cmd, t_minishell *mini);
 int		unset_builtin(char **cmd, t_minishell *mini);
 int		exit_builtin(char **cmd, t_minishell *mini);
 int     cd_builtin(char *cmd, t_minishell *mini);
@@ -155,6 +154,33 @@ int	exec(char **cmd, char **envp, t_minishell *mini);
 int  execute_single_command(t_minishell *mini);
 int		execute_several_commands(t_minishell *mini);
 int    executor(t_minishell *mini);
+
+//cd_relativepath.c
+char	*cd_relpath1(char *cmd, t_minishell *mini);
+char	*cd_relpath2(char *cmd, t_minishell *mini);
+char	*cd_relpath3(char *cmd, t_minishell *mini);
+char	*cd_relpath4(char *cmd, t_minishell *mini);
+char	*ft_relative_path_cd(char *cmd, t_minishell *mini);
+
+//cd_builtin.c
+char	*convert_path_to_absolute(char *cmd, t_minishell *mini);
+int	update_env_mini(t_minishell *mini, char *up_var, char *new_value);
+int	update_env_cd(t_minishell *mini, char *cd);
+int	cd_builtin(char *cmd, t_minishell *mini);
+
+//export_builtin.c
+char	*adjust_help2(t_minishell *mini, char *start, char *end);
+char	*adjust_help1(t_minishell *mini, char *var_env, char *start, char *end);
+char	*adjust_var_env(t_minishell *mini, char *var_env, int count);
+int	export_with_arg(t_minishell *mini, char **cmd, int i);
+int	export_builtin(char **cmd, t_minishell *mini);
+
+//export_utils.c
+char	*ft_strrchr_set(const char *s, char *set);
+int	check_arg_export(char *export_arg);
+int	check_update_var(char *cmd, t_list *env_mini);
+int	list_env_update(t_minishell *mini, char *var_update);
+char	*translate_var(t_minishell *mini, char *str);
 
 #endif
 

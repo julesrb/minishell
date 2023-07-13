@@ -15,7 +15,7 @@
 int	print_opening(void)
 {
     printf("╔════════════════════════════════════╗\n");
-    printf("║        WELCOME TO MINISHELL        ║\n");
+    printf("║        WELCOME TO MINISHELL🐚      ║\n");
     printf("╚════════════════════════════════════╝\n");
 	return (EXIT_SUCCESS);
 }
