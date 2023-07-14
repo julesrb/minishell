@@ -74,8 +74,8 @@ int	execute_single_command(t_minishell *mini)
 
 	if (is_env_function(mini->cmd_table[0][0]) == EXIT_SUCCESS)
 	{
-		infile_insert(*mini);
-		outfile_insert(*mini);
+		infile_insert(*mini, mini->redir_start);
+		outfile_insert(mini->redir_end);
 		exit_status = exec(mini->cmd_table[0], mini->envp, mini);
 		return (exit_status);
 	}
@@ -84,8 +84,8 @@ int	execute_single_command(t_minishell *mini)
 		pid = fork();
 		if (pid == 0)
 		{
-			input_redirection(*mini);
-			output_redirection(*mini);
+			input_redirection(*mini, mini->redir_start);
+			output_redirection(mini->redir_end);
 			exit_status = exec(mini->cmd_table[0], mini->envp, mini);
 			exit(exit_status);
 		}
@@ -115,7 +115,7 @@ int	execute_several_commands(t_minishell *mini, int index)
 		if ((is_env_function(mini->cmd_table[index][0]) == 0)
 			&& (index == mini->nb_cmd - 1))
 		{
-			outfile_insert(*mini);
+			outfile_insert(mini->redir_end);
 			close(fd[index - 1][0]);
 			exit_status2 = exec(mini->cmd_table[index], mini->envp, mini);
 		}
@@ -136,71 +136,6 @@ int	execute_several_commands(t_minishell *mini, int index)
 		return (exit_status2);
 	return (exit_status);
 }
-
-/* int	input_redir(t_minishell mini, t_redir *start)
-{
-	int		fd_infile;
-
-	if (!start)
-		return (EXIT_SUCCESS);
-	if (start->type == 1)
-	{
-		fd_infile = open(start->file, O_RDONLY, 0777);
-		if (fd_infile == -1)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			perror(start->file);
-			return (EXIT_FAILURE);
-		}
-		if (dup2(fd_infile, 0) == -1)
-		{
-			perror(NULL);
-			return (EXIT_FAILURE);
-		}
-		close(fd_infile);
-	}
-	else if (start->type == 2)
-		here_doc(start->file, mini);
-	return (EXIT_SUCCESS);
-}
-
-int	output_redir(t_redir *end)
-{
-	int		fd_outfile ;
-
-	fd_outfile = 0;
-	if (!end)
-		return (EXIT_SUCCESS);
-	if (end->type)
-	{
-		if (end->type == 1)
-		{
-			fd_outfile = open(end->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-			if (fd_outfile == -1)
-			{
-				perror(NULL);
-				return (EXIT_FAILURE);
-			}
-		}
-		else if (end->type == 2)
-		{
-			fd_outfile = open(end->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
-			if (fd_outfile == -1)
-			{
-				perror(NULL);
-				return (EXIT_FAILURE);
-			}
-		}
-		if (dup2(fd_outfile, 1) == -1)
-		{
-			perror(NULL);
-			return (EXIT_FAILURE);
-		}
-		close(fd_outfile);
-	}
-	return (EXIT_SUCCESS);
-} */
-
 
 int	executor(t_minishell *mini)
 {
@@ -237,14 +172,14 @@ int	executor(t_minishell *mini)
 			while(curr != NULL)
 			{
 				printf("test\n");
-				input_redir(*mini, curr);
+				input_redirection(*mini, curr);
 				curr = curr->next;
 			}
 			curr = mini->redir_end;
 			while(curr != NULL)
 			{
 				printf("test\n");
-				output_redir(curr);
+				output_redirection(curr);
 				curr = curr->next;
 			}
 			exit(EXIT_SUCCESS);
