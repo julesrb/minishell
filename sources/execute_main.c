@@ -15,11 +15,11 @@
 int	execute_builtin(char **cmd, t_minishell *mini)
 {
 	if (!ft_strncmp(cmd[0], "pwd", max_length("pwd", cmd[0])))
-		return (pwd_builtin(mini));
+		return (pwd_builtin(mini, cmd));
 	else if (!ft_strncmp(cmd[0], "env", max_length("env", cmd[0])))
 		return (env_builtin(mini));
 	else if (!ft_strncmp(cmd[0], "cd", max_length("cd", cmd[0])))
-		return (cd_builtin(cmd[1], mini));
+		return (cd_builtin(cmd, mini));
 	else if (!ft_strncmp(cmd[0], "export", max_length("export", cmd[0])))
 		return (export_builtin(cmd, mini));
 	else if (!ft_strncmp(cmd[0], "unset", max_length("unset", cmd[0])))
