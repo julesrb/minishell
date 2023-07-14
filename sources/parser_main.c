@@ -85,7 +85,7 @@ t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex)
 		}
 	}
 	mini->cmd_table[cmd] = parser_malloc_command(split_cmd);
-	deallocate_list(&split_cmd);
+	free_llist(&split_cmd);
 	return (lex);
 }
 

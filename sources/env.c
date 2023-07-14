@@ -43,10 +43,7 @@ int	env_mini(t_minishell *mini, char **envp)
 		new_var = ft_strdup(envp[i]);
 		new = ft_lstnew((void *)new_var);
 		if (!new)
-		{
-			deallocate_env(&mini->env_mini);
-			return (EXIT_FAILURE);
-		}
+			ft_failure("Error initializing the minishell environment", 1, 0, 1);
 		ft_lstadd_back(&mini->env_mini, new);
 		i++;
 	}

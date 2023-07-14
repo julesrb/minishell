@@ -12,6 +12,72 @@
 
 #include "minishell.h"
 
+void	free_redir(t_redir **head)
+{
+	t_redir	*curr;
+	t_redir	*trash;
+
+	curr = *head;
+	while (curr != NULL)
+	{
+		trash = curr;
+		free(curr->file);
+		curr = curr->next;
+		free(trash);
+	}
+	*head = NULL;
+}
+
+void	free_llist(t_llist **head)
+{
+	t_llist	*curr;
+	t_llist	*trash;
+
+	curr = *head;
+	while (curr != NULL)
+	{
+		trash = curr;
+		free(curr->content);
+		curr = curr->next;
+		free(trash);
+	}
+	*head = NULL;
+}
+
+void	free_tab_3d(char ***arr)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (arr[i] != NULL)
+	{
+		j = 0;
+		while (arr[i][j] != NULL)
+		{
+			free(arr[i][j]);
+			j++;
+		}
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
+
+void	free_mini(t_minishell *mini)
+{
+	if (mini->input != NULL)
+		free(mini->input);
+	if (mini->lexer_table != NULL)
+		free_llist(&mini->lexer_table);
+	if (mini->redir_start != NULL)
+		free_redir(&mini->redir_start);
+	if (mini->redir_end != NULL)
+		free_redir(&mini->redir_end);
+	if (mini->cmd_table != NULL)
+		free_tab_3d(mini->cmd_table);
+}
+
 void	ft_free_tab(char **tab)
 {
 	size_t	i;

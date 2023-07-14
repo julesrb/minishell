@@ -56,16 +56,26 @@ typedef struct s_minishell
 	int		nb_cmd;
 	int		exit_status;
 	int		main_pid;
+	int		error;
 	int		execute;
 	char	**envp;
 }t_minishell;
 
-extern t_minishell	*mini_global;
+extern t_minishell	*g_mini;
 
-int		print_opening(void);
-int		print_exit(void);
-int		print_exit(void);
+int	ft_failure(char *str, int exit, int free_mini, int free_env);
 
+//----- arg.c
+void	arg_check(int argc, char **argv);
+
+//----- banner.c
+void	banner_print_opening(void);
+void	banner_print_exit(void);
+
+void	send_error(char *str, int quit, int exit_n);
+int		prompt(t_minishell *mini);
+
+//----- prompt.c
 int		prompt(t_minishell *mini);
 
 // Lexer related functions
@@ -92,7 +102,7 @@ int		print_lst(t_llist *lst);
 int		print_cmd_table(t_minishell *mini, int cmd);
 int		print_cmd(char **cmd_line);
 
-// Token
+// ---- token.c
 int		token_yield_redir(char *redir, t_minishell *mini);
 int		token_yield_quote(char *token, t_minishell *mini);
 int		token_yield_pipe(char *token, t_minishell *mini);
@@ -134,11 +144,17 @@ void	here_doc(char *limiter);
 void	deallocate_env(t_list **root);
 int		list_env_update(t_minishell *mini, char *var_update);
 
-// signal
-void	signal_main(t_minishell *mini);
+//----- singal.c
+void	signal_main(void);
+void	signal_main_handler(int s);
 void	signal_command(t_minishell *mini);
+void	signal_command_handler(int s);
 
-//free_functions.c
+
+//----- free_functions.c
+void	free_mini(t_minishell *mini);
+void	free_llist(t_llist **head);
+void	free_redir(t_redir **head);
 void	ft_free_tab(char **tab);
 int		ft_free(char *str1, char *str2, char **tab1, char **tab2);
 int		ft_free_success(char *str1, char *str2, char **tab1, char **tab2);
