@@ -126,19 +126,18 @@ int		ft_count_trim(char *cmd);
 int		ft_count_trim(char *cmd);
 
 // Builtin functions
-int		pwd_builtin(t_minishell *mini);
+int	pwd_builtin(t_minishell *mini, char **cmd);
 int		env_mini(t_minishell *mini, char **envp);
 int		env_builtin(t_minishell *mini);
 int		echo_builtin(char **cmd_split);
 int		unset_builtin(char **cmd, t_minishell *mini);
 int		exit_builtin(char **cmd, t_minishell *mini);
-int		cd_builtin(char *cmd, t_minishell *mini);
 
 int		input_redirection(t_minishell mini);
 int		output_redirection(t_minishell mini);
 int		outfile_insert(t_minishell mini);
 int		infile_insert(t_minishell mini);
-void	here_doc(char *limiter);
+void	here_doc(char *limiter, t_minishell mini);
 
 //environment function
 void	deallocate_env(t_list **root);
@@ -188,10 +187,10 @@ char	*cd_relpath4(char *cmd, t_minishell *mini);
 char	*ft_relative_path_cd(char *cmd, t_minishell *mini);
 
 //cd_builtin.c
-char	*convert_path_to_absolute(char *cmd, t_minishell *mini);
+char	*convert_path_to_absolute(char **cmd, t_minishell *mini);
 int		update_env_mini(t_minishell *mini, char *up_var, char *new_value);
-int		update_env_cd(t_minishell *mini, char *cd);
-int		cd_builtin(char *cmd, t_minishell *mini);
+int		update_env_cd(t_minishell *mini, char **cd);
+int		cd_builtin(char **cmd, t_minishell *mini);
 
 //export_builtin.c
 char	*adjust_help2(t_minishell *mini, char *start, char *end);

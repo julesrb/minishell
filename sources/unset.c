@@ -59,5 +59,10 @@ int	unset_builtin(char **cmd, t_minishell *mini)
 			lst_env_remove(mini, cmd[i]);
 		i++;
 	}
+	if (i == 1)
+	{
+		ft_putendl_fd("unset: not enough arguments", 2);
+		return(EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }
