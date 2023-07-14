@@ -144,21 +144,19 @@ void	here_doc_insert(char *limiter, t_minishell mini)
 	}
 }
 
-int	input_redirection(t_minishell mini)
+int	input_redirection(t_minishell mini, t_redir *start)
 {
 	int		fd_infile;
-	t_redir	*redir;
 
-	redir = mini.redir_start;
-	if (!redir)
+	if (!start)
 		return (EXIT_SUCCESS);
-	if (redir->type == 1)
+	if (start->type == 1)
 	{
-		fd_infile = open(redir->file, O_RDONLY, 0777);
+		fd_infile = open(start->file, O_RDONLY, 0777);
 		if (fd_infile == -1)
 		{
 			ft_putstr_fd("minishell: ", 2);
-			perror(redir->file);
+			perror(start->file);
 			return (EXIT_FAILURE);
 		}
 		if (dup2(fd_infile, 0) == -1)
@@ -168,34 +166,32 @@ int	input_redirection(t_minishell mini)
 		}
 		close(fd_infile);
 	}
-	else if (redir->type == 2)
-		here_doc(redir->file, mini);
+	else if (start->type == 2)
+		here_doc(start->file, mini);
 	return (EXIT_SUCCESS);
 }
 
-int	output_redirection(t_minishell mini)
+int		output_redirection(t_redir *end)
 {
-	int		fd_outfile ;
-	t_redir	*redir;
+	int		fd_outfile;
 
 	fd_outfile = 0;
-	redir = mini.redir_end;
-	if (!redir)
+	if (!end)
 		return (EXIT_SUCCESS);
-	if (redir->type)
+	if (end->type)
 	{
-		if (redir->type == 1)
+		if (end->type == 1)
 		{
-			fd_outfile = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			fd_outfile = open(end->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 			if (fd_outfile == -1)
 			{
 				perror(NULL);
 				return (EXIT_FAILURE);
 			}
 		}
-		else if (redir->type == 2)
+		else if (end->type == 2)
 		{
-			fd_outfile = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
+			fd_outfile = open(end->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
 			if (fd_outfile == -1)
 			{
 				perror(NULL);
@@ -212,53 +208,49 @@ int	output_redirection(t_minishell mini)
 	return (EXIT_SUCCESS);
 }
 
-int	infile_insert(t_minishell mini)
+int	infile_insert(t_minishell mini, t_redir *start)
 {
 	int		fd_infile;
-	t_redir	*redir;
 
-	redir = mini.redir_start;
-	if (!redir)
+	if (!start)
 		return (EXIT_SUCCESS);
-	if (redir->type == 1)
+	if (start->type == 1)
 	{
-		fd_infile = open(redir->file, O_RDONLY, 0777);
+		fd_infile = open(start->file, O_RDONLY, 0777);
 		if (fd_infile == -1)
 		{
 			ft_putstr_fd("minishell: ", 2);
-			perror(redir->file);
+			perror(start->file);
 			return (EXIT_FAILURE);
 		}
 		close(fd_infile);
 	}
-	else if (redir->type == 2)
-		here_doc(redir->file, mini);
+	else if (start->type == 2)
+		here_doc(start->file, mini);
 	return (EXIT_SUCCESS);
 }
 
-int	outfile_insert(t_minishell mini)
+int	outfile_insert(t_redir *end)
 {
 	int		fd_outfile;
-	t_redir	*redir;
 
 	fd_outfile = 0;
-	redir = mini.redir_end;
-	if (!redir)
+	if (!end)
 		return (EXIT_SUCCESS);
-	if (redir->type)
+	if (end->type)
 	{
-		if (redir->type == 1)
+		if (end->type == 1)
 		{
-			fd_outfile = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			fd_outfile = open(end->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 			if (fd_outfile == -1)
 			{
 				perror(NULL);
 				return (EXIT_FAILURE);
 			}
 		}
-		else if (redir->type == 2)
+		else if (end->type == 2)
 		{
-			fd_outfile = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
+			fd_outfile = open(end->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
 			if (fd_outfile == -1)
 			{
 				perror(NULL);

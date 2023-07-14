@@ -123,10 +123,10 @@ int		echo_builtin(char **cmd_split);
 int		unset_builtin(char **cmd, t_minishell *mini);
 int		exit_builtin(char **cmd, t_minishell *mini);
 
-int		input_redirection(t_minishell mini);
-int		output_redirection(t_minishell mini);
-int		outfile_insert(t_minishell mini);
-int		infile_insert(t_minishell mini);
+int		input_redirection(t_minishell mini, t_redir *start);
+int		output_redirection(t_redir *end);
+int		outfile_insert(t_redir *end);
+int		infile_insert(t_minishell mini, t_redir *start);
 void	here_doc(char *limiter, t_minishell mini);
 
 //environment function
