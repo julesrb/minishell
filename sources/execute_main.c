@@ -137,14 +137,122 @@ int	execute_several_commands(t_minishell *mini, int index)
 	return (exit_status);
 }
 
+/* int	input_redir(t_minishell mini, t_redir *start)
+{
+	int		fd_infile;
+
+	if (!start)
+		return (EXIT_SUCCESS);
+	if (start->type == 1)
+	{
+		fd_infile = open(start->file, O_RDONLY, 0777);
+		if (fd_infile == -1)
+		{
+			ft_putstr_fd("minishell: ", 2);
+			perror(start->file);
+			return (EXIT_FAILURE);
+		}
+		if (dup2(fd_infile, 0) == -1)
+		{
+			perror(NULL);
+			return (EXIT_FAILURE);
+		}
+		close(fd_infile);
+	}
+	else if (start->type == 2)
+		here_doc(start->file, mini);
+	return (EXIT_SUCCESS);
+}
+
+int	output_redir(t_redir *end)
+{
+	int		fd_outfile ;
+
+	fd_outfile = 0;
+	if (!end)
+		return (EXIT_SUCCESS);
+	if (end->type)
+	{
+		if (end->type == 1)
+		{
+			fd_outfile = open(end->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			if (fd_outfile == -1)
+			{
+				perror(NULL);
+				return (EXIT_FAILURE);
+			}
+		}
+		else if (end->type == 2)
+		{
+			fd_outfile = open(end->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
+			if (fd_outfile == -1)
+			{
+				perror(NULL);
+				return (EXIT_FAILURE);
+			}
+		}
+		if (dup2(fd_outfile, 1) == -1)
+		{
+			perror(NULL);
+			return (EXIT_FAILURE);
+		}
+		close(fd_outfile);
+	}
+	return (EXIT_SUCCESS);
+} */
+
+
 int	executor(t_minishell *mini)
 {
 	int	exit_status;
+	// t_redir	*curr = NULL;
+	// pid_t pid;
+	// int i = 0;
 
 	exit_status = 0;
 	if (!mini->cmd_table)
 		return (EXIT_FAILURE);
 	signal_command(mini);
+/* 	if (mini->nb_cmd == 0)
+	{
+		curr = mini->redir_start;
+		while(curr != NULL)
+		{
+			printf("%d: redir in %s\n", i, mini->redir_start->file);
+			curr = curr->next;
+			i++;
+		}
+		curr = mini->redir_end;
+		i =  0;
+		while(curr != NULL)
+		{
+			printf("%d: redir out %s\n", i, mini->redir_end->file);
+			curr = curr->next;
+			i++;
+		}
+		pid = fork();
+		if (pid == 0)
+		{
+			curr = mini->redir_start;
+			while(curr != NULL)
+			{
+				printf("test\n");
+				input_redir(*mini, curr);
+				curr = curr->next;
+			}
+			curr = mini->redir_end;
+			while(curr != NULL)
+			{
+				printf("test\n");
+				output_redir(curr);
+				curr = curr->next;
+			}
+			exit(EXIT_SUCCESS);
+		}
+		else
+			waitpid(pid, NULL, 0);
+		return(EXIT_SUCCESS);
+	} */
 	if (mini->nb_cmd == 1)
 	{
 		exit_status = execute_single_command(mini);
