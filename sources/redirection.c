@@ -12,44 +12,70 @@
 
 #include "minishell.h"
 
+char	*ft_reverse_split(char **line_split, char *c)
+{
+	char *result;
+	int i;
+	char *temp;
+
+	temp = NULL;
+	i = 1;
+	result = ft_strdup(line_split[0]);
+	while(line_split[i] != NULL)
+	{
+		temp = ft_strdup(line_split[i]);
+		result = ft_strjoin(result, c);
+		result = ft_strjoin(result, temp);
+		free(temp);
+		i++;
+	}
+	return(result);
+}
+
+int	ft_strlcpy_dollar(char *str, t_minishell mini)
+{
+	char	*temp;
+	char	*temp2;
+
+	temp = ft_strtrim(str, "\'\".");
+	temp2 = getenv_mini(temp + 1, &mini);
+	free(temp);
+	if (temp2 != NULL)
+	{
+		free(str);
+		str = malloc(sizeof(char) * (ft_strlen(temp2) + 1));
+		ft_strlcpy(str, temp2, ft_strlen(temp2) + 1);
+	}
+	else
+	{
+		free(str);
+		str = malloc(sizeof(char) * 1);
+		ft_strlcpy(str, (char *)"\0", 1);
+	}
+	return(EXIT_SUCCESS);
+}
+
 char	*heredoc_convert_dollar(t_minishell mini, char *line)
 {
 	char	 **line_split;
-	char	*temp;
 	char	*result;
+	char	*env_val;
 	int i;
 
 	i = 0;
-	temp = NULL;
-	result = NULL;
-	line_split = ft_split(line, ' ');
+	env_val = ft_strtrim(line, "\'\".");
+	line_split = ft_split(env_val, ' ');
+	if (!line_split)
+		return (NULL);
+	free(env_val);
 	while(line_split[i] != NULL)
 	{
 		if (ft_strchr(line_split[i], '$') != NULL)
-		{
-			temp = ft_strdup(getenv_mini(line_split[i] + 1, &mini));
-			if (temp != NULL)
-			{
-				free(line_split[i]);
-				line_split[i] = malloc(sizeof(char) * ft_strlen(temp));
-				ft_strlcpy(line_split[i], temp, ft_strlen(temp));
-			}
-			else
-			{
-				free(line_split[i]);
-				line_split[i] = malloc(sizeof(char) * 2);
-				ft_strlcpy(line_split[i], (char *)"\n", 2);
-			}
-		}
+			ft_strlcpy_dollar(line_split[i], mini);
 		i++;
 	}
-	i = 0;
-	result = NULL;
-	while(line_split[i] != NULL)
-	{
-		result = ft_strjoin(result, line_split[i]);
-		i++;
-	}
+	result = ft_reverse_split(line_split, (char *)" ");
+	ft_free_success(NULL, NULL, line_split, NULL);
 	return (result);
 }
 
@@ -68,9 +94,8 @@ void	here_doc_put_in(char *limiter, int *fds, t_minishell mini)
 			free(heredoc_line);
 			exit(EXIT_SUCCESS);
 		}
-		if (ft_strrchr(heredoc_line2, '$') != NULL)
+		if (ft_strrchr(heredoc_line, '$') != NULL)
 		{
-			printf("test\n");
 			heredoc_line2 = heredoc_convert_dollar(mini, heredoc_line);
 		}
 		else
