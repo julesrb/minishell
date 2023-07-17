@@ -145,7 +145,7 @@ int	executor(t_minishell *mini)
 	if (!mini->cmd_table)
 		return (EXIT_FAILURE);
 	signal_command(mini);
-	if (mini->nb_cmd == 1)
+	if (mini->nb_cmd <= 1)  // if (mini->nb_cmd == 1)
 	{
 		exit_status = execute_single_command(mini);
 		return (exit_status);

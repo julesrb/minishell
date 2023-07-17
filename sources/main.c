@@ -60,10 +60,10 @@ int	main(int argc, char **argv, char **envp)
 		init_t_mini(&mini);
 		prompt(&mini);  // if prompt return 0, set error and one and skip all the other while steps;
 		lexer(&mini);
- 			/* print_lst(mini.lexer_table);  */
+ 			print_lst(mini.lexer_table); 
 		parser(&mini);
- 	/* 		print_t_mini(&mini);
-			print_cmd_table(&mini, mini.nb_cmd); */
+ 			print_t_mini(&mini);
+			print_cmd_table(&mini, mini.nb_cmd);
  		if ((mini.error_pipe == 0 && mini.error_redir == 0)
 			&& (mini.nb_cmd > 0 || mini.redir_start || mini.redir_end))
 			mini.exit_status = executor(&mini);
