@@ -100,12 +100,13 @@ char	*ft_relative_path(char *cmd, t_minishell *mini)
 	}
 	else if (ft_strncmp(cmd, "../", 3) == 0)
 	{
-		path_trim = ft_strtrim(cmd, "../");
+		path_trim = ft_strtrim(cmd, "./");
 		count_trim = ft_count_trim(cmd);
 		env_path = origine_path(count_trim, mini);
 		path_root = ft_strjoin(env_path, (char *)"/");
 		relative_path = ft_strjoin(path_root, path_trim);
 	}
+	free(path_trim);
 	return (relative_path);
 }
 
@@ -132,14 +133,12 @@ char	*find_executable(char **cmd, t_minishell *mini)
 {
 	char	*result;
 
+	result = NULL;
 	if (is_absolute_path(cmd[0]) == EXIT_SUCCESS)
-		return (cmd[0]);
+		result = ft_strdup(cmd[0]);
 	else if (is_relative_path(cmd[0]) == EXIT_SUCCESS)
-	{
 		result = ft_relative_path(cmd[0], mini);
-		return (result);
-	}
 	else
-		return (ft_access_path(cmd, 0, mini));
-	return (NULL);
+		result = ft_access_path(cmd, 0, mini);
+	return (result);
 }

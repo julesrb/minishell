@@ -95,9 +95,7 @@ void	here_doc_put_in(char *limiter, int *fds, t_minishell mini)
 			exit(EXIT_SUCCESS);
 		}
 		if (ft_strrchr(heredoc_line, '$') != NULL)
-		{
 			heredoc_line2 = heredoc_convert_dollar(mini, heredoc_line);
-		}
 		else
 			heredoc_line2 = ft_strdup(heredoc_line);
 		ft_putendl_fd(heredoc_line2, fds[1]);

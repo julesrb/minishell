@@ -40,15 +40,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 	else
 	{
 		path = find_executable(cmd, mini);
-		if (!path)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(cmd[0], 2);
-			ft_putendl_fd(": command not found", 2);
-			ft_free(path, NULL, NULL, NULL);
-			return (127);
-		}
-		else if (execve(path, cmd, envp) == -1)
+		if (!path || (execve(path, cmd, envp) == -1))
 		{
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(cmd[0], 2);
