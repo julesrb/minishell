@@ -15,18 +15,22 @@
 char	**ft_access_list_help(char *cmd_2, char **path_envp, int len, int i)
 {
 	char	**result;
+	char	*temp;
 
+	temp = NULL;
 	result = (char **)malloc(sizeof(result) * ++len);
 	if (!result)
 		return (ft_free_pointer(cmd_2, NULL, NULL, path_envp));
 	while (path_envp[i] != NULL)
 	{
-		result[i] = ft_strjoin(path_envp[i], cmd_2);
+		temp = ft_strdup(path_envp[i]);
+		result[i] = ft_strjoin(temp, cmd_2);
 		if (!result[i])
-			return (ft_free_pointer(cmd_2, NULL, NULL, path_envp));
+			return (ft_free_pointer(cmd_2, NULL, result, path_envp));
 		i++;
 	}
 	result[i] = NULL;
+	ft_free_tab(path_envp);
 	return (result);
 }
 
@@ -71,8 +75,7 @@ char	*ft_access_path(char **cmd, int i, t_minishell *mini)
 			result = malloc(sizeof(result) * ft_strlen(access_list[i]));
 			if (!result)
 				return (ft_free_pointer(NULL, NULL, cmd, access_list));
-			ft_strlcpy(result, access_list[i],
-				ft_strlen(access_list[i]) + 1);
+			ft_strlcpy(result, access_list[i], ft_strlen(access_list[i]) + 1);
 			break ;
 		}
 		i++;
