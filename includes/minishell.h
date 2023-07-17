@@ -179,6 +179,7 @@ int		is_env_function(char *cmd);
 int		child_process(t_minishell *mini, int index, char **cmd, int **fd);
 int		create_process_fd(char **cmd, t_minishell *mini, int index, int **fd);
 int		**create_pipe(t_minishell *mini);
+int		free_pipe(int **fd);
 int		close_fd(int **fd);
 
 //execute_main.c

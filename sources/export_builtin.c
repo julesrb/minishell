@@ -16,12 +16,18 @@ char	*adjust_help2(t_minishell *mini, char *start, char *end)
 {
 	char	*rslt;
 	char	*temp_trim;
+	char	*temp;
 
+	temp = NULL;
 	rslt = NULL;
 	temp_trim = NULL;
 	temp_trim = ft_strtrim(end, (const char *)"\"");
 	if (ft_strrchr(temp_trim, '$') != NULL)
-		rslt = ft_strjoin(start, translate_var(mini, temp_trim));
+	{
+		temp = translate_var(mini, temp_trim);
+		rslt = ft_strjoin(start, temp);
+		free(temp);
+	}
 	else
 	{
 		rslt = ft_strjoin(start, temp_trim);
