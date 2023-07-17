@@ -183,7 +183,7 @@ int		executor(t_minishell *mini);
 char	*cd_relpath1(char *cmd, t_minishell *mini);
 char	*cd_relpath2(char *cmd, t_minishell *mini);
 char	*cd_relpath3(char *cmd, t_minishell *mini);
-char	*cd_relpath4(char *cmd, t_minishell *mini);
+char	*cd_relpath4(t_minishell *mini);
 char	*ft_relative_path_cd(char *cmd, t_minishell *mini);
 
 //cd_builtin.c

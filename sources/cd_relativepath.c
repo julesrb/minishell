@@ -73,16 +73,11 @@ char	*cd_relpath3(char *cmd, t_minishell *mini)
 	return (relative_path);
 }
 
-char	*cd_relpath4(char *cmd, t_minishell *mini)
+char	*cd_relpath4(t_minishell *mini)
 {
-	char	*temp1;
 	char	*relative_path;
-	int		count_trim;
 
-	temp1 = ft_strtrim(cmd, "..");
-	count_trim = 1;
-	relative_path = origine_path(count_trim, mini);
-	free(temp1);
+	relative_path = origine_path(1, mini);
 	return (relative_path);
 }
 
@@ -98,7 +93,7 @@ char	*ft_relative_path_cd(char *cmd, t_minishell *mini)
 	else if (ft_isalnum(cmd[0]) != 0)
 		relative_path = cd_relpath3(cmd, mini);
 	else if ((ft_strncmp(cmd, "..", 2) == 0) && ft_strlen(cmd) == 2)
-		relative_path = cd_relpath4(cmd, mini);
+		relative_path = cd_relpath4(mini);
 	else if ((cmd[0] == '.') && (ft_strlen(cmd) == 1))
 		relative_path = ft_strdup(getenv_mini("PWD", mini));
 	else if ((cmd[0] == '-' && ft_strlen(cmd) == 1))
