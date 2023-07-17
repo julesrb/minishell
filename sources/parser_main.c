@@ -88,6 +88,17 @@ t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex)
 	free_llist(&split_cmd);
 	return (lex);
 }
+int parser_error_check(t_minishell *mini)
+{
+	if (mini->error_pipe == 1)
+		ft_failure("minishell: pipe error", 0, 1, 0);
+	if (mini->error_redir == 1)
+		ft_failure("minishell: redirection error", 0, 1, 0);
+	if (mini->nb_cmd == 0 && !mini->redir_start && !mini->redir_end)
+		ft_failure("minishell: parsing error", 0, 1, 0);
+	return (0);
+	// Sort the ENTER error.
+}
 
 int	parser(t_minishell *mini)
 {
@@ -95,11 +106,7 @@ int	parser(t_minishell *mini)
 	t_llist	*lexer;
 
 	cmd = 0;
-	if (mini->error == 1)
-		return (1);
 	lexer = mini->lexer_table;
-	if (!lexer)
-		return (0);
 	if (mini->error_pipe == 0)
 	{
 		mini->nb_cmd = mini->pipe + 1;
@@ -116,5 +123,6 @@ int	parser(t_minishell *mini)
 			mini->nb_cmd = 0;
 		mini->cmd_table[cmd] = NULL;
 	}
+	parser_error_check(mini);
 	return (1);
 }

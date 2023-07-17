@@ -47,7 +47,7 @@ void	init_t_mini(t_minishell *mini)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_minishell			mini;
+	t_minishell	mini;
 
 	g_mini = &mini;
 	mini.exit_status = 0;
@@ -63,15 +63,13 @@ int	main(int argc, char **argv, char **envp)
 		if (!lexer(&mini))
 			ft_failure("lexer alloc failed", 0, 1, 0);
  						/* print_lst(mini.lexer_table);  */
-		if(!parser(&mini))  // protect the if mini->error
-			ft_failure("parser alloc failed", 0, 1, 0);
+		if (mini.error == 0)
+			if(!parser(&mini))
+				ft_failure("parser alloc failed", 0, 1, 0);
  					/* 	print_t_mini(&mini);
 						print_cmd_table(&mini, mini.nb_cmd); */
- 		if ((mini.error_pipe == 0 && mini.error_redir == 0)
-			&& (mini.nb_cmd > 0 || mini.redir_start || mini.redir_end))
+		if (mini.error == 0)
 			mini.exit_status = executor(&mini);
-		else if (mini.nb_cmd != 0)
-			ft_failure("minishell: parsing error", 0, 1, 0);
 		free_mini(&mini);
 	}
 	return (EXIT_SUCCESS);

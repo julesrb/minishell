@@ -158,6 +158,7 @@ int	executor(t_minishell *mini)
 	}
 	if (mini->nb_cmd == 1)
 	{
+		// can we asign it to mini->exist_status directly ?
 		exit_status = execute_single_command(mini);
 		return (exit_status);
 	}
