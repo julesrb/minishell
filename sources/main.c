@@ -50,8 +50,7 @@ int	main(int argc, char **argv, char **envp)
 	t_minishell			mini;
 
 	g_mini = &mini;
-	mini.exit_status = 0; //can move ?
-	mini.envp = envp;  //can move ?
+	mini.exit_status = 0;
 	arg_check(argc, argv);
 	env_mini(&mini, envp);
 	banner_print_opening();

@@ -36,6 +36,7 @@ int	env_mini(t_minishell *mini, char **envp)
 
 	i = 0;
 	new_var = NULL;
+	mini->envp = envp;
 	mini->env_mini = NULL;
 	mini->main_pid = getpid();
 	while (envp[i] != NULL)
