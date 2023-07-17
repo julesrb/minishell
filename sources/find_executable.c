@@ -75,6 +75,7 @@ char	*origine_path(int count_trim, t_minishell *mini)
 	}
 	or_path = (char *)malloc(sizeof(or_path) * (i + 1));
 	ft_strlcpy(or_path, current_path, i + 1);
+	free(current_path);
 	return (or_path);
 }
 

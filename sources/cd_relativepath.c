@@ -14,21 +14,18 @@
 
 char	*cd_relpath1(char *cmd, t_minishell *mini)
 {
-	char	*relative_path;
 	char	*temp1;
 	char	*temp2;
 	char	*temp3;
 
 	temp1 = ft_strtrim(cmd, "./");
-	temp2 = ft_strtrim(temp1, (char *)"/");
+	temp2 = ft_strdup(getenv_mini("PWD", mini));
+	temp3 = ft_strjoin(temp2, (char *)"/");
+	temp2 = ft_strjoin(temp3, temp1);
 	free(temp1);
-	temp1 = ft_strdup(getenv_mini("PWD", mini));
-	temp3 = ft_strjoin(temp1, (char *)"/");
-	temp1 = ft_strjoin(temp3, temp2);
+	temp3 = ft_strtrim(temp2, " /");
 	free(temp2);
-	relative_path = ft_strtrim(temp1, (char *)"/");
-	free(temp1);
-	return (relative_path);
+	return (temp3);
 }
 
 char	*cd_relpath2(char *cmd, t_minishell *mini)
@@ -38,16 +35,13 @@ char	*cd_relpath2(char *cmd, t_minishell *mini)
 	char	*temp3;
 	int		count_trim;
 
-	temp1 = ft_strtrim(cmd, "../");
-	temp2 = ft_strtrim(temp1, (char *)"/");
-	free(temp1);
+	temp1 = ft_strtrim(cmd, "./");
 	count_trim = ft_count_trim(cmd);
-	temp1 = origine_path(count_trim, mini);
-	temp3 = ft_strjoin(temp1, (char *)"/");
-	temp1 = ft_strjoin(temp3, temp2);
-	free(temp2);
-	temp3 = ft_strtrim(temp1, (char *)"/");
-	free(temp1);
+	temp2 = origine_path(count_trim, mini);
+	temp3 = ft_strjoin(temp2, (char *)"/");
+	temp2 = ft_strjoin(temp3, temp1);
+	temp3 = ft_strtrim(temp2, " /");
+	ft_free_success(temp1, temp2, NULL, NULL);
 	return (temp3);
 }
 
@@ -60,7 +54,7 @@ char	*cd_relpath3(char *cmd, t_minishell *mini)
 
 	temp3 = NULL;
 	relative_path = NULL;
-	temp1 = ft_strtrim(cmd, (char *)"/");
+	temp1 = ft_strtrim(cmd, " /");
 	temp2 = origine_path(0, mini);
 	if (ft_strlen(getenv_mini("PWD", mini)) == 1)
 		relative_path = ft_strjoin(temp2, temp1);
@@ -79,7 +73,7 @@ char	*cd_relpath4(char *cmd, t_minishell *mini)
 	char	*relative_path;
 	int		count_trim;
 
-	temp1 = ft_strtrim(cmd, "..");
+	temp1 = ft_strtrim(cmd, " /");
 	count_trim = 1;
 	relative_path = origine_path(count_trim, mini);
 	free(temp1);

@@ -132,6 +132,7 @@ int	execute_several_commands(t_minishell *mini, int index)
 	}
 	while (wait(NULL) != -1)
 		;
+	free_pipe(fd);
 	if ((is_env_function(mini->cmd_table[mini->nb_cmd - 1][0]) == EXIT_SUCCESS))
 		return (exit_status2);
 	return (exit_status);
