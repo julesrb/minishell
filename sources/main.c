@@ -62,7 +62,7 @@ int	main(int argc, char **argv, char **envp)
 		lexer(&mini);
  			/* print_lst(mini.lexer_table);  */
 		parser(&mini);
- 	/* 		print_t_mini(&mini);
+/*  			print_t_mini(&mini);
 			print_cmd_table(&mini, mini.nb_cmd); */
  		if ((mini.error_pipe == 0 && mini.error_redir == 0)
 			&& (mini.nb_cmd > 0 || mini.redir_start || mini.redir_end))

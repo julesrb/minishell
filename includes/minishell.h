@@ -209,4 +209,11 @@ char	*translate_var(t_minishell *mini, char *str);
 //parser_redir.c
 int		parser_redir_check(t_minishell *mini, char *redir, int cmd_nb);
 t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type);
+
+//redirection.c
+int	redirection_function_insert(t_minishell mini, t_redir *redirection);
+int	redirection_function(t_minishell mini, t_redir *redirection);
+
+
+
 #endif
