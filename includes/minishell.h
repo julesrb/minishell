@@ -192,7 +192,7 @@ int		executor(t_minishell *mini);
 char	*cd_relpath1(char *cmd, t_minishell *mini);
 char	*cd_relpath2(char *cmd, t_minishell *mini);
 char	*cd_relpath3(char *cmd, t_minishell *mini);
-char	*cd_relpath4(char *cmd, t_minishell *mini);
+char	*cd_relpath4(t_minishell *mini);
 char	*ft_relative_path_cd(char *cmd, t_minishell *mini);
 
 //cd_builtin.c
@@ -218,4 +218,11 @@ char	*translate_var(t_minishell *mini, char *str);
 //parser_redir.c
 int		parser_redir_check(t_minishell *mini, char *redir, int cmd_nb);
 t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type);
+
+//redirection.c
+int	redirection_function_insert(t_minishell mini, t_redir *redirection);
+int	redirection_function(t_minishell mini, t_redir *redirection);
+
+
+
 #endif
