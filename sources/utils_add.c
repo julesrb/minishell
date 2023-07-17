@@ -39,16 +39,18 @@ int	add_to_list(t_llist **root, char *str)
 	t_llist	*curr;
 
 	new_node = malloc(sizeof(t_llist));
+	if (!new_node || !str)
+		return (0);
 	new_node->next = NULL;
 	new_node->content = str;
 	if (*root == NULL)
 	{
 		*root = new_node;
-		return (0);
+		return (1);
 	}
 	curr = *root;
 	while (curr->next != NULL)
 		curr = curr->next;
 	curr->next = new_node;
-	return (0);
+	return (1);
 }

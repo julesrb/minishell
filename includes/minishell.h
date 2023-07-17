@@ -29,6 +29,14 @@
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1
 
+#define PROCESS_TOKEN(func, input, i, mini) \
+	do { \
+		int a = func(&(input[i]), mini); \
+		if (a == -1) \
+			return (0); \
+		i = i + a; \
+	} while(0)
+
 typedef struct s_llist
 {
 	char			*content;
@@ -126,19 +134,18 @@ int		ft_count_trim(char *cmd);
 int		ft_count_trim(char *cmd);
 
 // Builtin functions
-int		pwd_builtin(t_minishell *mini);
+int	pwd_builtin(t_minishell *mini, char **cmd);
 int		env_mini(t_minishell *mini, char **envp);
 int		env_builtin(t_minishell *mini);
 int		echo_builtin(char **cmd_split);
 int		unset_builtin(char **cmd, t_minishell *mini);
 int		exit_builtin(char **cmd, t_minishell *mini);
-int		cd_builtin(char *cmd, t_minishell *mini);
 
-int		input_redirection(t_minishell mini);
-int		output_redirection(t_minishell mini);
-int		outfile_insert(t_minishell mini);
-int		infile_insert(t_minishell mini);
-void	here_doc(char *limiter);
+int		input_redirection(t_minishell mini, t_redir *start);
+int		output_redirection(t_redir *end);
+int		outfile_insert(t_redir *end);
+int		infile_insert(t_minishell mini, t_redir *start);
+void	here_doc(char *limiter, t_minishell mini);
 
 //environment function
 void	deallocate_env(t_list **root);
@@ -153,6 +160,7 @@ void	signal_command_handler(int s);
 
 //----- free_functions.c
 void	free_mini(t_minishell *mini);
+void	free_null(void *ptr);
 void	free_llist(t_llist **head);
 void	free_redir(t_redir **head);
 void	ft_free_tab(char **tab);
@@ -188,10 +196,10 @@ char	*cd_relpath4(char *cmd, t_minishell *mini);
 char	*ft_relative_path_cd(char *cmd, t_minishell *mini);
 
 //cd_builtin.c
-char	*convert_path_to_absolute(char *cmd, t_minishell *mini);
+char	*convert_path_to_absolute(char **cmd, t_minishell *mini);
 int		update_env_mini(t_minishell *mini, char *up_var, char *new_value);
-int		update_env_cd(t_minishell *mini, char *cd);
-int		cd_builtin(char *cmd, t_minishell *mini);
+int		update_env_cd(t_minishell *mini, char **cd);
+int		cd_builtin(char **cmd, t_minishell *mini);
 
 //export_builtin.c
 char	*adjust_help2(t_minishell *mini, char *start, char *end);

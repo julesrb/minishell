@@ -27,7 +27,7 @@ int	lexer_error_pipe_check(t_minishell *mini)
 
 	curr = mini->lexer_table;
 	if (!curr)
-		return (EXIT_FAILURE);
+		return (0);
 	if (curr->content[0] == '|')
 		mini->error_pipe = 1;
 	if (lexer_last_token_is_pipe(curr) == 1)
@@ -38,34 +38,43 @@ int	lexer_error_pipe_check(t_minishell *mini)
 			mini->error_pipe = 1;
 		curr = curr->next;
 	}
-	return (EXIT_SUCCESS);
+	return (1);
+}
+
+int	lexer_iswordstart(char c)
+{
+	if (c == '-'	|| c == '.' || c == '=' || c == '/'
+		|| c == '~' || c == '(')
+		return (1);
+	else
+		return (0);
 }
 
 int	lexer(t_minishell *mini)
 {
-	char	*input;
 	int		i;
 
 	i = 0;
-	input = mini->input;
-	while (input[i] != 0)
+	if (mini->error == 1)
+		return (0);
+	while (mini->input[i] != 0)
 	{
-		if (input[i] == '<' || input[i] == '>')
-			i += token_yield_redir(&input[i], mini);
-		else if (ft_isalnum(input[i]) != 0 || input[i] == '-' || input[i] == '.'
-			|| input[i] == '=' || input[i] == '/'
-			|| input[i] == '~' || input[i] == '(')
-			i += token_yield_word(&input[i], mini);
-		else if (input[i] == 39 || input[i] == 34)
-			i += token_yield_quote(&input[i], mini);
-		else if (input[i] == '$')
-			i += token_yield_var(&input[i], mini);
-		else if (input[i] == '|' )
-			i += token_yield_pipe(&input[i], mini);
+		if (mini->input[i] == '<' || mini->input[i] == '>')
+			PROCESS_TOKEN(token_yield_redir, mini->input, i, mini);
+		else if (ft_isalnum(mini->input[i]) != 0 || lexer_iswordstart(mini->input[i]) == 1)
+			PROCESS_TOKEN(token_yield_word, mini->input, i, mini);
+		else if (mini->input[i] == 39 || mini->input[i] == 34)
+			PROCESS_TOKEN(token_yield_quote, mini->input, i, mini);
+		else if (mini->input[i] == '$')
+			PROCESS_TOKEN(token_yield_var, mini->input, i, mini);
+		else if (mini->input[i] == '|' )
+			PROCESS_TOKEN(token_yield_pipe, mini->input, i, mini);
 		else
 			i++;
 	}
 	mini->nb_cmd = mini->pipe + 1;
 	lexer_error_pipe_check(mini);
-	return (EXIT_SUCCESS);
+	if (!mini->lexer_table)
+		mini->error = 1;
+	return (1);
 }

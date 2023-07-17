@@ -17,10 +17,10 @@ int	prompt(t_minishell *mini)
 	mini->input = readline("[Minishell] ");
 	rl_redisplay();
 	if (!mini->input)
-		return (ft_failure("readline failed", 0, 1, 0));
+		ft_failure("exit", 1, 1, 1);
 	if (mini->input[0] == 0)
-		add_to_list(&mini->lexer_table, ft_strdup(""));
+		return (add_to_list(&mini->lexer_table, ft_strdup("")));
 	else
 		add_history(mini->input);
-	return (EXIT_SUCCESS);
+	return (1);
 }

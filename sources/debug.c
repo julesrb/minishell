@@ -19,7 +19,7 @@ int	print_lst_redir(t_redir *lst)
 	i = 1;
 	while (lst != NULL)
 	{
-		ft_printf("%i - %s; ", lst->type, lst->file);
+		ft_printf("%i- %s; ", lst->type, lst->file);
 		lst = lst->next;
 		i++;
 	}
@@ -33,10 +33,10 @@ int	print_t_mini(t_minishell *mini)
 	ft_printf("| pipe_error = %i\n", mini->error_pipe);
 	ft_printf("| redir_error = %i\n", mini->error_redir);
 	ft_printf("| nb_cmd = %i\n", mini->nb_cmd);
-	ft_printf("| redir_in = ");
+	ft_printf("| redir_start = ");
 	print_lst_redir(mini->redir_start);
 	ft_printf("\n");
-	ft_printf("| redir_out = ");
+	ft_printf("| redir_end = ");
 	print_lst_redir(mini->redir_end);
 	ft_printf("\n\n");
 

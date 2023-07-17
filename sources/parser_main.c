@@ -95,16 +95,18 @@ int	parser(t_minishell *mini)
 	t_llist	*lexer;
 
 	cmd = 0;
+	if (mini->error == 1)
+		return (1);
 	lexer = mini->lexer_table;
 	if (!lexer)
-		return (EXIT_FAILURE);
+		return (0);
 	if (mini->error_pipe == 0)
 	{
 		mini->nb_cmd = mini->pipe + 1;
 		mini->cmd_table = (char ***)malloc
 			(sizeof (char **) * (mini->nb_cmd + 1));
 		if (!mini->cmd_table)
-			return (EXIT_FAILURE);
+			return (0);
 		while (lexer != NULL)
 		{
 			lexer = parser_build_command(mini, cmd, lexer);
@@ -114,5 +116,5 @@ int	parser(t_minishell *mini)
 			mini->nb_cmd = 0;
 		mini->cmd_table[cmd] = NULL;
 	}
-	return (EXIT_SUCCESS);
+	return (1);
 }

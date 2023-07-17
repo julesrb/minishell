@@ -14,7 +14,6 @@
 
 int	token_yield_word(char *token, t_minishell *mini)
 {
-	int		i;
 	int		len;
 	char	*str;
 
@@ -32,13 +31,11 @@ int	token_yield_word(char *token, t_minishell *mini)
 	}
 	str = malloc(sizeof (char) * (len + 1));
 	if (!str)
-		return (EXIT_FAILURE);
-	i = -1;
-	while (++i < len)
-		str[i] = token[i];
-	str[i] = '\0';
-	add_to_list(&mini->lexer_table, str);
-	return (i);
+		return (0);
+	ft_strlcpy(str, token, len + 1);
+	if (!add_to_list(&mini->lexer_table, str))
+		return (0);
+	return (len);
 }
 
 int	token_yield_quote(char *token, t_minishell *mini)
@@ -55,16 +52,11 @@ int	token_yield_quote(char *token, t_minishell *mini)
 		len++;
 	str = malloc(sizeof (char) * (len + 1));
 	if (!str)
-		return (EXIT_FAILURE);
-	i = 0;
-	while (i < len)
-	{
-		str[i] = token[i];
-		i++;
-	}
-	str[i] = '\0';
-	add_to_list(&mini->lexer_table, str);
-	return (i + 1);
+		return (0);
+	ft_strlcpy(str, token, len + 1);
+	if (!add_to_list(&mini->lexer_table, str))
+		return (0);
+	return (len);
 }
 
 int	token_yield_var(char *token, t_minishell *mini)
@@ -78,15 +70,11 @@ int	token_yield_var(char *token, t_minishell *mini)
 		len++;
 	str = malloc(sizeof (char) * (len + 1));
 	if (!str)
-		return (EXIT_FAILURE);
+		return (0);
 	i = 0;
-	while (i < len)
-	{
-		str[i] = token[i];
-		i++;
-	}
-	str[i] = '\0';
-	add_to_list(&mini->lexer_table, str);
+	ft_strlcpy(str, token, len + 1);
+	if (!add_to_list(&mini->lexer_table, str))
+		return (0);
 	return (len);
 }
 
@@ -95,12 +83,12 @@ int	token_yield_pipe(char *token, t_minishell *mini)
 	char	*str;
 
 	mini->pipe += 1;
-	str = malloc(sizeof (char) * (1 + 1));
+	str = malloc(sizeof (char) * (2));
 	if (!str)
-		return (EXIT_FAILURE);
-	str[0] = token[0];
-	str[1] = 0;
-	add_to_list(&mini->lexer_table, str);
+		return (0);
+	ft_strlcpy(str, token, 2);
+	if (!add_to_list(&mini->lexer_table, str))
+		return (0);
 	return (1);
 }
 
@@ -110,24 +98,23 @@ int	token_yield_redir(char *redir, t_minishell *mini)
 
 	if (redir[0] != redir[1])
 	{
-		str = malloc(sizeof (char) * (1 + 1));
+		str = malloc(sizeof (char) * (2));
 		if (!str)
-			return (EXIT_FAILURE);
-		str[0] = redir[0];
-		str[1] = 0;
-		add_to_list(&mini->lexer_table, str);
+			return (0);
+		ft_strlcpy(str, redir, 2);
+		if (!add_to_list(&mini->lexer_table, str))
+			return (0);
 		return (1);
 	}
 	if (redir[0] == redir[1])
 	{
-		str = malloc(sizeof (char) * (2 + 1));
+		str = malloc(sizeof (char) * (3));
 		if (!str)
-			return (EXIT_FAILURE);
-		str[0] = redir[0];
-		str[1] = redir[1];
-		str[2] = 0;
-		add_to_list(&mini->lexer_table, str);
+			return (0);
+		ft_strlcpy(str, redir, 3);
+		if (!add_to_list(&mini->lexer_table, str))
+			return (0);
 		return (2);
 	}
-	return (EXIT_FAILURE);
+	return (0);
 }

@@ -58,7 +58,9 @@ t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type)
 		mini->error_redir = 1;
 		return (curr);
 	}
-	if (curr->next != NULL)
+	if (curr->next == NULL)
+		return (NULL);
+	else
 		curr = curr->next;
 	while (curr->content[i] != 0)
 	{

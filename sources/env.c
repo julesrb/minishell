@@ -21,8 +21,8 @@ void	deallocate_env(t_list **root)
 	while (curr != NULL)
 	{
 		aux = curr;
-		free (aux->content);
 		curr = curr->next;
+		free (aux->content);
 		free (aux);
 	}
 	*root = NULL;

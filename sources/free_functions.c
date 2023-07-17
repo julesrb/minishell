@@ -21,9 +21,9 @@ void	free_redir(t_redir **head)
 	while (curr != NULL)
 	{
 		trash = curr;
-		free(curr->file);
 		curr = curr->next;
-		free(trash);
+		free_null(trash->file);
+		free_null(trash);
 	}
 	*head = NULL;
 }
@@ -37,11 +37,27 @@ void	free_llist(t_llist **head)
 	while (curr != NULL)
 	{
 		trash = curr;
-		free(curr->content);
 		curr = curr->next;
-		free(trash);
+		free_null(trash->content);
+		free_null(trash);
 	}
 	*head = NULL;
+}
+
+void	ft_free_tab(char **tab)
+{
+	size_t	i;
+
+	i = 0;
+	if (tab)
+	{
+		while (tab[i])
+		{
+			free_null(tab[i]);
+			i++;
+		}
+		free_null(tab);
+	}
 }
 
 void	free_tab_3d(char ***arr)
@@ -55,19 +71,25 @@ void	free_tab_3d(char ***arr)
 		j = 0;
 		while (arr[i][j] != NULL)
 		{
-			free(arr[i][j]);
+			free_null(arr[i][j]);
 			j++;
 		}
-		free(arr[i]);
+		free_null(arr[i]);
 		i++;
 	}
-	free(arr);
+	free_null(arr);
+}
+
+void	free_null(void *ptr)
+{
+	ptr = NULL;
+	free(ptr);
 }
 
 void	free_mini(t_minishell *mini)
 {
 	if (mini->input != NULL)
-		free(mini->input);
+		free_null(mini->input);
 	if (mini->lexer_table != NULL)
 		free_llist(&mini->lexer_table);
 	if (mini->redir_start != NULL)
@@ -76,22 +98,6 @@ void	free_mini(t_minishell *mini)
 		free_redir(&mini->redir_end);
 	if (mini->cmd_table != NULL)
 		free_tab_3d(mini->cmd_table);
-}
-
-void	ft_free_tab(char **tab)
-{
-	size_t	i;
-
-	i = 0;
-	if (tab)
-	{
-		while (tab[i])
-		{
-			free(tab[i]);
-			i++;
-		}
-		free(tab);
-	}
 }
 
 int	ft_free(char *str1, char *str2, char **tab1, char **tab2)

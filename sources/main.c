@@ -16,6 +16,7 @@ t_minishell	*g_mini;
 
 int	ft_failure(char *str, int exit_n, int fr_mini, int fr_env)
 {
+	g_mini->error = 1;
 	if (errno == 0)
 		ft_putendl_fd(str, 2);
 	else
@@ -26,7 +27,7 @@ int	ft_failure(char *str, int exit_n, int fr_mini, int fr_env)
 		free_mini(g_mini);
 	if (exit_n != 0)
 		exit(exit_n);
-	return (EXIT_FAILURE);
+	return (1);
 }
 
 void	init_t_mini(t_minishell *mini)
@@ -58,17 +59,20 @@ int	main(int argc, char **argv, char **envp)
 	{
 		signal_main();
 		init_t_mini(&mini);
-		prompt(&mini);  // if prompt return 0, set error and one and skip all the other while steps;
-		lexer(&mini);
- 			print_lst(mini.lexer_table); 
-		parser(&mini);
- 			print_t_mini(&mini);
-			print_cmd_table(&mini, mini.nb_cmd);
+		if (!prompt(&mini))
+			ft_failure("readline failed", 0, 1, 0);
+		if (!lexer(&mini))
+			ft_failure("lexer alloc failed", 0, 1, 0);
+ 						/* print_lst(mini.lexer_table);  */
+		if(!parser(&mini))  // protect the if mini->error
+			ft_failure("parser alloc failed", 0, 1, 0);
+ 					/* 	print_t_mini(&mini);
+						print_cmd_table(&mini, mini.nb_cmd); */
  		if ((mini.error_pipe == 0 && mini.error_redir == 0)
 			&& (mini.nb_cmd > 0 || mini.redir_start || mini.redir_end))
 			mini.exit_status = executor(&mini);
 		else if (mini.nb_cmd != 0)
-			ft_putendl_fd("minishell: parsing error", 2);
+			ft_failure("minishell: parsing error", 0, 1, 0);
 		free_mini(&mini);
 	}
 	return (EXIT_SUCCESS);
