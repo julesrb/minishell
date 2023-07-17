@@ -40,7 +40,7 @@ int	ft_count_trim(char *cmd)
 	{
 		if (cmd[i] == '.' && cmd[i + 1] == '.' && cmd[i + 2] == '/')
 			count_trim++;
-		i++;
+		i = i + 3;
 	}
 	return (count_trim);
 }

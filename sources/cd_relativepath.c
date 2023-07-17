@@ -40,7 +40,7 @@ char	*cd_relpath2(char *cmd, t_minishell *mini)
 	temp2 = origine_path(count_trim, mini);
 	temp3 = ft_strjoin(temp2, (char *)"/");
 	temp2 = ft_strjoin(temp3, temp1);
-	temp3 = ft_strtrim(temp2, " /");
+	temp3 = ft_strtrim(temp2, (char *)" /");
 	ft_free_success(temp1, temp2, NULL, NULL);
 	return (temp3);
 }

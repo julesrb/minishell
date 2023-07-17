@@ -141,20 +141,20 @@ int	execute_several_commands(t_minishell *mini, int index)
 int	executor(t_minishell *mini)
 {
 	int	exit_status;
-	// t_redir	*curr = NULL;
-	// pid_t pid;
-	// int i = 0;
+	t_redir	*curr = NULL;
+	pid_t pid;
+	int i = 0;
 
 	exit_status = 0;
 	if (!mini->cmd_table)
 		return (EXIT_FAILURE);
 	signal_command(mini);
-/* 	if (mini->nb_cmd == 0)
+	if (mini->nb_cmd == 0)
 	{
 		curr = mini->redir_start;
 		while(curr != NULL)
 		{
-			printf("%d: redir in %s\n", i, mini->redir_start->file);
+			printf("%d: redir in %s\n", i, curr->file);
 			curr = curr->next;
 			i++;
 		}
@@ -162,7 +162,7 @@ int	executor(t_minishell *mini)
 		i =  0;
 		while(curr != NULL)
 		{
-			printf("%d: redir out %s\n", i, mini->redir_end->file);
+			printf("%d: redir out %s\n", i, curr->file);
 			curr = curr->next;
 			i++;
 		}
@@ -188,7 +188,7 @@ int	executor(t_minishell *mini)
 		else
 			waitpid(pid, NULL, 0);
 		return(EXIT_SUCCESS);
-	} */
+	}
 	if (mini->nb_cmd == 1)
 	{
 		exit_status = execute_single_command(mini);
