@@ -96,10 +96,10 @@ int	update_env_cd(t_minishell *mini, char **cd)
 	pwd = convert_path_to_absolute(cd, mini);
 	oldpwd = ft_strdup(getenv_mini("PWD", mini));
 	if (update_env_mini(mini, "OLDPWD", oldpwd) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+		return (ft_free_fail(pwd, oldpwd, NULL, NULL));
 	if (update_env_mini(mini, "PWD", pwd) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+		return (ft_free_fail(pwd, oldpwd, NULL, NULL));
+	return (ft_free_success(pwd, oldpwd, NULL, NULL));
 }
 
 int	cd_builtin(char **cmd, t_minishell *mini)

@@ -16,5 +16,5 @@ void	arg_check(int argc, char **argv)
 {
 	(void)argv;
 	if (argc != 1)
-		exit (1);
+		ft_failure("wrong argument", 1, 0, 0);
 }

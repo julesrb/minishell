@@ -12,38 +12,53 @@
 
 #include "minishell.h"
 
-t_minishell	*mini_global;
+t_minishell	*g_mini;
 
-int	init_t_mini(t_minishell *mini)
+int	ft_failure(char *str, int exit_n, int fr_mini, int fr_env)
+{
+	if (errno == 0)
+		ft_putendl_fd(str, 2);
+	else
+		perror(str);
+	if (fr_env == 1)
+		deallocate_env(&g_mini->env_mini);
+	if (fr_mini == 1)
+		free_mini(g_mini);
+	if (exit_n != 0)
+		exit(exit_n);
+	return (EXIT_FAILURE);
+}
+
+void	init_t_mini(t_minishell *mini)
 {
 	mini->input = NULL;
 	mini->cmd_table = NULL;
-	mini->lexer_table = NULL;
-	mini->redir_start = NULL;
 	mini->redir_end = NULL;
+	mini->redir_start = NULL;
+	mini->lexer_table = NULL;
 	mini->pipe = 0;
+	mini->error = 0;
 	mini->nb_cmd = 0;
 	mini->execute = 0;
-	mini->error_redir = 0;
 	mini->error_pipe = 0;
-	return (0);
+	mini->error_redir = 0;
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell			mini;
 
-	mini.exit_status = 0;
-	mini.envp = envp;
+	g_mini = &mini;
+	mini.exit_status = 0; //can move ?
+	mini.envp = envp;  //can move ?
 	arg_check(argc, argv);
-	if (env_mini(&mini, envp) == EXIT_FAILURE)
-		ft_putendl_fd("Error initializing the minishell environment", 2);
-	print_opening ();
+	env_mini(&mini, envp);
+	banner_print_opening();
 	while (1)
 	{
-		signal_main(&mini);
+		signal_main();
 		init_t_mini(&mini);
-		prompt(&mini);
+		prompt(&mini);  // if prompt return 0, set error and one and skip all the other while steps;
 		lexer(&mini);
  			/* print_lst(mini.lexer_table);  */
 		parser(&mini);
