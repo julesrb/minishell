@@ -40,7 +40,7 @@ int	ft_count_trim(char *cmd)
 	{
 		if (cmd[i] == '.' && cmd[i + 1] == '.' && cmd[i + 2] == '/')
 			count_trim++;
-		i++;
+		i = i + 3;
 	}
 	return (count_trim);
 }
@@ -75,6 +75,7 @@ char	*origine_path(int count_trim, t_minishell *mini)
 	}
 	or_path = (char *)malloc(sizeof(or_path) * (i + 1));
 	ft_strlcpy(or_path, current_path, i + 1);
+	free(current_path);
 	return (or_path);
 }
 

@@ -91,6 +91,10 @@ int	execute_single_command(t_minishell *mini)
 		{
 			waitpid(pid, &status, 0);
 			exit_status = WEXITSTATUS(status);
+			if (WTERMSIG(status) == SIGINT)
+				exit_status = 130;
+			if (WTERMSIG(status) == SIGQUIT)
+				exit_status = 131;
 		}
 	}
 	return (exit_status);
@@ -127,9 +131,14 @@ int	execute_several_commands(t_minishell *mini, int index)
 	{
 		waitpid(pid, &status, 0);
 		exit_status = WEXITSTATUS(status);
+		if (WTERMSIG(status) == SIGINT)
+			exit_status = 130;
+		if (WTERMSIG(status) == SIGQUIT)
+			exit_status = 131;
 	}
 	while (wait(NULL) != -1)
 		;
+	free_pipe(fd);
 	if ((is_env_function(mini->cmd_table[mini->nb_cmd - 1][0]) == EXIT_SUCCESS))
 		return (exit_status2);
 	return (exit_status);

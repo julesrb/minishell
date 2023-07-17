@@ -56,7 +56,7 @@ int	check_arg_export(char *export_arg)
 		ft_putendl_fd(export_arg, 2);
 		return (ft_free_fail(var_name, NULL, NULL, NULL));
 	}
-	return (EXIT_SUCCESS);
+	return (ft_free_success(var_name, NULL, NULL, NULL));
 }
 
 int	check_update_var(char *cmd, t_list *env_mini)
@@ -105,6 +105,7 @@ char	*translate_var(t_minishell *mini, char *str)
 {
 	int		i;
 	char	*translation;
+	char *temp;
 
 	i = 0;
 	translation = NULL;
@@ -115,7 +116,8 @@ char	*translate_var(t_minishell *mini, char *str)
 	i++;
 	while (str[i] != 0 && str[i] != ' ')
 		i++;
-	translation = ft_strjoin(translation, &str[i]);
-	translation = ft_strjoin(str, translation);
+	temp = ft_strjoin(translation, &str[i]);
+	translation = ft_strjoin(str, temp);
+	free(temp);
 	return (translation);
 }
