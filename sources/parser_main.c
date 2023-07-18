@@ -116,15 +116,24 @@ int	parser_error_pipe_check(t_minishell *mini)
 	return (1);
 }
 
-int parser_error_check(t_minishell *mini)
+int	parser_error_check(t_minishell *mini)
 {
 	parser_error_pipe_check(mini);
 	if (mini->error_pipe == 1)
+	{
 		ft_failure("minishell: pipe error", 0, 1, 0);
+		return (0);
+	}
 	if (mini->error_redir == 1)
+	{
 		ft_failure("minishell: redirection error", 0, 1, 0);
+		return (0);
+	}
 	if (mini->nb_cmd == 0 && !mini->redir_start && !mini->redir_end)
+	{
 		ft_failure("minishell: parsing error", 0, 1, 0);
+		return (0);
+	}
 	return (1);
 	// Sort the ENTER error.
 }
@@ -132,24 +141,29 @@ int parser_error_check(t_minishell *mini)
 int	parser(t_minishell *mini)
 {
 	int		cmd;
+	//int		malloc_err;
 	t_llist	*lexer;
 
 	cmd = 0;
+	//malloc_err = 0;
+	lexer = mini->lexer_table;
 	if (mini->error == 1) // do i pass it to main ?
-		return (0);
+		return (1);
 	if (!parser_error_check(mini))
 		return (1);
-	lexer = mini->lexer_table;
 	MALLOC_OR_RETURN(mini->cmd_table, sizeof (char **) * (mini->nb_cmd + 1));
 	while (lexer != NULL)
 	{
 		lexer = parser_build_command(mini, cmd, lexer);
+		//lexer = parser_build_command(mini, cmd, lexer, &malloc_err);
+	/* 	if (malloc_err = 1)
+			return (0); */
 		cmd++;
 	}
+	parser_error_check(mini);
 	if (mini->cmd_table[0][0][0] == 0)
 		mini->nb_cmd = 0;
 	mini->cmd_table[cmd] = NULL;
-	parser_error_check(mini);
 	if (!mini->cmd_table)
 		mini->error = 1;
 	return (1);

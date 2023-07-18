@@ -27,7 +27,7 @@ int	lexer(t_minishell *mini)
 
 	i = 0;
 	if (mini->error == 1)
-		return (0);
+		return (1);
 	while (mini->input[i] != 0)
 	{
 		if (mini->input[i] == '<' || mini->input[i] == '>')
