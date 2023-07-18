@@ -92,7 +92,7 @@ typedef struct s_minishell
 
 extern t_minishell	*g_mini;
 
-int	ft_failure(char *str, int exit, int free_mini, int free_env);
+int		ft_failure(char *str, int exit, int free_mini, int free_env);
 
 //----- arg.c
 void	arg_check(int argc, char **argv);

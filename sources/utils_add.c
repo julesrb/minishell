@@ -38,8 +38,7 @@ int	add_to_list(t_llist **root, char *str)
 	t_llist	*new_node;
 	t_llist	*curr;
 
-	//MALLOC_OR_ZERO(new_node, sizeof(t_llist));
-	new_node = malloc(sizeof(t_llist));
+	MALLOC_OR_ZERO(new_node, sizeof(t_llist));
 	if (!str)
 		return (0);
 	new_node->next = NULL;

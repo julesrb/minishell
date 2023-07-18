@@ -14,7 +14,7 @@
 
 int	lexer_iswordstart(char c)
 {
-	if (c == '-'	|| c == '.' || c == '=' || c == '/'
+	if (c == '-' || c == '.' || c == '=' || c == '/'
 		|| c == '~' || c == '(')
 		return (1);
 	else
@@ -32,7 +32,8 @@ int	lexer(t_minishell *mini)
 	{
 		if (mini->input[i] == '<' || mini->input[i] == '>')
 			PROCESS_TOKEN(token_yield_redir, mini->input, i, mini);
-		else if (ft_isalnum(mini->input[i]) != 0 || lexer_iswordstart(mini->input[i]) == 1)
+		else if (ft_isalnum(mini->input[i]) != 0
+			|| lexer_iswordstart(mini->input[i]) == 1)
 			PROCESS_TOKEN(token_yield_word, mini->input, i, mini);
 		else if (mini->input[i] == 39 || mini->input[i] == 34)
 			PROCESS_TOKEN(token_yield_quote, mini->input, i, mini);
