@@ -40,13 +40,11 @@ int	parser_redir_add_lst(t_minishell *mini, int type, char *file, int cmd_n)
 {
 	if (cmd_n == 0)
 	{
-
 		if (!add_to_redir(&mini->redir_start, type, ft_strdup(file)))
 			return (0);
 	}
 	else
 	{
-
 		if (!add_to_redir(&mini->redir_end, type, ft_strdup(file)))
 			return (0);
 	}

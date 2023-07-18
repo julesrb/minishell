@@ -24,13 +24,13 @@ int	add_to_redir(t_redir **root, int type, char *str)
 	if (*root == NULL)
 	{
 		*root = new_node;
-		return (0);
+		return (1);
 	}
 	curr = *root;
 	while (curr->next != NULL)
 		curr = curr->next;
 	curr->next = new_node;
-	return (0);
+	return (1);
 }
 
 int	add_to_list(t_llist **root, char *str)

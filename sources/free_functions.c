@@ -63,18 +63,11 @@ void	ft_free_tab(char **tab)
 void	free_tab_3d(char ***arr)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	while (arr[i] != NULL)
 	{
-		j = 0;
-		while (arr[i][j] != NULL)
-		{
-			free(arr[i][j]);
-			j++;
-		}
-		free(arr[i]);
+		ft_free_tab(arr[i]);
 		i++;
 	}
 	free(arr);

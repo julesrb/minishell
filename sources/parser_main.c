@@ -70,8 +70,7 @@ t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex, int *m_e
 			split_cmd = parser_var_split(mini, &lex, split_cmd, m_err);
 		if (lex != NULL && (lex->str[0] == 34 || lex->str[0] == 39))
 			quote_translation(mini, lex);
-		if (lex != NULL && lex->str[0] != '|'
-			&& lex->str[0] != '<' && lex->str[0] != '>')
+		if (lex != NULL && lex->str[0] != '|' && lex->str[0] != '<' && lex->str[0] != '>')
 		{
 			if (!add_to_list(&split_cmd, ft_strdup(lex->str)))
 			{
