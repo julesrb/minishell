@@ -65,7 +65,7 @@ int	main(int argc, char **argv, char **envp)
  						/* print_lst(mini.lexer_table);  */
 		if(!parser(&mini))
 			ft_failure("parser alloc failed", 0, 1, 0);
- 					/* 	print_t_mini(&mini);
+ 						/* print_t_mini(&mini);
 						print_cmd_table(&mini, mini.nb_cmd); */
 		executor(&mini);
 		free_mini(&mini);
