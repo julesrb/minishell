@@ -134,12 +134,13 @@ int		ft_count_trim(char *cmd);
 int		ft_count_trim(char *cmd);
 
 // Builtin functions
-int	pwd_builtin(t_minishell *mini, char **cmd);
+int		pwd_builtin(t_minishell *mini, char **cmd);
 int		env_mini(t_minishell *mini, char **envp);
 int		env_builtin(t_minishell *mini);
 int		echo_builtin(char **cmd_split);
 int		unset_builtin(char **cmd, t_minishell *mini);
 int		exit_builtin(char **cmd, t_minishell *mini);
+
 
 int		input_redirection(t_minishell mini, t_redir *start);
 int		output_redirection(t_redir *end);
@@ -190,10 +191,10 @@ int		execute_several_commands(t_minishell *mini, int index);
 int		executor(t_minishell *mini);
 
 //cd_relativepath.c
+int		ft_tablen(char **cmd);
 char	*cd_relpath1(char *cmd, t_minishell *mini);
 char	*cd_relpath2(char *cmd, t_minishell *mini);
 char	*cd_relpath3(char *cmd, t_minishell *mini);
-char	*cd_relpath4(t_minishell *mini);
 char	*ft_relative_path_cd(char *cmd, t_minishell *mini);
 
 //cd_builtin.c

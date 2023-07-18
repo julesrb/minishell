@@ -23,7 +23,7 @@ int	check_unset_var(char *cmd, t_list *env_mini)
 	return (EXIT_FAILURE);
 }
 
-int	lst_env_remove(t_minishell *mini, char *var_unset)
+int	lst_env_remove(t_minishell *mini, char *v_unset)
 {
 	t_list	*prev;
 	t_list	*curr;
@@ -32,7 +32,7 @@ int	lst_env_remove(t_minishell *mini, char *var_unset)
 	curr = mini->env_mini;
 	while (curr != NULL)
 	{
-		if (ft_strncmp(var_unset, (char *)(curr->content), ft_strlen(var_unset)) == 0)
+		if (!ft_strncmp(v_unset, (char *)(curr->content), ft_strlen(v_unset)))
 		{
 			if (prev == NULL)
 				mini->env_mini = curr->next;
@@ -62,7 +62,7 @@ int	unset_builtin(char **cmd, t_minishell *mini)
 	if (i == 1)
 	{
 		ft_putendl_fd("unset: not enough arguments", 2);
-		return(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }

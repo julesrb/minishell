@@ -12,17 +12,6 @@
 
 #include "minishell.h"
 
-int	ft_tablen(char **cmd)
-{
-	int i;
-
-	i = 0;
-	while(cmd[i] != NULL)
-		i++;
-	return (i);
-}
-
-
 char	*convert_path_to_absolute(char **cmd, t_minishell *mini)
 {
 	char	*result;
@@ -30,10 +19,7 @@ char	*convert_path_to_absolute(char **cmd, t_minishell *mini)
 
 	tab_len = ft_tablen(cmd);
 	if (tab_len == 1)
-	{
-		result = ft_relative_path_cd("~", mini);
-		return (result);
-	}
+		return (ft_relative_path_cd("~", mini));
 	if (is_absolute_path(cmd[1]) == EXIT_SUCCESS)
 	{
 		if ((cmd[1][ft_strlen(cmd[1]) - 1] == '/') && (ft_strlen(cmd[1]) > 1))
@@ -45,17 +31,12 @@ char	*convert_path_to_absolute(char **cmd, t_minishell *mini)
 			result = ft_strdup(cmd[1]);
 		return (result);
 	}
-	else if ((is_relative_path(cmd[1]) == EXIT_SUCCESS) || ((ft_strlen(cmd[1]) == 1)
-			&& (cmd[1][0] == '-')) || ((ft_strlen(cmd[1]) == 1) && (cmd[1][0] == '~')))
-	{
-		result = ft_relative_path_cd(cmd[1], mini);
-		return (result);
-	}
+	else if ((is_relative_path(cmd[1]) == 0) || ((ft_strlen(cmd[1]) == 1)
+			&& (cmd[1][0] == '-')) || ((ft_strlen(cmd[1]) == 1)
+			&& (cmd[1][0] == '~')))
+		return (ft_relative_path_cd(cmd[1], mini));
 	else if (ft_isalnum(cmd[1][0]) != 0)
-	{
-		result = ft_relative_path_cd(cmd[1], mini);
-		return (result);
-	}
+		return (ft_relative_path_cd(cmd[1], mini));
 	return (NULL);
 }
 
@@ -102,6 +83,18 @@ int	update_env_cd(t_minishell *mini, char **cd)
 	return (ft_free_success(pwd, oldpwd, NULL, NULL));
 }
 
+int	chdir_error(char **cmd, char *cmd_replace)
+{
+	if (chdir(cmd_replace) == -1)
+	{
+		free(cmd_replace);
+		ft_putstr_fd("cd: ", 2);
+		perror(cmd[1]);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
 int	cd_builtin(char **cmd, t_minishell *mini)
 {
 	char	*cmd_replace;
@@ -120,13 +113,8 @@ int	cd_builtin(char **cmd, t_minishell *mini)
 		cmd_replace = ft_strdup(getenv_mini("OLDPWD", mini));
 	else
 		cmd_replace = ft_strdup(cmd[1]);
-	if (chdir(cmd_replace) == -1)
-	{
-		free(cmd_replace);
-		ft_putstr_fd("cd: ", 2);
-		perror(cmd[1]);
+	if (chdir_error(cmd, cmd_replace) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	}
 	free(cmd_replace);
 	update_env_cd(mini, cmd);
 	return (EXIT_SUCCESS);

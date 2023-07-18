@@ -92,11 +92,25 @@ int	execute_single_command(t_minishell *mini)
 	return (exit_status);
 }
 
+int	exit_process(pid_t pid)
+{
+	int	status;
+	int	exit_status;
+
+	waitpid(pid, &status, 0);
+	exit_status = WEXITSTATUS(status);
+	if (WTERMSIG(status) == SIGINT)
+		exit_status = 130;
+	if (WTERMSIG(status) == SIGQUIT)
+		exit_status = 131;
+	return (exit_status);
+}
+
+
 int	execute_several_commands(t_minishell *mini, int index)
 {
 	int		**fd;
 	int		exit_status;
-	int		status;
 	int		exit_status2;
 	pid_t	pid;
 
@@ -119,15 +133,8 @@ int	execute_several_commands(t_minishell *mini, int index)
 			create_process_fd(mini->cmd_table[index], mini, index, fd);
 		index++;
 	}
-	if (pid != 0)
-	{
-		waitpid(pid, &status, 0);
-		exit_status = WEXITSTATUS(status);
-		if (WTERMSIG(status) == SIGINT)
-			exit_status = 130;
-		if (WTERMSIG(status) == SIGQUIT)
-			exit_status = 131;
-	}
+	if (pid)
+		exit_status = exit_process(pid);
 	while (wait(NULL) != -1)
 		;
 	free_pipe(fd);
@@ -138,34 +145,26 @@ int	execute_several_commands(t_minishell *mini, int index)
 
 int	executor(t_minishell *mini)
 {
-	int	exit_status;
-	pid_t pid;
+	pid_t 	pid;
+	int 	status;
 
-	exit_status = 0;
 	if (!mini->cmd_table)
-		return (EXIT_FAILURE);
+		return (0);
 	signal_command(mini);
 	if (mini->nb_cmd == 0)
 	{
 		pid = fork();
 		if (pid == 0)
-		{
-			redirection_function(*mini, mini->redir_start);
-			exit(EXIT_SUCCESS);
-		}
+			exit(redirection_function(*mini, mini->redir_start));
 		else
-			waitpid(pid, NULL, 0);
-		return(EXIT_SUCCESS);
+		{
+			waitpid(pid, &status, 0);
+			mini->exit_status = WEXITSTATUS(status);
+		}
 	}
-	if (mini->nb_cmd == 1)
-	{
-		exit_status = execute_single_command(mini);
-		return (exit_status);
-	}
+	else if (mini->nb_cmd == 1)
+		mini->exit_status = execute_single_command(mini);
 	else
-	{
-		exit_status = execute_several_commands(mini, 0);
-		return (exit_status);
-	}
-	return (EXIT_SUCCESS);
+		mini->exit_status = execute_several_commands(mini, 0);
+	return (1);
 }

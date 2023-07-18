@@ -69,7 +69,7 @@ int	main(int argc, char **argv, char **envp)
 						print_cmd_table(&mini, mini.nb_cmd); */
  		if ((mini.error_pipe == 0 && mini.error_redir == 0)
 			&& (mini.nb_cmd > 0 || mini.redir_start || mini.redir_end))
-			mini.exit_status = executor(&mini);
+			executor(&mini);
 		else if (mini.nb_cmd != 0)
 			ft_failure("minishell: parsing error", 0, 1, 0);
 		free_mini(&mini);
