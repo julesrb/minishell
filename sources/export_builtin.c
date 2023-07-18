@@ -76,12 +76,10 @@ char	*adjust_var_env(t_minishell *mini, char *var_env, int count)
 	return (rslt);
 }
 
-int	export_with_arg(t_minishell *mini, char **cmd, int i)
+int	export_with_arg(t_minishell *mini, char **cmd, int i, char *new_var)
 {
 	t_list	*new;
-	char	*new_var;
 
-	new_var = NULL;
 	while (cmd[i] && (check_arg_export(cmd[i]) == EXIT_SUCCESS))
 	{
 		if (check_update_var(cmd[i], mini->env_mini) == EXIT_SUCCESS)
@@ -126,7 +124,7 @@ int	export_builtin(char **cmd, t_minishell *mini)
 	}
 	else
 	{
-		if (export_with_arg(mini, cmd, 1) == EXIT_SUCCESS)
+		if (export_with_arg(mini, cmd, 1, NULL) == EXIT_SUCCESS)
 			return (EXIT_SUCCESS);
 		return (EXIT_FAILURE);
 	}

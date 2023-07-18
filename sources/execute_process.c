@@ -29,9 +29,9 @@ int	**create_pipe(t_minishell *mini)
 	return (fd);
 }
 
-int		free_pipe(int **fd)
+int	free_pipe(int **fd)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (fd[i] != NULL)
@@ -40,7 +40,7 @@ int		free_pipe(int **fd)
 		i++;
 	}
 	free(fd);
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int	close_fd(int **fd)

@@ -155,18 +155,12 @@ int		ft_count_trim(char *cmd);
 int		ft_count_trim(char *cmd);
 
 // Builtin functions
-int	pwd_builtin(t_minishell *mini, char **cmd);
+int		pwd_builtin(t_minishell *mini, char **cmd);
 int		env_mini(t_minishell *mini, char **envp);
 int		env_builtin(t_minishell *mini);
 int		echo_builtin(char **cmd_split);
 int		unset_builtin(char **cmd, t_minishell *mini);
 int		exit_builtin(char **cmd, t_minishell *mini);
-
-int		input_redirection(t_minishell mini, t_redir *start);
-int		output_redirection(t_redir *end);
-int		outfile_insert(t_redir *end);
-int		infile_insert(t_minishell mini, t_redir *start);
-void	here_doc(char *limiter, t_minishell mini);
 
 //environment function
 void	deallocate_env(t_list **root);
@@ -206,15 +200,18 @@ int		close_fd(int **fd);
 //execute_main.c
 int		execute_builtin(char **cmd_split, t_minishell *mini);
 int		exec(char **cmd, char **envp, t_minishell *mini);
-int		execute_single_command(t_minishell *mini);
-int		execute_several_commands(t_minishell *mini, int index);
 int		executor(t_minishell *mini);
+int		exit_process(pid_t pid);
+
+//execute_cmd.c
+int		execute_one_cmd(t_minishell *mini);
+int		exec_more_cmd(t_minishell *mini, int index, int exit_status, pid_t pid);
 
 //cd_relativepath.c
+int		ft_tablen(char **cmd);
 char	*cd_relpath1(char *cmd, t_minishell *mini);
 char	*cd_relpath2(char *cmd, t_minishell *mini);
 char	*cd_relpath3(char *cmd, t_minishell *mini);
-char	*cd_relpath4(t_minishell *mini);
 char	*ft_relative_path_cd(char *cmd, t_minishell *mini);
 
 //cd_builtin.c
@@ -227,7 +224,7 @@ int		cd_builtin(char **cmd, t_minishell *mini);
 char	*adjust_help2(t_minishell *mini, char *start, char *end);
 char	*adjust_help1(t_minishell *mini, char *var_env, char *start, char *end);
 char	*adjust_var_env(t_minishell *mini, char *var_env, int count);
-int		export_with_arg(t_minishell *mini, char **cmd, int i);
+int		export_with_arg(t_minishell *mini, char **cmd, int i, char *new_var);
 int		export_builtin(char **cmd, t_minishell *mini);
 
 //export_utils.c
@@ -242,9 +239,22 @@ int		parser_redir_check(t_minishell *mini, char *redir, int cmd_nb);
 t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type, int *m_err);
 
 //redirection.c
-int	redirection_function_insert(t_minishell mini, t_redir *redirection);
-int	redirection_function(t_minishell mini, t_redir *redirection);
+void	here_doc(char *limiter, t_minishell mini);
+int		redirection_function(t_minishell mini, t_redir *redirection);
+int		input_redirection(t_minishell mini, t_redir *start);
+int		output_redirection(t_redir *end, int fd_outfile);
+void	exit_redir(int fd_outfile);
 
+//redirection_insert.c
+void	here_doc_insert(char *limiter, t_minishell mini);
+int		redirection_function_insert(t_minishell mini, t_redir *redirection);
+int		infile_insert(t_minishell mini, t_redir *start);
+int		outfile_insert(t_redir *end, int fd_outfile);
 
+//redirection_heredoc.c
+char	*ft_reverse_split(char **line_split, char *c);
+int		ft_strlcpy_dollar(char *str, t_minishell mini);
+char	*heredoc_convert_dollar(t_minishell mini, char *line);
+void	here_doc_put_in(char *limiter, int *fds, t_minishell mini);
 
 #endif

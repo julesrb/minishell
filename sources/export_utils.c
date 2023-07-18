@@ -105,7 +105,7 @@ char	*translate_var(t_minishell *mini, char *str)
 {
 	int		i;
 	char	*translation;
-	char *temp;
+	char	*temp;
 
 	i = 0;
 	translation = NULL;

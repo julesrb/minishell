@@ -12,6 +12,16 @@
 
 #include "minishell.h"
 
+int	ft_tablen(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i] != NULL)
+		i++;
+	return (i);
+}
+
 char	*cd_relpath1(char *cmd, t_minishell *mini)
 {
 	char	*temp1;
@@ -67,14 +77,6 @@ char	*cd_relpath3(char *cmd, t_minishell *mini)
 	return (relative_path);
 }
 
-char	*cd_relpath4(t_minishell *mini)
-{
-	char	*relative_path;
-
-	relative_path = origine_path(1, mini);
-	return (relative_path);
-}
-
 char	*ft_relative_path_cd(char *cmd, t_minishell *mini)
 {
 	char	*relative_path;
@@ -87,7 +89,7 @@ char	*ft_relative_path_cd(char *cmd, t_minishell *mini)
 	else if (ft_isalnum(cmd[0]) != 0)
 		relative_path = cd_relpath3(cmd, mini);
 	else if ((ft_strncmp(cmd, "..", 2) == 0) && ft_strlen(cmd) == 2)
-		relative_path = cd_relpath4(mini);
+		relative_path = origine_path(1, mini);
 	else if ((cmd[0] == '.') && (ft_strlen(cmd) == 1))
 		relative_path = ft_strdup(getenv_mini("PWD", mini));
 	else if ((cmd[0] == '-' && ft_strlen(cmd) == 1))
