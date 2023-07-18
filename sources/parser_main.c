@@ -137,7 +137,6 @@ int	parser_error_check(t_minishell *mini)
 		return (0);
 	}
 	return (1);
-	// Sort the ENTER error.
 }
 
 int	parser(t_minishell *mini)
