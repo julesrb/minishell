@@ -29,9 +29,9 @@ int	**create_pipe(t_minishell *mini)
 	return (fd);
 }
 
-int		free_pipe(int **fd)
+int	free_pipe(int **fd)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (fd[i] != NULL)
@@ -40,7 +40,7 @@ int		free_pipe(int **fd)
 		i++;
 	}
 	free(fd);
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int	close_fd(int **fd)
@@ -61,12 +61,12 @@ int	child_process(t_minishell *mini, int index, char **cmd, int **fd)
 {
 	if (index == 0)
 	{
-		redirection_function(*mini, mini->redir_start);
+		redirection_function(*mini, mini->redir_start, 0);
 		dup2(fd[index][1], 1);
 	}
 	else if (index == mini->nb_cmd - 1)
 	{
-		redirection_function(*mini, mini->redir_end);
+		redirection_function(*mini, mini->redir_end, 0);
 		dup2(fd[index - 1][0], 0);
 	}
 	else

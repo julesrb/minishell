@@ -15,7 +15,7 @@
 int	pwd_builtin(t_minishell *mini, char **cmd)
 {
 	t_list	*curr;
-	int i;
+	int		i;
 
 	i = 0;
 	while (cmd[i] != NULL)
@@ -23,7 +23,7 @@ int	pwd_builtin(t_minishell *mini, char **cmd)
 	if (i > 1)
 	{
 		ft_putendl_fd("pwd: too many arguments", 2);
-		return(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	}
 	curr = mini->env_mini;
 	while (ft_strncmp(curr->content, "PWD=", 4) != 0)

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirection.c                                      :+:      :+:    :+:   */
+/*   redirection_insert.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gbussier <gbussier@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/13 19:06:50 by gbussier          #+#    #+#             */
-/*   Updated: 2023/07/13 19:06:51 by gbussier         ###   ########.fr       */
+/*   Created: 2023/07/18 15:53:18 by gbussier          #+#    #+#             */
+/*   Updated: 2023/07/18 15:53:19 by gbussier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	here_doc(char *limiter, t_minishell mini)
+void	here_doc_insert(char *limiter, t_minishell mini)
 {
 	int		fds[2];
 	pid_t	pid;
@@ -28,11 +28,10 @@ void	here_doc(char *limiter, t_minishell mini)
 	{
 		wait(NULL);
 		close(fds[1]);
-		dup2(fds[0], 0);
 	}
 }
 
-int	redirection_function(t_minishell mini, t_redir *redirection)
+int	redirection_function_insert(t_minishell mini, t_redir *redirection)
 {
 	int	exit_status;
 
@@ -40,9 +39,9 @@ int	redirection_function(t_minishell mini, t_redir *redirection)
 	while (redirection != NULL)
 	{
 		if (redirection->type == 1 || redirection->type == 2)
-			exit_status = input_redirection(mini, redirection);
+			exit_status = infile_insert(mini, redirection);
 		else if (redirection->type == 3 || redirection->type == 4)
-			exit_status = output_redirection(redirection, 0);
+			exit_status = outfile_insert(redirection, 0);
 		if (exit_status == EXIT_FAILURE)
 			break ;
 		redirection = redirection->next;
@@ -50,7 +49,7 @@ int	redirection_function(t_minishell mini, t_redir *redirection)
 	return (exit_status);
 }
 
-int	input_redirection(t_minishell mini, t_redir *start)
+int	infile_insert(t_minishell mini, t_redir *start)
 {
 	int		fd_infile;
 
@@ -63,30 +62,16 @@ int	input_redirection(t_minishell mini, t_redir *start)
 		{
 			ft_putstr_fd("minishell: ", 2);
 			perror(start->file);
-			exit (EXIT_FAILURE);
-		}
-		if (dup2(fd_infile, 0) == -1)
-		{
-			perror(NULL);
 			return (EXIT_FAILURE);
 		}
 		close(fd_infile);
 	}
 	else if (start->type == 2)
-		here_doc(start->file, mini);
+		here_doc_insert(start->file, mini);
 	return (EXIT_SUCCESS);
 }
 
-void	exit_redir(int fd_outfile)
-{
-	if (fd_outfile == -1)
-	{
-		perror(NULL);
-		exit (EXIT_FAILURE);
-	}
-}
-
-int	output_redirection(t_redir *end, int fd_outfile)
+int	outfile_insert(t_redir *end, int fd_outfile)
 {
 	if (!end)
 		return (EXIT_SUCCESS);
@@ -95,17 +80,20 @@ int	output_redirection(t_redir *end, int fd_outfile)
 		if (end->type == 3)
 		{
 			fd_outfile = open(end->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-			exit_redir(fd_outfile);
+			if (fd_outfile == -1)
+			{
+				perror(NULL);
+				return (EXIT_FAILURE);
+			}
 		}
 		else if (end->type == 4)
 		{
 			fd_outfile = open(end->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
-			exit_redir(fd_outfile);
-		}
-		if (dup2(fd_outfile, 1) == -1)
-		{
-			perror(NULL);
-			return (EXIT_FAILURE);
+			if (fd_outfile == -1)
+			{
+				perror(NULL);
+				return (EXIT_FAILURE);
+			}
 		}
 		close(fd_outfile);
 	}
