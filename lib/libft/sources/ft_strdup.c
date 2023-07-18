@@ -32,15 +32,19 @@ char	*ft_strdup(char	*src)
 	char	*tab;
 	int		i;
 
-	tab = (char *)malloc(sizeof (*tab) * (ft_strlen(src) + 1));
+	tab = NULL;
 	i = 0;
-	if (!tab)
-		return (NULL);
-	while (src[i] != '\0')
+	if (src)
 	{
-		tab[i] = src[i];
-		i++;
+		tab = (char *)malloc(sizeof (*tab) * (ft_strlen(src) + 1));
+		if (!tab)
+			return (NULL);
+		while (src[i] != '\0')
+		{
+			tab[i] = src[i];
+			i++;
+		}
+		tab[i] = '\0';
 	}
-	tab[i] = '\0';
 	return (tab);
 }

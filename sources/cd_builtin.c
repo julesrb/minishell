@@ -112,7 +112,12 @@ int	cd_builtin(char **cmd, t_minishell *mini)
 	else if ((ft_strlen(cmd[1]) == 1) && (cmd[1][0] == '-'))
 		cmd_replace = ft_strdup(getenv_mini("OLDPWD", mini));
 	else
-		cmd_replace = ft_strdup(cmd[1]);
+		cmd_replace = ft_strdup(NULL);
+	if (!cmd_replace)
+	{
+		ft_putendl_fd("memory allocation failed", 2);
+		return (EXIT_FAILURE);
+	}
 	if (chdir_error(cmd, cmd_replace) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	free(cmd_replace);
