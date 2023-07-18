@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection_insert.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbussier <gbussier@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/18 15:53:18 by gbussier          #+#    #+#             */
+/*   Updated: 2023/07/18 15:53:19 by gbussier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	here_doc_insert(char *limiter, t_minishell mini)
@@ -21,7 +33,7 @@ void	here_doc_insert(char *limiter, t_minishell mini)
 
 int	redirection_function_insert(t_minishell mini, t_redir *redirection)
 {
-	int exit_status;
+	int	exit_status;
 
 	exit_status = 0;
 	while (redirection != NULL)
@@ -29,14 +41,13 @@ int	redirection_function_insert(t_minishell mini, t_redir *redirection)
 		if (redirection->type == 1 || redirection->type == 2)
 			exit_status = infile_insert(mini, redirection);
 		else if (redirection->type == 3 || redirection->type == 4)
-			exit_status = outfile_insert(redirection);
+			exit_status = outfile_insert(redirection, 0);
 		if (exit_status == EXIT_FAILURE)
-			break;
+			break ;
 		redirection = redirection->next;
 	}
 	return (exit_status);
 }
-
 
 int	infile_insert(t_minishell mini, t_redir *start)
 {
@@ -60,11 +71,8 @@ int	infile_insert(t_minishell mini, t_redir *start)
 	return (EXIT_SUCCESS);
 }
 
-int	outfile_insert(t_redir *end)
+int	outfile_insert(t_redir *end, int fd_outfile)
 {
-	int		fd_outfile;
-
-	fd_outfile = 0;
 	if (!end)
 		return (EXIT_SUCCESS);
 	if (end->type)

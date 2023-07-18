@@ -1,15 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection_heredoc.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbussier <gbussier@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/18 15:53:03 by gbussier          #+#    #+#             */
+/*   Updated: 2023/07/18 15:53:05 by gbussier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*ft_reverse_split(char **line_split, char *c)
 {
-	char *result;
-	int i;
-	char *temp;
+	char	*result;
+	int		i;
+	char	*temp;
 
 	temp = NULL;
 	i = 1;
 	result = ft_strdup(line_split[0]);
-	while(line_split[i] != NULL)
+	while (line_split[i] != NULL)
 	{
 		temp = ft_strdup(line_split[i]);
 		result = ft_strjoin(result, c);
@@ -17,7 +29,7 @@ char	*ft_reverse_split(char **line_split, char *c)
 		free(temp);
 		i++;
 	}
-	return(result);
+	return (result);
 }
 
 int	ft_strlcpy_dollar(char *str, t_minishell mini)
@@ -40,15 +52,15 @@ int	ft_strlcpy_dollar(char *str, t_minishell mini)
 		str = malloc(sizeof(char) * 1);
 		ft_strlcpy(str, (char *)"\0", 1);
 	}
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 char	*heredoc_convert_dollar(t_minishell mini, char *line)
 {
-	char	 **line_split;
+	char	**line_split;
 	char	*result;
 	char	*env_val;
-	int i;
+	int		i;
 
 	i = 0;
 	env_val = ft_strtrim(line, "\'\".");
@@ -56,7 +68,7 @@ char	*heredoc_convert_dollar(t_minishell mini, char *line)
 	if (!line_split)
 		return (NULL);
 	free(env_val);
-	while(line_split[i] != NULL)
+	while (line_split[i] != NULL)
 	{
 		if (ft_strchr(line_split[i], '$') != NULL)
 			ft_strlcpy_dollar(line_split[i], mini);
@@ -66,7 +78,6 @@ char	*heredoc_convert_dollar(t_minishell mini, char *line)
 	ft_free_success(NULL, NULL, line_split, NULL);
 	return (result);
 }
-
 
 void	here_doc_put_in(char *limiter, int *fds, t_minishell mini)
 {

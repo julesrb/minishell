@@ -34,7 +34,7 @@ void	here_doc(char *limiter, t_minishell mini)
 
 int	redirection_function(t_minishell mini, t_redir *redirection)
 {
-	int exit_status;
+	int	exit_status;
 
 	exit_status = 0;
 	while (redirection != NULL)
@@ -42,9 +42,9 @@ int	redirection_function(t_minishell mini, t_redir *redirection)
 		if (redirection->type == 1 || redirection->type == 2)
 			exit_status = input_redirection(mini, redirection);
 		else if (redirection->type == 3 || redirection->type == 4)
-			exit_status = output_redirection(redirection);
+			exit_status = output_redirection(redirection, 0);
 		if (exit_status == EXIT_FAILURE)
-			break;
+			break ;
 		redirection = redirection->next;
 	}
 	return (exit_status);
@@ -77,11 +77,17 @@ int	input_redirection(t_minishell mini, t_redir *start)
 	return (EXIT_SUCCESS);
 }
 
-int		output_redirection(t_redir *end)
+void	exit_redir(int fd_outfile)
 {
-	int		fd_outfile;
+	if (fd_outfile == -1)
+	{
+		perror(NULL);
+		exit (EXIT_FAILURE);
+	}
+}
 
-	fd_outfile = 0;
+int	output_redirection(t_redir *end, int fd_outfile)
+{
 	if (!end)
 		return (EXIT_SUCCESS);
 	if (end->type)
@@ -89,20 +95,12 @@ int		output_redirection(t_redir *end)
 		if (end->type == 3)
 		{
 			fd_outfile = open(end->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-			if (fd_outfile == -1)
-			{
-				perror(NULL);
-				exit (EXIT_FAILURE);
-			}
+			exit_redir(fd_outfile);
 		}
 		else if (end->type == 4)
 		{
 			fd_outfile = open(end->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
-			if (fd_outfile == -1)
-			{
-				perror(NULL);
-				exit (EXIT_FAILURE);
-			}
+			exit_redir(fd_outfile);
 		}
 		if (dup2(fd_outfile, 1) == -1)
 		{

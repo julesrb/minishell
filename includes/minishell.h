@@ -141,13 +141,6 @@ int		echo_builtin(char **cmd_split);
 int		unset_builtin(char **cmd, t_minishell *mini);
 int		exit_builtin(char **cmd, t_minishell *mini);
 
-
-int		input_redirection(t_minishell mini, t_redir *start);
-int		output_redirection(t_redir *end);
-int		outfile_insert(t_redir *end);
-int		infile_insert(t_minishell mini, t_redir *start);
-void	here_doc(char *limiter, t_minishell mini);
-
 //environment function
 void	deallocate_env(t_list **root);
 int		list_env_update(t_minishell *mini, char *var_update);
@@ -228,13 +221,14 @@ t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type)
 void	here_doc(char *limiter, t_minishell mini);
 int		redirection_function(t_minishell mini, t_redir *redirection);
 int		input_redirection(t_minishell mini, t_redir *start);
-int		output_redirection(t_redir *end);
+int		output_redirection(t_redir *end, int fd_outfile);
+void	exit_redir(int fd_outfile);
 
 //redirection_insert.c
 void	here_doc_insert(char *limiter, t_minishell mini);
 int		redirection_function_insert(t_minishell mini, t_redir *redirection);
 int		infile_insert(t_minishell mini, t_redir *start);
-int		outfile_insert(t_redir *end);
+int		outfile_insert(t_redir *end, int fd_outfile);
 
 //redirection_heredoc.c
 char	*ft_reverse_split(char **line_split, char *c);
