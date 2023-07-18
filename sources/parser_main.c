@@ -88,15 +88,44 @@ t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex)
 	free_llist(&split_cmd);
 	return (lex);
 }
+
+int	parser_last_token_is_pipe(t_llist *curr)
+{
+	while (curr->next != NULL)
+		curr = curr->next;
+	if (curr->content[0] == '|')
+		return (1);
+	return (0);
+}
+
+int	parser_error_pipe_check(t_minishell *mini)
+{
+	t_llist	*curr;
+
+	curr = mini->lexer_table;
+	if (curr->content[0] == '|')
+		mini->error_pipe = 1;
+	if (parser_last_token_is_pipe(curr) == 1)
+		mini->error_pipe = 1;
+	while (curr->next != NULL)
+	{
+		if (curr->content[0] == '|' && curr->next->content[0] == '|')
+			mini->error_pipe = 1;
+		curr = curr->next;
+	}
+	return (1);
+}
+
 int parser_error_check(t_minishell *mini)
 {
+	parser_error_pipe_check(mini);
 	if (mini->error_pipe == 1)
 		ft_failure("minishell: pipe error", 0, 1, 0);
 	if (mini->error_redir == 1)
 		ft_failure("minishell: redirection error", 0, 1, 0);
 	if (mini->nb_cmd == 0 && !mini->redir_start && !mini->redir_end)
 		ft_failure("minishell: parsing error", 0, 1, 0);
-	return (0);
+	return (1);
 	// Sort the ENTER error.
 }
 
@@ -106,23 +135,22 @@ int	parser(t_minishell *mini)
 	t_llist	*lexer;
 
 	cmd = 0;
+	if (mini->error == 1) // do i pass it to main ?
+		return (0);
+	if (!parser_error_check(mini))
+		return (1);
 	lexer = mini->lexer_table;
-	if (mini->error_pipe == 0)
+	MALLOC_OR_RETURN(mini->cmd_table, sizeof (char **) * (mini->nb_cmd + 1));
+	while (lexer != NULL)
 	{
-		mini->nb_cmd = mini->pipe + 1;
-		mini->cmd_table = (char ***)malloc
-			(sizeof (char **) * (mini->nb_cmd + 1));
-		if (!mini->cmd_table)
-			return (0);
-		while (lexer != NULL)
-		{
-			lexer = parser_build_command(mini, cmd, lexer);
-			cmd++;
-		}
-		if (mini->cmd_table[0][0][0] == 0)
-			mini->nb_cmd = 0;
-		mini->cmd_table[cmd] = NULL;
+		lexer = parser_build_command(mini, cmd, lexer);
+		cmd++;
 	}
+	if (mini->cmd_table[0][0][0] == 0)
+		mini->nb_cmd = 0;
+	mini->cmd_table[cmd] = NULL;
 	parser_error_check(mini);
+	if (!mini->cmd_table)
+		mini->error = 1;
 	return (1);
 }
