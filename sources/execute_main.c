@@ -84,9 +84,6 @@ int	executor(t_minishell *mini)
 			waitpid(pid, &status, 0);
 			mini->exit_status = WEXITSTATUS(status);
 		}
-		else
-			waitpid(pid, NULL, 0);
-		return(EXIT_SUCCESS);
 	}
 	else if (mini->nb_cmd == 1)
 		mini->exit_status = execute_one_cmd(mini);
