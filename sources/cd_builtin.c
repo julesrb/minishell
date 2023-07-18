@@ -75,7 +75,17 @@ int	update_env_cd(t_minishell *mini, char **cd)
 	char	*pwd;
 
 	pwd = convert_path_to_absolute(cd, mini);
+	if (!pwd)
+	{
+		ft_putendl_fd("memory allocation failed", 2);
+		return (EXIT_FAILURE);
+	}
 	oldpwd = ft_strdup(getenv_mini("PWD", mini));
+	if (!oldpwd)
+	{
+		ft_putendl_fd("memory allocation failed", 2);
+		return (EXIT_FAILURE);
+	}
 	if (update_env_mini(mini, "OLDPWD", oldpwd) == EXIT_FAILURE)
 		return (ft_free_fail(pwd, oldpwd, NULL, NULL));
 	if (update_env_mini(mini, "PWD", pwd) == EXIT_FAILURE)
@@ -121,6 +131,7 @@ int	cd_builtin(char **cmd, t_minishell *mini)
 	if (chdir_error(cmd, cmd_replace))
 		return (EXIT_FAILURE);
 	free(cmd_replace);
-	update_env_cd(mini, cmd);
-	return (EXIT_SUCCESS);
+	if (update_env_cd(mini, cmd) == EXIT_SUCCESS)
+		return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }

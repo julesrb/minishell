@@ -126,6 +126,7 @@ int	export_builtin(char **cmd, t_minishell *mini)
 	{
 		if (export_with_arg(mini, cmd, 1, NULL) == EXIT_SUCCESS)
 			return (EXIT_SUCCESS);
+		ft_putendl_fd("memory allocation failes", 2);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
