@@ -82,7 +82,7 @@ int	export_with_arg(t_minishell *mini, char **cmd, int i, char *new_var)
 
 	while (cmd[i] && (check_arg_export(cmd[i]) == EXIT_SUCCESS))
 	{
-		if (check_update_var(cmd[i], mini->env_mini) == EXIT_SUCCESS)
+		if (check_update_var(cmd[i], mini->env_mini))
 		{
 			new_var = adjust_var_env(mini, cmd[i], 0);
 			if (list_env_update(mini, new_var) == EXIT_FAILURE)
@@ -126,7 +126,7 @@ int	export_builtin(char **cmd, t_minishell *mini)
 	{
 		if (export_with_arg(mini, cmd, 1, NULL) == EXIT_SUCCESS)
 			return (EXIT_SUCCESS);
-		ft_putendl_fd("memory allocation failes", 2);
+		ft_putendl_fd("memory allocation failed", 2);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
