@@ -47,10 +47,10 @@ char	*cd_relpath2(char *cmd, t_minishell *mini)
 
 	temp1 = ft_strtrim(cmd, "./");
 	count_trim = ft_count_trim(cmd);
-	temp2 = origine_path(count_trim, mini);
+	temp2 = origine_path(count_trim, mini, 0, 0);
 	temp3 = ft_strjoin(temp2, (char *)"/");
 	temp2 = ft_strjoin(temp3, temp1);
-	temp3 = ft_strtrim(temp2, (char *)" /");
+	temp3 = ft_strtrim(temp2, " /");
 	ft_free_success(temp1, temp2, NULL, NULL);
 	return (temp3);
 }
@@ -65,7 +65,7 @@ char	*cd_relpath3(char *cmd, t_minishell *mini)
 	temp3 = NULL;
 	relative_path = NULL;
 	temp1 = ft_strtrim(cmd, " /");
-	temp2 = origine_path(0, mini);
+	temp2 = origine_path(0, mini, 0, 0);
 	if (ft_strlen(getenv_mini("PWD", mini)) == 1)
 		relative_path = ft_strjoin(temp2, temp1);
 	else
@@ -89,12 +89,14 @@ char	*ft_relative_path_cd(char *cmd, t_minishell *mini)
 	else if (ft_isalnum(cmd[0]) != 0)
 		relative_path = cd_relpath3(cmd, mini);
 	else if ((ft_strncmp(cmd, "..", 2) == 0) && ft_strlen(cmd) == 2)
-		relative_path = origine_path(1, mini);
+		relative_path = origine_path(1, mini, 0, 0);
 	else if ((cmd[0] == '.') && (ft_strlen(cmd) == 1))
 		relative_path = ft_strdup(getenv_mini("PWD", mini));
 	else if ((cmd[0] == '-' && ft_strlen(cmd) == 1))
 		relative_path = ft_strdup(getenv_mini("OLDPWD", mini));
 	else if ((cmd[0] == '~' && ft_strlen(cmd) == 1))
 		relative_path = ft_strdup(getenv_mini("HOME", mini));
+	else if ((cmd[0] == '.') && (ft_strlen(cmd) > 1))
+		relative_path = cd_relpath3(cmd, mini);
 	return (relative_path);
 }

@@ -138,21 +138,22 @@ int		token_yield_pipe(char *token, t_minishell *mini);
 int		token_yield_word(char *token, t_minishell *mini);
 int		token_yield_var(char *token, t_minishell *mini);
 
-// Path related functions
+// find_path.c
 char	*ft_access_path(char **cmd, int i, t_minishell *mini);
 char	**ft_access_list(char **cmd, t_minishell *mini);
 char	**ft_access_list_help(char *cmd_2, char **path_from_envp, int len, int i);
-void	ft_free_tab(char **tab);
-void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2);
-int		ft_free(char *str1, char *str2, char **tab1, char **tab2);
+
+//find_executable.c
 char	*find_executable(char **cmd, t_minishell *mini);
 int		is_absolute_path(char *path);
 int		is_relative_path(char *path);
-char	*ft_relative_path(char *cmd, t_minishell *mini);
-char	*origine_path(int count_trim, t_minishell *mini);
 char	*getenv_mini(char *env_mini, t_minishell *mini);
 int		ft_count_trim(char *cmd);
-int		ft_count_trim(char *cmd);
+
+//find_executable2.c
+char	*ft_relative_path(char *cmd, t_minishell *mini, char *temp1, char *temp2);
+char	*origine_path(int count_trim, t_minishell *mini, int j, int nb);
+
 
 // Builtin functions
 int		pwd_builtin(t_minishell *mini, char **cmd);
@@ -174,16 +175,17 @@ void	signal_command_handler(int s);
 
 
 //----- free_functions.c
-void	free_mini(t_minishell *mini);
 void	free_null(void *ptr);
+void	free_mini(t_minishell *mini);
+int		ft_free_fail(char *str1, char *str2, char **tab1, char **tab2);
+int		ft_free_success(char *str1, char *str2, char **tab1, char **tab2);
+
+//----- free_functions2.c
 void	free_llist(t_llist **head);
 void	free_redir(t_redir **head);
 void	ft_free_tab(char **tab);
-int		ft_free(char *str1, char *str2, char **tab1, char **tab2);
-int		ft_free_success(char *str1, char *str2, char **tab1, char **tab2);
-int		ft_free_fail(char *str1, char *str2, char **tab1, char **tab2);
 void	*ft_free_pointer(char *str1, char *str2, char **tab1, char **tab2);
-void	ft_free_exit(char *str1, char *str2, char **tab1, char **tab2);
+void	free_tab_3d(char ***arr);
 
 // execute_utils.c
 int		max_length(const char *str1, const char *str2);
@@ -218,7 +220,7 @@ char	*ft_relative_path_cd(char *cmd, t_minishell *mini);
 char	*convert_path_to_absolute(char **cmd, t_minishell *mini);
 int		update_env_mini(t_minishell *mini, char *up_var, char *new_value);
 int		update_env_cd(t_minishell *mini, char **cd);
-int		cd_builtin(char **cmd, t_minishell *mini);
+int		cd_builtin(char **cmd, t_minishell *mini, char *cmd_replace);
 
 //export_builtin.c
 char	*adjust_help2(t_minishell *mini, char *start, char *end);

@@ -19,7 +19,7 @@ int	execute_builtin(char **cmd, t_minishell *mini)
 	else if (!ft_strncmp(cmd[0], "env", max_length("env", cmd[0])))
 		return (env_builtin(mini));
 	else if (!ft_strncmp(cmd[0], "cd", max_length("cd", cmd[0])))
-		return (cd_builtin(cmd, mini));
+		return (cd_builtin(cmd, mini, NULL));
 	else if (!ft_strncmp(cmd[0], "export", max_length("export", cmd[0])))
 		return (export_builtin(cmd, mini));
 	else if (!ft_strncmp(cmd[0], "unset", max_length("unset", cmd[0])))
@@ -45,7 +45,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(cmd[0], 2);
 			ft_putendl_fd(": command not found", 2);
-			ft_free(path, NULL, NULL, NULL);
+			ft_free_success(path, NULL, NULL, NULL);
 			return (127);
 		}
 	}

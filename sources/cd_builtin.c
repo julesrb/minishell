@@ -105,9 +105,8 @@ int	chdir_error(char **cmd, char *cmd_replace)
 	return (0);
 }
 
-int	cd_builtin(char **cmd, t_minishell *mini)
+int	cd_builtin(char **cmd, t_minishell *mini, char *cmd_replace)
 {
-	char	*cmd_replace;
 	int		tab_len;
 
 	tab_len = ft_tablen(cmd);
@@ -116,7 +115,6 @@ int	cd_builtin(char **cmd, t_minishell *mini)
 		ft_putstr_fd("cd: string not in pwd: ", 2);
 		ft_putendl_fd(cmd[1], 2);
 	}
-	cmd_replace = NULL;
 	if ((tab_len == 1) || ((cmd[1][0] == '~') && (ft_strlen(cmd[1]) == 1)))
 		cmd_replace = ft_strdup(getenv_mini("HOME", mini));
 	else if ((ft_strlen(cmd[1]) == 1) && (cmd[1][0] == '-'))
