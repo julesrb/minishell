@@ -53,7 +53,7 @@ int	print_lst(t_llist *lst)
 	ft_printf("\n");
 	while (curr != NULL)
 	{
-		ft_printf("token %i = %s;\n", i, curr->content);
+		ft_printf("token %i = %s;\n", i, curr->str);
 		curr = curr->next;
 		i++;
 	}

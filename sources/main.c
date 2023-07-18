@@ -67,7 +67,8 @@ int	main(int argc, char **argv, char **envp)
 			ft_failure("parser alloc failed", 0, 1, 0);
  						/* print_t_mini(&mini);
 						print_cmd_table(&mini, mini.nb_cmd); */
-		executor(&mini);
+		/* if (mini.error == 0)
+			executor(&mini); */
 		free_mini(&mini);
 	}
 	return (EXIT_SUCCESS);

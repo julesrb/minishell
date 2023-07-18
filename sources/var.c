@@ -21,20 +21,20 @@ int	quote_translation(t_minishell *mini, t_llist *curr)
 	i = 0;
 	flag_translation = 0;
 	(void)mini;
-	quote = curr->content[0];
+	quote = curr->str[0];
 	if (quote == 34)
 		flag_translation = 1;
-	while (curr->content[i] != 0)
+	while (curr->str[i] != 0)
 	{
-		curr->content[i] = curr->content[i + 1];
-		if (curr->content[i] == quote)
-			curr->content[i] = 0;
+		curr->str[i] = curr->str[i + 1];
+		if (curr->str[i] == quote)
+			curr->str[i] = 0;
 		i++;
 	}
 	if (flag_translation == 1)
 	{
-		if (ft_strchr(curr->content, '$') != NULL)
-			curr->content = add_var_translation(mini, curr->content);
+		if (ft_strchr(curr->str, '$') != NULL)
+			curr->str = add_var_translation(mini, curr->str);
 	}
 	return (EXIT_SUCCESS);
 }

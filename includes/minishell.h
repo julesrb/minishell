@@ -37,16 +37,30 @@
 		i = i + a; \
 	} while(0)
 
-# define MALLOC_OR_RETURN(ptr, size) \
+# define MALLOC_OR_ZERO(ptr, size) \
 	do { \
 		(ptr) = malloc(size); \
 		if ((ptr) == NULL) \
 			return (0); \
+	} while (0)
+
+# define MALLOC_OR_NULL(ptr, size) \
+	do { \
+		(ptr) = malloc(size); \
+		if ((ptr) == NULL) \
+			return (NULL); \
+	} while (0)
+
+# define FT_STRDUP_OR_NULL(ptr, str) \
+	do { \
+		(ptr) = ft_strdup(str); \
+		if ((ptr) == NULL) \
+			return (NULL); \
 	} while (0) 
 
 typedef struct s_llist
 {
-	char			*content;
+	char			*str;
 	struct s_llist	*next;
 }t_llist;
 
@@ -225,7 +239,7 @@ char	*translate_var(t_minishell *mini, char *str);
 
 //parser_redir.c
 int		parser_redir_check(t_minishell *mini, char *redir, int cmd_nb);
-t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type);
+t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type, int *m_err);
 
 //redirection.c
 int	redirection_function_insert(t_minishell mini, t_redir *redirection);

@@ -53,14 +53,14 @@ int	parser_redir_add_lst(t_minishell *mini, int type, char *file, int cmd_n)
 	return (1);
 }
 
-t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type)
+t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type, int *m_err)
 {
 	t_llist	*curr;
 	int		i;
 
 	i = 0;
 	curr = lex;
-	type = parser_redir_check(mini, curr->content, cmd_n);
+	type = parser_redir_check(mini, curr->str, cmd_n);
 	if (type == -1)
 	{
 		mini->error_redir = 1;
@@ -70,15 +70,16 @@ t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type)
 		return (NULL);
 	else
 		curr = curr->next;
-	while (curr->content[i] != 0)
+	while (curr->str[i] != 0)
 	{
-		if (ft_isalnum(curr->content[i]) == 0 && curr->content[i] != '.')
+		if (ft_isalnum(curr->str[i]) == 0 && curr->str[i] != '.')
 			mini->error_redir = 1;
 		i++;
 	}
 	if (mini->error_redir == 0)
 	{
-		parser_redir_add_lst(mini, type, curr->content, cmd_n);
+		if (!parser_redir_add_lst(mini, type, curr->str, cmd_n))
+			*m_err = 1;
 		return (curr->next);
 	}
 	return (curr);

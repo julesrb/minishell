@@ -17,7 +17,7 @@ int	add_to_redir(t_redir **root, int type, char *str)
 	t_redir	*new_node;
 	t_redir	*curr;
 
-	MALLOC_OR_RETURN(new_node, sizeof(t_redir));
+	MALLOC_OR_ZERO(new_node, sizeof(t_redir));
 	new_node->next = NULL;
 	new_node->type = type;
 	new_node->file = str;
@@ -38,11 +38,12 @@ int	add_to_list(t_llist **root, char *str)
 	t_llist	*new_node;
 	t_llist	*curr;
 
-	MALLOC_OR_RETURN(new_node, sizeof(t_llist));
+	//MALLOC_OR_ZERO(new_node, sizeof(t_llist));
+	new_node = malloc(sizeof(t_llist));
 	if (!str)
 		return (0);
 	new_node->next = NULL;
-	new_node->content = str;
+	new_node->str = str;
 	if (*root == NULL)
 	{
 		*root = new_node;
