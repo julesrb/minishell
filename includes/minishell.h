@@ -29,13 +29,20 @@
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1
 
-#define PROCESS_TOKEN(func, input, i, mini) \
+# define PROCESS_TOKEN(func, input, i, mini) \
 	do { \
 		int a = func(&(input[i]), mini); \
 		if (a == -1) \
 			return (0); \
 		i = i + a; \
 	} while(0)
+
+# define MALLOC_OR_RETURN(ptr, size) \
+	do { \
+		(ptr) = malloc(size); \
+		if ((ptr) == NULL) \
+			return (0); \
+	} while (0) 
 
 typedef struct s_llist
 {

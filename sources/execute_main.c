@@ -146,12 +146,10 @@ int	execute_several_commands(t_minishell *mini, int index)
 
 int	executor(t_minishell *mini)
 {
-	int	exit_status;
 	pid_t pid;
 
-	exit_status = 0;
-	if (!mini->cmd_table)
-		return (EXIT_FAILURE);
+	if (mini->error == 1)
+		return (0);
 	signal_command(mini);
 	if (mini->nb_cmd == 0)
 	{
@@ -163,18 +161,11 @@ int	executor(t_minishell *mini)
 		}
 		else
 			waitpid(pid, NULL, 0);
-		return(EXIT_SUCCESS);
+		return(1);
 	}
 	if (mini->nb_cmd == 1)
-	{
-		// can we asign it to mini->exist_status directly ?
-		exit_status = execute_single_command(mini);
-		return (exit_status);
-	}
+		mini->exit_status = execute_single_command(mini);
 	else
-	{
-		exit_status = execute_several_commands(mini, 0);
-		return (exit_status);
-	}
-	return (EXIT_SUCCESS);
+		mini->exit_status = execute_several_commands(mini, 0);
+	return (1);
 }

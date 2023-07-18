@@ -29,9 +29,7 @@ int	token_yield_word(char *token, t_minishell *mini)
 		if (token[len] != 0)
 			len++;
 	}
-	str = malloc(sizeof (char) * (len + 1));
-	if (!str)
-		return (0);
+	MALLOC_OR_RETURN(str, sizeof (char) * (len + 1));
 	ft_strlcpy(str, token, len + 1);
 	if (!add_to_list(&mini->lexer_table, str))
 		return (0);
@@ -50,9 +48,7 @@ int	token_yield_quote(char *token, t_minishell *mini)
 	len = i;
 	if (token[i] == token[0])
 		len++;
-	str = malloc(sizeof (char) * (len + 1));
-	if (!str)
-		return (0);
+	MALLOC_OR_RETURN(str, sizeof (char) * (len + 1));
 	ft_strlcpy(str, token, len + 1);
 	if (!add_to_list(&mini->lexer_table, str))
 		return (0);
@@ -68,9 +64,7 @@ int	token_yield_var(char *token, t_minishell *mini)
 	len = 0;
 	while (token[len] != ' ' && token[len] != 0)
 		len++;
-	str = malloc(sizeof (char) * (len + 1));
-	if (!str)
-		return (0);
+	MALLOC_OR_RETURN(str, sizeof (char) * (len + 1));
 	i = 0;
 	ft_strlcpy(str, token, len + 1);
 	if (!add_to_list(&mini->lexer_table, str))
@@ -83,9 +77,7 @@ int	token_yield_pipe(char *token, t_minishell *mini)
 	char	*str;
 
 	mini->pipe += 1;
-	str = malloc(sizeof (char) * (2));
-	if (!str)
-		return (0);
+	MALLOC_OR_RETURN(str, sizeof (char) * (2));
 	ft_strlcpy(str, token, 2);
 	if (!add_to_list(&mini->lexer_table, str))
 		return (0);
@@ -98,9 +90,7 @@ int	token_yield_redir(char *redir, t_minishell *mini)
 
 	if (redir[0] != redir[1])
 	{
-		str = malloc(sizeof (char) * (2));
-		if (!str)
-			return (0);
+		MALLOC_OR_RETURN(str, sizeof (char) * (2));
 		ft_strlcpy(str, redir, 2);
 		if (!add_to_list(&mini->lexer_table, str))
 			return (0);
@@ -108,9 +98,7 @@ int	token_yield_redir(char *redir, t_minishell *mini)
 	}
 	if (redir[0] == redir[1])
 	{
-		str = malloc(sizeof (char) * (3));
-		if (!str)
-			return (0);
+		MALLOC_OR_RETURN(str, sizeof (char) * (3));
 		ft_strlcpy(str, redir, 3);
 		if (!add_to_list(&mini->lexer_table, str))
 			return (0);
