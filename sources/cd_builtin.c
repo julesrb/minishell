@@ -90,9 +90,9 @@ int	chdir_error(char **cmd, char *cmd_replace)
 		free(cmd_replace);
 		ft_putstr_fd("cd: ", 2);
 		perror(cmd[1]);
-		return (EXIT_FAILURE);
+		return (1);
 	}
-	return (EXIT_SUCCESS);
+	return (0);
 }
 
 int	cd_builtin(char **cmd, t_minishell *mini)
@@ -118,7 +118,7 @@ int	cd_builtin(char **cmd, t_minishell *mini)
 		ft_putendl_fd("memory allocation failed", 2);
 		return (EXIT_FAILURE);
 	}
-	if (chdir_error(cmd, cmd_replace) == EXIT_FAILURE)
+	if (chdir_error(cmd, cmd_replace))
 		return (EXIT_FAILURE);
 	free(cmd_replace);
 	update_env_cd(mini, cmd);
