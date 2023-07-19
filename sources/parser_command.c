@@ -64,48 +64,6 @@ t_llist	*parser_pieces(t_minishell *mini, t_llist *lex, int cmd)
 	return (split_cmd);
 }
 
-/* t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex)
-{
-	t_llist	*split_cmd;
-
-	split_cmd = NULL;
-	if (lex->str[0] == '|')
-		lex = lex->next;
-	split_cmd = parser_pieces(mini, lex, cmd);
-	mini->cmd_table[cmd] = parser_malloc_command(mini, split_cmd);
-	if (!mini->cmd_table[cmd])
-		mini->error_malloc = 1;
-	free_llist(&split_cmd);
-	return (lex);
-}
-
-t_llist	*parser_pieces(t_minishell *mini, t_llist *lex, int cmd)
-{
-	t_llist	*split_cmd;
-
-	split_cmd = NULL;
-	while (lex != NULL && lex->str[0] != '|')
-	{
-		if (lex->str[0] == '<' || lex->str[0] == '>')
-			lex = parser_redir_file(mini, lex, cmd, 0);
-		if (lex != NULL && lex->str[0] == '$')
-			split_cmd = parser_var_split(mini, &lex, split_cmd);
-		if (lex != NULL && (lex->str[0] == 34 || lex->str[0] == 39))
-			quote_translation(mini, lex);
-		if (lex != NULL && lex->str[0] != '|'
-			&& lex->str[0] != '<' && lex->str[0] != '>')
-		{
-			if (!add_to_list(&split_cmd, ft_strdup(lex->str)))
-			{
-				mini->error_malloc = 1;
-				return (NULL);
-			}
-			lex = lex->next;
-		}
-	}
-	return (split_cmd);
-}
- */
 t_llist	*parser_build_cmd(t_minishell *mini, int i, t_llist *lex, t_llist *cmd)
 {
 	if (lex->str[0] == '|')
