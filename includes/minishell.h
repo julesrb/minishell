@@ -272,4 +272,8 @@ char	*var_find_translation(t_list *curr, char *var, char *translation);
 char	*var_translation(t_minishell *mini, char *var);
 char	*add_var_translation(t_minishell *mini, char *str);
 
+//----- utils_add.c
+int		add_to_redir(t_redir **root, int type, char *str);
+int		add_to_list(t_llist **root, char *str);
+
 #endif
