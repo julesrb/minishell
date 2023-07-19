@@ -21,54 +21,36 @@ int	lexer_iswordstart(char c)
 		return (0);
 }
 
-int	lexer(t_minishell *mini)
+int	tokfun(int *i, int *a, int (*fun)(char *, t_minishell *), t_minishell *mini)
 {
-	int	i;
-	int a;
+	*a = fun(&(mini->input[*i]), mini);
+	if (*a == -1)
+		return (0);
+	*i = *i + *a;
+	return (1);
+}
 
-	i = 0;
-	a = 0;
+int	lexer(t_minishell *mini, int i, int a, int b)
+{
 	if (mini->error == 1)
 		return (1);
 	while (mini->input[i] != 0)
 	{
 		if (mini->input[i] == '<' || mini->input[i] == '>')
-		{
-			a = token_yield_redir(&(mini->input[i]), mini);
-			if (a == -1)
-				return 0;
-			i = i + a;
-		}
-		else if (ft_isalnum(mini->input[i]) != 0 || lexer_iswordstart(mini->input[i]) == 1)
-		{
-			a = token_yield_word(&(mini->input[i]), mini);
-			if (a == -1)
-				return 0;
-			i = i + a;
-		}
+			b = tokfun(&i, &a, token_yield_redir, mini);
+		else if (ft_isalnum(mini->input[i]) != 0
+			|| lexer_iswordstart(mini->input[i]) == 1)
+			b = tokfun(&i, &a, token_yield_word, mini);
 		else if (mini->input[i] == 39 || mini->input[i] == 34)
-		{
-			a = token_yield_quote(&(mini->input[i]), mini);
-			if (a == -1)
-				return 0;
-			i = i + a;
-		}
+			b = tokfun(&i, &a, token_yield_quote, mini);
 		else if (mini->input[i] == '$')
-		{
-			a = token_yield_var(&(mini->input[i]), mini);
-			if (a == -1)
-				return 0;
-			i = i + a;
-		}
+			b = tokfun(&i, &a, token_yield_var, mini);
 		else if (mini->input[i] == '|')
-		{
-			a = token_yield_pipe(&(mini->input[i]), mini);
-			if (a == -1)
-				return 0;
-			i = i + a;
-		}
+			b = tokfun(&i, &a, token_yield_pipe, mini);
 		else
 			i++;
+		if (b == 0)
+			return (0);
 	}
 	if (!mini->lexer_table)
 		mini->error = 1;
