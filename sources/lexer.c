@@ -24,23 +24,49 @@ int	lexer_iswordstart(char c)
 int	lexer(t_minishell *mini)
 {
 	int	i;
+	int a;
 
 	i = 0;
+	a = 0;
 	if (mini->error == 1)
 		return (1);
 	while (mini->input[i] != 0)
 	{
 		if (mini->input[i] == '<' || mini->input[i] == '>')
-			PROCESS_TOKEN(token_yield_redir, mini->input, i, mini);
-		else if (ft_isalnum(mini->input[i]) != 0
-			|| lexer_iswordstart(mini->input[i]) == 1)
-			PROCESS_TOKEN(token_yield_word, mini->input, i, mini);
+		{
+			a = token_yield_redir(&(mini->input[i]), mini);
+			if (a == -1)
+				return 0;
+			i = i + a;
+		}
+		else if (ft_isalnum(mini->input[i]) != 0 || lexer_iswordstart(mini->input[i]) == 1)
+		{
+			a = token_yield_word(&(mini->input[i]), mini);
+			if (a == -1)
+				return 0;
+			i = i + a;
+		}
 		else if (mini->input[i] == 39 || mini->input[i] == 34)
-			PROCESS_TOKEN(token_yield_quote, mini->input, i, mini);
+		{
+			a = token_yield_quote(&(mini->input[i]), mini);
+			if (a == -1)
+				return 0;
+			i = i + a;
+		}
 		else if (mini->input[i] == '$')
-			PROCESS_TOKEN(token_yield_var, mini->input, i, mini);
-		else if (mini->input[i] == '|' )
-			PROCESS_TOKEN(token_yield_pipe, mini->input, i, mini);
+		{
+			a = token_yield_var(&(mini->input[i]), mini);
+			if (a == -1)
+				return 0;
+			i = i + a;
+		}
+		else if (mini->input[i] == '|')
+		{
+			a = token_yield_pipe(&(mini->input[i]), mini);
+			if (a == -1)
+				return 0;
+			i = i + a;
+		}
 		else
 			i++;
 	}
