@@ -122,7 +122,8 @@ int		token_yield_var(char *token, t_minishell *mini);
 // find_path.c
 char	*ft_access_path(char **cmd, int i, t_minishell *mini);
 char	**ft_access_list(char **cmd, t_minishell *mini);
-char	**ft_access_list_help(char *cmd_2, char **path_from_envp, int len, int i);
+char	**ft_access_list_help(char *cmd_2, char **path_from_envp,
+			int len, int i);
 
 //find_executable.c
 char	*find_executable(char **cmd, t_minishell *mini);
@@ -132,7 +133,8 @@ char	*getenv_mini(char *env_mini, t_minishell *mini);
 int		ft_count_trim(char *cmd);
 
 //find_executable2.c
-char	*ft_relative_path(char *cmd, t_minishell *mini, char *temp1, char *temp2);
+char	*ft_relative_path(char *cmd, t_minishell *mini,
+			char *temp1, char *temp2);
 char	*origine_path(int count_trim, t_minishell *mini, int j, int nb);
 
 // Builtin functions
