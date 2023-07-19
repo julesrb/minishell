@@ -95,6 +95,11 @@ int		prompt(t_minishell *mini);
 //----- prompt.c
 int		prompt(t_minishell *mini);
 
+//----- lexer.c
+int	lexer_iswordstart(char c);
+int	tokfun(int *i, int *a, int (*fun)(char *, t_minishell *), t_minishell *mini);
+int	lexer(t_minishell *mini, int i, int a, int b);
+
 //----- parser_command.c
 char	**parser_malloc_command(t_minishell *mini, t_llist *cmd_list);
 t_llist	*parser_build_cmd(t_minishell *mini, int i, t_llist *lex, t_llist *cmd);
@@ -102,6 +107,7 @@ int		parser_empty_cmd(t_minishell *mini);
 
 //----- parser_main.c
 t_llist	*parser_var_split(t_minishell *mini, t_llist **lex, t_llist *split_cmd);
+int		parser(t_minishell *mini);
 int		parser_error_check(t_minishell *mini);
 
 //----- utils.c
@@ -136,7 +142,6 @@ char	*ft_relative_path(char *cmd, t_minishell *mini,
 char	*origine_path(int count_trim, t_minishell *mini, int j, int nb);
 
 //----- builtin functions.c
-//----- Builtin functions
 int		pwd_builtin(t_minishell *mini, char **cmd);
 int		env_mini(t_minishell *mini, char **envp);
 int		env_builtin(t_minishell *mini);
