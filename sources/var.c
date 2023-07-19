@@ -33,7 +33,7 @@ int	quote_translation(t_minishell *mini, t_llist *curr)
 	}
 	if (flag_translation == 1)
 	{
-		if (ft_strchr(curr->str, '$') != NULL)
+		while (ft_strchr(curr->str, '$') != NULL)
 			curr->str = add_var_translation(mini, curr->str);
 	}
 	return (EXIT_SUCCESS);
@@ -84,6 +84,7 @@ char	*add_var_translation(t_minishell *mini, char *str)
 {
 	int		i;
 	char	*translation;
+	char	*end;
 
 	i = 0;
 	translation = NULL;
@@ -94,7 +95,8 @@ char	*add_var_translation(t_minishell *mini, char *str)
 	i++;
 	while (str[i] != 0 && str[i] != ' ')
 		i++;
-	translation = ft_strjoin(translation, &str[i]);
-	translation = ft_strjoin(str, translation);
+	end = ft_strjoin(translation, &str[i]);
+	translation = ft_strjoin(str, end);
+	free(end);
 	return (translation);
 }

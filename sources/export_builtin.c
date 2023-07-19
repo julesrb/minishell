@@ -24,9 +24,10 @@ char	*adjust_help2(t_minishell *mini, char *start, char *end)
 	temp_trim = ft_strtrim(end, (const char *)"\"");
 	if (ft_strrchr(temp_trim, '$') != NULL)
 	{
-		temp = translate_var(mini, temp_trim);
-		rslt = ft_strjoin(start, temp);
-		free(temp);
+		while (ft_strchr(temp_trim, '$') != NULL)
+			temp_trim = add_var_translation(mini, temp_trim);
+		rslt = ft_strjoin(start, temp_trim);
+		free(temp_trim);
 	}
 	else
 	{
