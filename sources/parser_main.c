@@ -95,7 +95,7 @@ int	parser(t_minishell *mini)
 		return (0);
 	while (lexer != NULL)
 	{
-		lexer = parser_build_command(mini, cmd, lexer);
+		lexer = parser_build_cmd(mini, cmd, lexer, NULL);
 		if (mini->error_malloc == 1)
 			return (0);
 		cmd++;

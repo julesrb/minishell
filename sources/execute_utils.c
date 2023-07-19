@@ -48,7 +48,8 @@ int	is_env_function(char **cmd)
 {
 	if (ft_strncmp(cmd[0], "cd", max_length("cd", cmd[0])) == 0)
 		return (1);
-	else if ((ft_strncmp(cmd[0], "export", max_length("export", cmd[0])) == 0) && ft_tablen(cmd) > 1)
+	else if ((ft_strncmp(cmd[0], "export", max_length("export", cmd[0])) == 0)
+		&& ft_tablen(cmd) > 1)
 		return (1);
 	else if (ft_strncmp(cmd[0], "unset", max_length("unset", cmd[0])) == 0)
 		return (1);

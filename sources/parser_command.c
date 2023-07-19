@@ -37,40 +37,101 @@ char	**parser_malloc_command(t_minishell *mini, t_llist *cmd_list)
 	return (cmd_arr);
 }
 
-t_llist	*parser_pieces(t_minishell *mini, t_llist *lex, t_llist	*l_cmd, int cmd)
+t_llist	*parser_pieces(t_minishell *mini, t_llist *lex, int cmd)
 {
-	if (lex->str[0] == '<' || lex->str[0] == '>')
-		lex = parser_redir_file(mini, lex, cmd, 0);
-	if (lex != NULL && lex->str[0] == '$')
-		l_cmd = parser_var_split(mini, &lex, l_cmd);
-	if (lex != NULL && (lex->str[0] == 34 || lex->str[0] == 39))
-		quote_translation(mini, lex);
-	if (lex != NULL && lex->str[0] != '|'
-		&& lex->str[0] != '<' && lex->str[0] != '>')
+	t_llist	*split_cmd;
+
+	split_cmd = NULL;
+	while (lex != NULL && lex->str[0] != '|')
 	{
-		if (!add_to_list(&l_cmd, ft_strdup(lex->str)))
+		if (lex->str[0] == '<' || lex->str[0] == '>')
+			lex = parser_redir_file(mini, lex, cmd, 0);
+		if (lex != NULL && lex->str[0] == '$')
+			split_cmd = parser_var_split(mini, &lex, split_cmd);
+		if (lex != NULL && (lex->str[0] == 34 || lex->str[0] == 39))
+			quote_translation(mini, lex);
+		if (lex != NULL && lex->str[0] != '|'
+			&& lex->str[0] != '<' && lex->str[0] != '>')
 		{
-			mini->error_malloc = 1;
-			return (NULL);
+			if (!add_to_list(&split_cmd, ft_strdup(lex->str)))
+			{
+				mini->error_malloc = 1;
+				return (NULL);
+			}
+			lex = lex->next;
 		}
-		lex = lex->next;
 	}
-	return (lex);
+	return (split_cmd);
 }
 
-t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex)
+/* t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex)
 {
 	t_llist	*split_cmd;
 
 	split_cmd = NULL;
 	if (lex->str[0] == '|')
 		lex = lex->next;
-	while (lex != NULL && lex->str[0] != '|')
-		lex = parser_pieces(mini, lex, split_cmd, cmd);
+	split_cmd = parser_pieces(mini, lex, cmd);
 	mini->cmd_table[cmd] = parser_malloc_command(mini, split_cmd);
 	if (!mini->cmd_table[cmd])
 		mini->error_malloc = 1;
 	free_llist(&split_cmd);
+	return (lex);
+}
+
+t_llist	*parser_pieces(t_minishell *mini, t_llist *lex, int cmd)
+{
+	t_llist	*split_cmd;
+
+	split_cmd = NULL;
+	while (lex != NULL && lex->str[0] != '|')
+	{
+		if (lex->str[0] == '<' || lex->str[0] == '>')
+			lex = parser_redir_file(mini, lex, cmd, 0);
+		if (lex != NULL && lex->str[0] == '$')
+			split_cmd = parser_var_split(mini, &lex, split_cmd);
+		if (lex != NULL && (lex->str[0] == 34 || lex->str[0] == 39))
+			quote_translation(mini, lex);
+		if (lex != NULL && lex->str[0] != '|'
+			&& lex->str[0] != '<' && lex->str[0] != '>')
+		{
+			if (!add_to_list(&split_cmd, ft_strdup(lex->str)))
+			{
+				mini->error_malloc = 1;
+				return (NULL);
+			}
+			lex = lex->next;
+		}
+	}
+	return (split_cmd);
+}
+ */
+t_llist	*parser_build_cmd(t_minishell *mini, int i, t_llist *lex, t_llist *cmd)
+{
+	if (lex->str[0] == '|')
+		lex = lex->next;
+	while (lex != NULL && lex->str[0] != '|')
+	{
+		if (lex->str[0] == '<' || lex->str[0] == '>')
+			lex = parser_redir_file(mini, lex, i, 0);
+		if (lex != NULL && lex->str[0] == '$')
+			cmd = parser_var_split(mini, &lex, cmd);
+		if (lex != NULL && (lex->str[0] == 34 || lex->str[0] == 39))
+			quote_translation(mini, lex);
+		if (lex != NULL && lex->str[0] != '|'
+			&& lex->str[0] != '<' && lex->str[0] != '>')
+		{
+			if (!add_to_list(&cmd, ft_strdup(lex->str)))
+				mini->error_malloc = 1;
+			lex = lex->next;
+		}
+	}
+	mini->cmd_table[i] = parser_malloc_command(mini, cmd);
+	if (!mini->cmd_table[i])
+		mini->error_malloc = 1;
+	if (mini->error_malloc == 1)
+		return (NULL);
+	free_llist(&cmd);
 	return (lex);
 }
 

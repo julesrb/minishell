@@ -81,7 +81,7 @@ int		prompt(t_minishell *mini);
 
 //----- parser_command.c
 char	**parser_malloc_command(t_minishell *mini, t_llist *cmd_list);
-t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex);
+t_llist	*parser_build_cmd(t_minishell *mini, int i, t_llist *lex, t_llist *cmd);
 int		parser_empty_cmd(t_minishell *mini);
 
 //----- parser_main.c
