@@ -136,6 +136,7 @@ char	*ft_relative_path(char *cmd, t_minishell *mini,
 char	*origine_path(int count_trim, t_minishell *mini, int j, int nb);
 
 //----- builtin functions.c
+//----- Builtin functions
 int		pwd_builtin(t_minishell *mini, char **cmd);
 int		env_mini(t_minishell *mini, char **envp);
 int		env_builtin(t_minishell *mini);
@@ -143,7 +144,7 @@ int		echo_builtin(char **cmd_split);
 int		unset_builtin(char **cmd, t_minishell *mini);
 int		exit_builtin(char **cmd, t_minishell *mini);
 
-//----- environment function.c
+//----- environment function
 void	deallocate_env(t_list **root);
 int		list_env_update(t_minishell *mini, char *var_update);
 
@@ -172,12 +173,6 @@ void	free_redir(t_redir **head);
 void	ft_free_tab(char **tab);
 void	*ft_free_pointer(char *str1, char *str2, char **tab1, char **tab2);
 void	free_tab_3d(char ***arr);
-
-//----- lexer.c
-int		lexer_iswordstart(char c);
-int		tokfun(int *i, int *a, int (*fun)(char *,
-				t_minishell *), t_minishell *mini);
-int		lexer(t_minishell *mini, int i, int a, int b);
 
 //----- execute_utils.c
 int		max_length(const char *str1, const char *str2);
@@ -227,19 +222,6 @@ int		check_arg_export(char *export_arg);
 int		check_update_var(char *cmd, t_list *env_mini);
 int		list_env_update(t_minishell *mini, char *var_update);
 char	*translate_var(t_minishell *mini, char *str);
-
-//----- parser_command.c
-char	**parser_malloc_command(t_minishell *mini, t_llist *cmd_list);
-t_llist	*parser_pieces(t_minishell *mini, t_llist *lex, int cmd);
-t_llist	*parser_build_cmd(t_minishell *mini, int i, t_llist *lex, t_llist *cmd);
-int		parser_empty_cmd(t_minishell *mini);
-
-//----- parser_main.c
-t_llist	*parser_var_split(t_minishell *mini, t_llist **lex, t_llist *split_cmd);
-int		parser_last_token_is_pipe(t_llist *curr);
-int		parser_error_pipe_check(t_minishell *mini);
-int		parser_error_check(t_minishell *mini);
-int		parser(t_minishell *mini);
 
 //----- parser_redir.c
 int		parser_redir_check(t_minishell *mini, char *redir, int cmd_nb);
