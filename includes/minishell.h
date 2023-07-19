@@ -86,6 +86,7 @@ typedef struct s_minishell
 	int		exit_status;
 	int		main_pid;
 	int		error;
+	int		error_malloc;
 	int		execute;
 	char	**envp;
 }t_minishell;
@@ -238,7 +239,7 @@ char	*translate_var(t_minishell *mini, char *str);
 
 //parser_redir.c
 int		parser_redir_check(t_minishell *mini, char *redir, int cmd_nb);
-t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type, int *m_err);
+t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type);
 
 //redirection.c
 void	here_doc(char *limiter, t_minishell mini);

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-char	**parser_malloc_command(t_llist *cmd_list)
+char	**parser_malloc_command(t_minishell *mini, t_llist *cmd_list)
 {
 	int		arg;
 	int		i;
@@ -22,23 +22,26 @@ char	**parser_malloc_command(t_llist *cmd_list)
 	i = 0;
 	cnt = cmd_list;
 	arg = lst_size(cnt);
-	MALLOC_OR_NULL(cmd_arr, sizeof (char *) * (arg + 1));
+	cmd_arr = (char **)calloc(1, sizeof (char *) * (arg + 1));
 	while (cmd_list != NULL)
 	{
-		FT_STRDUP_OR_NULL(cmd_arr[i], cmd_list->str);
+		cmd_arr[i] = ft_strdup(cmd_list->str);
+		if (!cmd_arr[i])
+		{
+			mini->error_malloc = 1;
+			return (NULL);
+		}
 		cmd_list = cmd_list->next;
 		i++;
 	}
-	cmd_arr[i] = NULL;
 	return (cmd_arr);
 }
 
-t_llist	*parser_var_split(t_minishell *mini, t_llist **lex, t_llist *split_cmd, int *m_err)
+t_llist	*parser_var_split(t_minishell *mini, t_llist **lex, t_llist *split_cmd)
 {
 	char	**split;
 	int		i;
 
-	(void)m_err;
 	i = 0;
 	(*lex)->str = var_translation(mini, (*lex)->str);
 	if (ft_strchr((*lex)->str, ' ') != NULL)
@@ -55,7 +58,7 @@ t_llist	*parser_var_split(t_minishell *mini, t_llist **lex, t_llist *split_cmd, 
 	return (split_cmd);
 }
 
-t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex, int *m_err)
+t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex)
 {
 	t_llist	*split_cmd;
 
@@ -65,26 +68,26 @@ t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex, int *m_e
 	while (lex != NULL && lex->str[0] != '|')
 	{
 		if (lex->str[0] == '<' || lex->str[0] == '>')
-			lex = parser_redir_file(mini, lex, cmd, 0, m_err);
+			lex = parser_redir_file(mini, lex, cmd, 0);
 		if (lex != NULL && lex->str[0] == '$')
-			split_cmd = parser_var_split(mini, &lex, split_cmd, m_err);
+			split_cmd = parser_var_split(mini, &lex, split_cmd);
 		if (lex != NULL && (lex->str[0] == 34 || lex->str[0] == 39))
 			quote_translation(mini, lex);
 		if (lex != NULL && lex->str[0] != '|' && lex->str[0] != '<' && lex->str[0] != '>')
 		{
 			if (!add_to_list(&split_cmd, ft_strdup(lex->str)))
 			{
-				*m_err = 1;
+				mini->error_malloc = 1;
 				return (NULL);
 			}
 			lex = lex->next;
 		}
 	}
-	mini->cmd_table[cmd] = parser_malloc_command(split_cmd);
+	mini->cmd_table[cmd] = parser_malloc_command(mini, split_cmd);
 	if (!mini->cmd_table[cmd])
 	{
-		*m_err = 1;
-		return (NULL); //review this shit
+		mini->error_malloc = 1;
+		return (NULL);
 	}
 	free_llist(&split_cmd);
 	return (lex);
@@ -141,26 +144,34 @@ int	parser_error_check(t_minishell *mini)
 int	parser(t_minishell *mini)
 {
 	int		cmd;
-	int		malloc_err;
 	t_llist	*lexer;
 
 	cmd = 0;
-	malloc_err = 0;
 	lexer = mini->lexer_table;
 	if (!parser_error_check(mini))
 		return (1);
-	MALLOC_OR_ZERO(mini->cmd_table, sizeof (char **) * (mini->nb_cmd + 1));
+	mini->cmd_table = calloc(1 ,sizeof (char **) * (mini->nb_cmd + 1));
+		if (!mini->cmd_table)
+			return (0);
 	while (lexer != NULL)
 	{
-		lexer = parser_build_command(mini, cmd, lexer, &malloc_err);
-		if (malloc_err == 1)
+		lexer = parser_build_command(mini, cmd, lexer);
+		if (mini->error_malloc == 1)
 			return (0);
 		cmd++;
 	}
-	parser_error_check(mini);
+	mini->cmd_table[cmd] = NULL;
+	if (mini->cmd_table[0][0] == 0)
+	{
+		free_null(mini->cmd_table[0]);
+		free_null(mini->cmd_table);
+		mini->nb_cmd = 0;
+		return (1);
+	}
+	if (!parser_error_check(mini))
+		return (1);
 	if (mini->cmd_table[0][0][0] == 0)
 		mini->nb_cmd = 0;
-	mini->cmd_table[cmd] = NULL;
 	if (!mini->cmd_table)
 		mini->error = 1;
 	return (1);

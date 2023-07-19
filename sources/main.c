@@ -41,6 +41,7 @@ void	init_t_mini(t_minishell *mini)
 	mini->error = 0;
 	mini->nb_cmd = 0;
 	mini->execute = 0;
+	mini->error_malloc = 0;
 	mini->error_pipe = 0;
 	mini->error_redir = 0;
 }
@@ -62,12 +63,12 @@ int	main(int argc, char **argv, char **envp)
 			ft_failure("readline failed", 0, 1, 0);
 		if (!lexer(&mini))
 			ft_failure("lexer alloc failed", 0, 1, 0);
- 						/* print_lst(mini.lexer_table);  */
+ 						/* print_lst(mini.lexer_table); */
 		if (mini.error == 0)
 			if (!parser(&mini))
 				ft_failure("parser alloc failed", 0, 1, 0);
- 						/* print_t_mini(&mini);
-						print_cmd_table(&mini, mini.nb_cmd); */
+ 						/* print_t_mini(&mini); */
+						/* print_cmd_table(&mini, mini.nb_cmd); */
 		if (mini.error == 0)
 			executor(&mini);
 		free_mini(&mini);
