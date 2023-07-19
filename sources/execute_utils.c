@@ -27,30 +27,30 @@ int	max_length(const char *str1, const char *str2)
 
 int	is_builtin(char *cmd)
 {
-	if (ft_strncmp(cmd, "pwd", max_length("pwd", cmd)) == EXIT_SUCCESS)
-		return (EXIT_SUCCESS);
-	else if (ft_strncmp(cmd, "env", max_length("env", cmd)) == EXIT_SUCCESS)
-		return (EXIT_SUCCESS);
-	else if (ft_strncmp(cmd, "cd", max_length("cd", cmd)) == EXIT_SUCCESS)
-		return (EXIT_SUCCESS);
+	if (ft_strncmp(cmd, "pwd", max_length("pwd", cmd)) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "env", max_length("env", cmd)) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "cd", max_length("cd", cmd)) == 0)
+		return (1);
 	else if (ft_strncmp(cmd, "export", max_length("export", cmd)) == 0)
-		return (EXIT_SUCCESS);
-	else if (ft_strncmp(cmd, "unset", max_length("unset", cmd)) == EXIT_SUCCESS)
-		return (EXIT_SUCCESS);
-	else if (ft_strncmp(cmd, "echo", max_length("echo", cmd)) == EXIT_SUCCESS)
-		return (EXIT_SUCCESS);
-	else if (ft_strncmp(cmd, "exit", max_length("exit", cmd)) == EXIT_SUCCESS)
-		return (EXIT_SUCCESS);
-	return (EXIT_FAILURE);
+		return (1);
+	else if (ft_strncmp(cmd, "unset", max_length("unset", cmd)) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "echo", max_length("echo", cmd)) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "exit", max_length("exit", cmd)) == 0)
+		return (1);
+	return (0);
 }
 
-int	is_env_function(char *cmd)
+int	is_env_function(char **cmd)
 {
-	if (ft_strncmp(cmd, "cd", max_length("cd", cmd)) == EXIT_SUCCESS)
-		return (EXIT_SUCCESS);
-	else if (ft_strncmp(cmd, "export", max_length("export", cmd)) == 0)
-		return (EXIT_SUCCESS);
-	else if (ft_strncmp(cmd, "unset", max_length("unset", cmd)) == EXIT_SUCCESS)
-		return (EXIT_SUCCESS);
-	return (EXIT_FAILURE);
+	if (ft_strncmp(cmd[0], "cd", max_length("cd", cmd[0])) == 0)
+		return (1);
+	else if ((ft_strncmp(cmd[0], "export", max_length("export", cmd[0])) == 0) && ft_tablen(cmd) > 1)
+		return (1);
+	else if (ft_strncmp(cmd[0], "unset", max_length("unset", cmd[0])) == 0)
+		return (1);
+	return (0);
 }

@@ -35,7 +35,7 @@ int	exec(char **cmd, char **envp, t_minishell *mini)
 {
 	char	*path;
 
-	if (is_builtin(cmd[0]) == EXIT_SUCCESS)
+	if (is_builtin(cmd[0]))
 		return (execute_builtin(cmd, mini));
 	else
 	{
