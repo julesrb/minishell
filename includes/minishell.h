@@ -96,9 +96,10 @@ int		prompt(t_minishell *mini);
 int		prompt(t_minishell *mini);
 
 //----- lexer.c
-int	lexer_iswordstart(char c);
-int	tokfun(int *i, int *a, int (*fun)(char *, t_minishell *), t_minishell *mini);
-int	lexer(t_minishell *mini, int i, int a, int b);
+int		lexer_iswordstart(char c);
+int		tokfun(int *i, int *a, int (*fun)(char *, t_minishell *),
+			t_minishell *mini);
+int		lexer(t_minishell *mini, int i, int a, int b);
 
 //----- parser_command.c
 char	**parser_malloc_command(t_minishell *mini, t_llist *cmd_list);

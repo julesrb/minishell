@@ -66,16 +66,19 @@ int	parser_error_check(t_minishell *mini)
 	if (mini->error_pipe == 1)
 	{
 		ft_failure("minishell: pipe error", 0, 1, 0);
+		mini->cmd_table = NULL;
 		return (0);
 	}
 	if (mini->error_redir == 1)
 	{
 		ft_failure("minishell: redirection error", 0, 1, 0);
+		mini->cmd_table = NULL;
 		return (0);
 	}
 	if (mini->nb_cmd == 0 && !mini->redir_start && !mini->redir_end)
 	{
 		ft_failure("minishell: parsing error", 0, 1, 0);
+		mini->cmd_table = NULL;
 		return (0);
 	}
 	return (1);
