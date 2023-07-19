@@ -171,7 +171,7 @@ void	free_tab_3d(char ***arr);
 // execute_utils.c
 int		max_length(const char *str1, const char *str2);
 int		is_builtin(char *cmd);
-int		is_env_function(char *cmd);
+int		is_env_function(char **cmd);
 
 // execute_process.c
 int		child_process(t_minishell *mini, int index, char **cmd, int **fd);

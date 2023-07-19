@@ -43,19 +43,14 @@ char	*adjust_help1(t_minishell *mini, char *var_env, char *start, char *end)
 
 	rslt = NULL;
 	temp_trim = NULL;
-	if (ft_strchr(var_env, '\"') != NULL)
-		rslt = adjust_help2(mini, start, end);
-	else if (ft_strchr(var_env, '\'') != NULL)
+	if (ft_strchr(var_env, '\'') != NULL)
 	{
 		temp_trim = ft_strtrim(end, (const char *)"\'");
 		rslt = ft_strjoin(start, temp_trim);
 		free(temp_trim);
 	}
 	else
-	{
-		free(start);
-		rslt = ft_strdup(var_env);
-	}
+		rslt = adjust_help2(mini, start, end);
 	free(end);
 	return (rslt);
 }

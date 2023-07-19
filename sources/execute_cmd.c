@@ -19,7 +19,7 @@ int	exec_more_cmd(t_minishell *mini, int index, int exit_status, pid_t pid)
 	fd = create_pipe(mini);
 	while (index < mini->nb_cmd)
 	{
-		if ((is_env_function(mini->cmd_table[index][0]) == 0)
+		if ((is_env_function(mini->cmd_table[index]))
 			&& (index == mini->nb_cmd - 1))
 		{
 			redirection_function_insert(*mini, mini->redir_end);
@@ -45,7 +45,7 @@ int	execute_one_cmd(t_minishell *mini)
 	pid_t	pid;
 	int		exit_status;
 
-	if (is_env_function(mini->cmd_table[0][0]) == EXIT_SUCCESS)
+	if (is_env_function(mini->cmd_table[0]))
 	{
 		redirection_function_insert(*mini, mini->redir_start);
 		exit_status = exec(mini->cmd_table[0], mini->envp, mini);
