@@ -108,7 +108,7 @@ int		prompt(t_minishell *mini);
 int		prompt(t_minishell *mini);
 
 // Lexer related functions
-int		lexer(t_minishell *mini);
+int		lexer(t_minishell *mini, int i, int a, int b);
 int		add_to_list(t_llist **root, char *str);
 
 int		parser(t_minishell *mini);
