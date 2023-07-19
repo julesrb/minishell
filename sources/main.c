@@ -61,14 +61,14 @@ int	main(int argc, char **argv, char **envp)
 		init_t_mini(&mini);
 		if (!prompt(&mini))
 			ft_failure("readline failed", 0, 1, 0);
-		if (!lexer(&mini))
+		if (!lexer(&mini, 0, 0, 1))
 			ft_failure("lexer alloc failed", 0, 1, 0);
- 						/* print_lst(mini.lexer_table); */
+/*  						print_lst(mini.lexer_table);  */
 		if (mini.error == 0)
 			if (!parser(&mini))
 				ft_failure("parser alloc failed", 0, 1, 0);
- 						/* print_t_mini(&mini); */
-						/* print_cmd_table(&mini, mini.nb_cmd); */
+/*  						print_t_mini(&mini);
+						print_cmd_table(&mini, mini.nb_cmd); */
 		if (mini.error == 0)
 			executor(&mini);
 		free_mini(&mini);

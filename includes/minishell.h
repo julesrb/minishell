@@ -79,6 +79,15 @@ int		prompt(t_minishell *mini);
 //----- prompt.c
 int		prompt(t_minishell *mini);
 
+//----- parser_command.c
+char	**parser_malloc_command(t_minishell *mini, t_llist *cmd_list);
+t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex);
+int		parser_empty_cmd(t_minishell *mini);
+
+//----- parser_main.c
+t_llist	*parser_var_split(t_minishell *mini, t_llist **lex, t_llist *split_cmd);
+int		parser_error_check(t_minishell *mini);
+
 // Lexer related functions
 int		lexer(t_minishell *mini, int i, int a, int b);
 int		add_to_list(t_llist **root, char *str);
@@ -126,7 +135,6 @@ int		ft_count_trim(char *cmd);
 char	*ft_relative_path(char *cmd, t_minishell *mini, char *temp1, char *temp2);
 char	*origine_path(int count_trim, t_minishell *mini, int j, int nb);
 
-
 // Builtin functions
 int		pwd_builtin(t_minishell *mini, char **cmd);
 int		env_mini(t_minishell *mini, char **envp);
@@ -144,7 +152,6 @@ void	signal_main(void);
 void	signal_main_handler(int s);
 void	signal_command(t_minishell *mini);
 void	signal_command_handler(int s);
-
 
 //----- free_functions.c
 void	free_null(void *ptr);
@@ -210,7 +217,7 @@ char	*translate_var(t_minishell *mini, char *str);
 
 //parser_redir.c
 int		parser_redir_check(t_minishell *mini, char *redir, int cmd_nb);
-t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cmd_n, int type);
+t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cm_n, int type);
 
 //redirection.c
 void	here_doc(char *limiter, t_minishell mini);
