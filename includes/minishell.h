@@ -64,7 +64,10 @@ typedef struct s_minishell
 
 extern t_minishell	*g_mini;
 
-int		ft_failure(char *str, int exit, int free_mini, int free_env);
+//----- main.c
+int		ft_failure(char *str, int exit_n, int fr_mini, int fr_env);
+void	init_t_mini(t_minishell *mini);
+int		main(int argc, char **argv, char **envp);
 
 //----- arg.c
 void	arg_check(int argc, char **argv);
@@ -72,6 +75,19 @@ void	arg_check(int argc, char **argv);
 //----- banner.c
 void	banner_print_opening(void);
 void	banner_print_exit(void);
+
+//----- debug.c
+int		print_lst_redir(t_redir *lst);
+int		print_t_mini(t_minishell *mini);
+int		print_lst(t_llist *lst);
+int		print_cmd(char **cmd_line);
+int		print_cmd_table(t_minishell *mini, int cmd);
+
+//----- echo.c
+int		echo_builtin(char **cmd_split);
+
+//----- exit.c
+int		exit_builtin(char **cmd, t_minishell *mini);
 
 void	send_error(char *str, int quit, int exit_n);
 int		prompt(t_minishell *mini);
@@ -88,29 +104,11 @@ int		parser_empty_cmd(t_minishell *mini);
 t_llist	*parser_var_split(t_minishell *mini, t_llist **lex, t_llist *split_cmd);
 int		parser_error_check(t_minishell *mini);
 
-//----- Lexer related functions
-int		lexer(t_minishell *mini, int i, int a, int b);
-int		add_to_list(t_llist **root, char *str);
-
-int		parser(t_minishell *mini);
-
-void	arg_check(int argc, char **argv);
-
-char	*add_var_translation(t_minishell *mini, char *str);
-char	*var_translation(t_minishell *mini, char *var);
-int		quote_translation(t_minishell *mini, t_llist *curr);
-
-//----- Utils
+//----- utils.c
 void	deallocate_list(t_llist **head);
 void	free_mini(t_minishell *mini);
 int		lst_size(t_llist *lst);
 int		add_to_redir(t_redir **root, int type, char *str);
-
-// Debug
-int		print_t_mini(t_minishell *mini);
-int		print_lst(t_llist *lst);
-int		print_cmd_table(t_minishell *mini, int cmd);
-int		print_cmd(char **cmd_line);
 
 // ---- token.c
 int		token_yield_redir(char *redir, t_minishell *mini);
@@ -125,7 +123,7 @@ char	**ft_access_list(char **cmd, t_minishell *mini);
 char	**ft_access_list_help(char *cmd_2, char **path_from_envp,
 			int len, int i);
 
-//find_executable.c
+//----- find_executable.c
 char	*find_executable(char **cmd, t_minishell *mini);
 int		is_absolute_path(char *path);
 int		is_relative_path(char *path);
@@ -137,6 +135,7 @@ char	*ft_relative_path(char *cmd, t_minishell *mini,
 			char *temp1, char *temp2);
 char	*origine_path(int count_trim, t_minishell *mini, int j, int nb);
 
+//----- builtin functions.c
 //----- Builtin functions
 int		pwd_builtin(t_minishell *mini, char **cmd);
 int		env_mini(t_minishell *mini, char **envp);
@@ -154,6 +153,13 @@ void	signal_main(void);
 void	signal_main_handler(int s);
 void	signal_command(t_minishell *mini);
 void	signal_command_handler(int s);
+
+//----- token.c
+int		token_yield_word(char *token, t_minishell *mini);
+int		token_yield_quote(char *token, t_minishell *mini);
+int		token_yield_var(char *token, t_minishell *mini);
+int		token_yield_pipe(char *token, t_minishell *mini);
+int		token_yield_redir(char *redir, t_minishell *mini);
 
 //----- free_functions.c
 void	free_null(void *ptr);
@@ -219,6 +225,8 @@ char	*translate_var(t_minishell *mini, char *str);
 
 //----- parser_redir.c
 int		parser_redir_check(t_minishell *mini, char *redir, int cmd_nb);
+int		parser_redir_add_lst(t_minishell *mini, int type,
+			char *file, int cmd_n);
 t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cm_n, int type);
 
 //----- redirection.c
@@ -239,5 +247,11 @@ char	*ft_reverse_split(char **line_split, char *c);
 int		ft_strlcpy_dollar(char *str, t_minishell mini);
 char	*heredoc_convert_dollar(t_minishell mini, char *line);
 void	here_doc_put_in(char *limiter, int *fds, t_minishell mini);
+
+//----- var.c
+int		quote_translation(t_minishell *mini, t_llist *curr);
+char	*var_find_translation(t_list *curr, char *var, char *translation);
+char	*var_translation(t_minishell *mini, char *var);
+char	*add_var_translation(t_minishell *mini, char *str);
 
 #endif

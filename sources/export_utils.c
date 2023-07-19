@@ -70,7 +70,7 @@ int	check_update_var(char *cmd, t_list *env_mini)
 		i++;
 	while (curr != NULL)
 	{
-		if (strncmp(cmd, (char *)(curr->content), i) == 0)
+		if (ft_strncmp(cmd, (char *)(curr->content), i) == 0)
 			return (1);
 		curr = curr->next;
 	}
