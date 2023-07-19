@@ -73,7 +73,8 @@ t_llist	*parser_build_command(t_minishell *mini, int cmd, t_llist *lex)
 			split_cmd = parser_var_split(mini, &lex, split_cmd);
 		if (lex != NULL && (lex->str[0] == 34 || lex->str[0] == 39))
 			quote_translation(mini, lex);
-		if (lex != NULL && lex->str[0] != '|' && lex->str[0] != '<' && lex->str[0] != '>')
+		if (lex != NULL && lex->str[0] != '|'
+			&& lex->str[0] != '<' && lex->str[0] != '>')
 		{
 			if (!add_to_list(&split_cmd, ft_strdup(lex->str)))
 			{
@@ -150,7 +151,7 @@ int	parser(t_minishell *mini)
 	lexer = mini->lexer_table;
 	if (!parser_error_check(mini))
 		return (1);
-	mini->cmd_table = calloc(1 ,sizeof (char **) * (mini->nb_cmd + 1));
+	mini->cmd_table = calloc(1, sizeof (char **) * (mini->nb_cmd + 1));
 		if (!mini->cmd_table)
 			return (0);
 	while (lexer != NULL)
@@ -160,7 +161,6 @@ int	parser(t_minishell *mini)
 			return (0);
 		cmd++;
 	}
-	mini->cmd_table[cmd] = NULL;
 	if (mini->cmd_table[0][0] == 0)
 	{
 		free_null(mini->cmd_table[0]);

@@ -61,7 +61,7 @@ int	main(int argc, char **argv, char **envp)
 		init_t_mini(&mini);
 		if (!prompt(&mini))
 			ft_failure("readline failed", 0, 1, 0);
-		if (!lexer(&mini, 0, 0, 1))
+		if (!lexer(&mini))
 			ft_failure("lexer alloc failed", 0, 1, 0);
  						/* print_lst(mini.lexer_table); */
 		if (mini.error == 0)
