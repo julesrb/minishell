@@ -70,16 +70,23 @@ char	*var_find_translation(t_list *curr, char *var, char *translation)
 char	*var_translation(t_minishell *mini, char *var)
 {
 	char	*translation;
+	int		i;
 
+	i = 0;
 	translation = NULL;
 	if (var[1] == 0)
 		return (ft_strdup("$"));
-	if (ft_isdigit(var[1]) != 0)
-		return (ft_strdup(&var[2]));
-	if (var[1] == '?')
-		return (ft_itoa(mini->exit_status));
 	if (var[1] == '0')
 		return (ft_strdup("minishell"));
+	if (ft_isdigit(var[1]) != 0)
+	{
+		while (ft_isdigit(var[1 + i]) != 0)
+			i++;
+		var[1 + i] = 0;
+		return (ft_strdup(&var[2]));
+	}
+	if (var[1] == '?')
+		return (ft_itoa(mini->exit_status));
 	translation = var_find_translation(mini->env_mini, var, translation);
 	return (translation);
 }
@@ -89,10 +96,11 @@ char	*add_var_translation(t_minishell *mini, char *str)
 	int		i;
 	char	*translation;
 	char	*end;
+	char	*dup;
 
 	i = 0;
 	translation = NULL;
-	char *dup = ft_strdup(str);
+	dup = ft_strdup(str);
 	while (str[i] != 0 && str[i] != '$')
 		i++;
 	translation = var_translation(mini, &str[i]);
