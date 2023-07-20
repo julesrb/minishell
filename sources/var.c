@@ -75,6 +75,8 @@ char	*var_translation(t_minishell *mini, char *var)
 	translation = NULL;
 	if (var[1] == 0)
 		return (ft_strdup("$"));
+	if (ft_isdigit(var[1]) != 0)
+		return (ft_strdup(&var[2]));
 	if (var[1] == '?')
 		return (ft_itoa(mini->exit_status));
 	if (var[1] == '0')
@@ -91,6 +93,7 @@ char	*add_var_translation(t_minishell *mini, char *str)
 
 	i = 0;
 	translation = NULL;
+	char *dup = ft_strdup(str);
 	while (str[i] != 0 && str[i] != '$')
 		i++;
 	translation = var_translation(mini, &str[i]);
@@ -98,7 +101,10 @@ char	*add_var_translation(t_minishell *mini, char *str)
 	i++;
 	while (str[i] != 0 && str[i] != ' ')
 		i++;
-	end = ft_strjoin(translation, &str[i]);
+	ft_printf("translation is %s\n", translation);
+	ft_printf("dup is %s\n",dup);
+	ft_printf("rest is %s\n", &dup[i]);
+	end = ft_strjoin(translation, &dup[i]);
 	translation = ft_strjoin(str, end);
 	free(end);
 	return (translation);
