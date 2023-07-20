@@ -56,6 +56,7 @@ typedef struct s_minishell
 	int		nb_cmd;
 	int		exit_status;
 	int		main_pid;
+	int		child_pid;
 	int		here_doc_pid;
 	int		error;
 	int		error_malloc;
@@ -160,6 +161,8 @@ void	signal_main(void);
 void	signal_main_handler(int s);
 void	signal_command(t_minishell *mini);
 void	signal_command_handler(int s);
+void	signal_here(void);
+void	signal_here_handler(int s);
 
 //----- token.c
 int		token_yield_word(char *token, t_minishell *mini);

@@ -19,7 +19,8 @@ void	here_doc(char *limiter, t_minishell mini)
 
 	if (pipe(fds) == -1)
 		exit(0);
-	pid = fork();<<
+	signal_here();
+	pid = fork();
 	mini.here_doc_pid = pid;
 	if (pid == -1)
 		exit(0);
