@@ -12,6 +12,16 @@
 
 #include "minishell.h"
 
+int	ft_tablen(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i] != NULL)
+		i++;
+	return (i);
+}
+
 int	max_length(const char *str1, const char *str2)
 {
 	size_t	len1;

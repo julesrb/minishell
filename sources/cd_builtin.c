@@ -35,7 +35,7 @@ char	*convert_path_to_absolute(char **cmd, t_minishell *mini)
 			&& (cmd[1][0] == '-')) || ((ft_strlen(cmd[1]) == 1)
 			&& (cmd[1][0] == '~')))
 		return (ft_relative_path_cd(cmd[1], mini));
-	else if (ft_isalnum(cmd[1][0]) != 0)
+	else
 		return (ft_relative_path_cd(cmd[1], mini));
 	return (NULL);
 }
