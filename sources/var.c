@@ -76,6 +76,8 @@ char	*var_translation(t_minishell *mini, char *var)
 		return (ft_strdup("$"));
 	if (var[1] == '?')
 		return (ft_itoa(mini->exit_status));
+	if (var[1] == '0')
+		return (ft_strdup("minishell"));
 	translation = var_find_translation(mini->env_mini, var, translation);
 	return (translation);
 }
