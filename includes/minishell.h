@@ -56,6 +56,8 @@ typedef struct s_minishell
 	int		nb_cmd;
 	int		exit_status;
 	int		main_pid;
+	int		here_doc_pid;
+	int		child_pid;
 	int		error;
 	int		error_malloc;
 	int		execute;
@@ -159,6 +161,8 @@ void	signal_main(void);
 void	signal_main_handler(int s);
 void	signal_command(t_minishell *mini);
 void	signal_command_handler(int s);
+void	signal_here(void);
+void	signal_here_handler(int s);
 
 //----- token.c
 int		token_yield_word(char *token, t_minishell *mini);
@@ -236,23 +240,23 @@ int		parser_redir_add_lst(t_minishell *mini, int type,
 t_llist	*parser_redir_file(t_minishell *mini, t_llist *lex, int cm_n, int type);
 
 //----- redirection.c
-void	here_doc(char *limiter, t_minishell mini);
-int		redirection_function(t_minishell mini, t_redir *redirection);
-int		input_redirection(t_minishell mini, t_redir *start);
+void	here_doc(char *limiter, t_minishell *mini);
+int		redirection_function(t_minishell *mini, t_redir *redirection);
+int		input_redirection(t_minishell *mini, t_redir *start);
 int		output_redirection(t_redir *end, int fd_outfile);
 void	exit_redir(int fd_outfile);
 
 //----- redirection_insert.c
-void	here_doc_insert(char *limiter);
-int		redirection_function_insert(t_minishell mini, t_redir *redirection);
-int		infile_insert(t_minishell mini, t_redir *start);
+void	here_doc_insert(t_minishell *mini, char *limiter);
+int		redirection_function_insert(t_minishell *mini, t_redir *redirection);
+int		infile_insert(t_minishell *mini, t_redir *start);
 int		outfile_insert(t_redir *end, int fd_outfile);
 
 //----- redirection_heredoc.c
 char	*ft_reverse_split(char **line_split, char *c);
-char	*ft_strlcpy_dollar(char *str, t_minishell mini);
-char	*heredoc_convert_dollar(t_minishell mini, char *line);
-void	here_doc_put_in(char *limiter, int *fds, t_minishell mini);
+char	*ft_strlcpy_dollar(char *str, t_minishell *mini);
+char	*heredoc_convert_dollar(t_minishell *mini, char *line);
+void	here_doc_put_in(char *limiter, int *fds, t_minishell *mini);
 
 //----- redirection_heredoc_insert.c
 void	here_doc_put_in_insert(char *limiter);

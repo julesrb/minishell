@@ -12,11 +12,12 @@
 
 #include "minishell.h"
 
-void	here_doc_insert(char *limiter)
+void	here_doc_insert(t_minishell *mini, char *limiter)
 {
 	pid_t	pid;
 
 	pid = fork();
+	mini->here_doc_pid = pid;
 	if (pid == -1)
 		exit(0);
 	if (pid == 0)
@@ -27,7 +28,7 @@ void	here_doc_insert(char *limiter)
 	}
 }
 
-int	redirection_function_insert(t_minishell mini, t_redir *redirection)
+int	redirection_function_insert(t_minishell *mini, t_redir *redirection)
 {
 	int	exit_status;
 
@@ -45,7 +46,7 @@ int	redirection_function_insert(t_minishell mini, t_redir *redirection)
 	return (exit_status);
 }
 
-int	infile_insert(t_minishell mini, t_redir *start)
+int	infile_insert(t_minishell *mini, t_redir *start)
 {
 	int		fd_infile;
 
@@ -64,7 +65,7 @@ int	infile_insert(t_minishell mini, t_redir *start)
 		close(fd_infile);
 	}
 	else if (start->type == 2)
-		here_doc_insert(start->file);
+		here_doc_insert(mini, start->file);
 	return (EXIT_SUCCESS);
 }
 

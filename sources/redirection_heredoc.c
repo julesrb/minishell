@@ -32,14 +32,14 @@ char	*ft_reverse_split(char **line_split, char *c)
 	return (result);
 }
 
-char	*ft_strlcpy_dollar(char *str, t_minishell mini)
+char	*ft_strlcpy_dollar(char *str, t_minishell *mini)
 {
 	char	*temp;
 	char	*temp2;
 
 	temp = ft_strtrim(str, "\'\".");
 	free(str);
-	temp2 = getenv_mini(temp + 1, &mini);
+	temp2 = getenv_mini(temp + 1, mini);
 	free(temp);
 	if (temp2 != NULL)
 	{
@@ -53,7 +53,7 @@ char	*ft_strlcpy_dollar(char *str, t_minishell mini)
 	return (temp);
 }
 
-char	*heredoc_convert_dollar(t_minishell mini, char *line)
+char	*heredoc_convert_dollar(t_minishell *mini, char *line)
 {
 	char	**line_split;
 	char	*result;
@@ -79,7 +79,7 @@ char	*heredoc_convert_dollar(t_minishell mini, char *line)
 	return (result);
 }
 
-void	here_doc_put_in(char *limiter, int *fds, t_minishell mini)
+void	here_doc_put_in(char *limiter, int *fds, t_minishell *mini)
 {
 	char	*heredoc_line;
 	char	*heredoc_line2;
