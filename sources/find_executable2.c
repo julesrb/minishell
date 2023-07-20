@@ -40,6 +40,16 @@ char	*origine_path(int count_trim, t_minishell *mini, int j, int nb)
 	return (or_path);
 }
 
+void	check_access(char *relative_path, char *cmd)
+{
+	if (access(relative_path, X_OK) == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		perror(cmd);
+		exit(EXIT_FAILURE);
+	}
+}
+
 char	*ft_relative_path(char *cmd, t_minishell *mini, char *temp, char *temp2)
 {
 	char	*relative_path;
@@ -64,5 +74,6 @@ char	*ft_relative_path(char *cmd, t_minishell *mini, char *temp, char *temp2)
 		relative_path = ft_strjoin(temp2, temp);
 	}
 	free(temp);
+	check_access(relative_path, cmd);
 	return (relative_path);
 }

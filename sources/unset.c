@@ -51,7 +51,7 @@ int	lst_env_remove(t_minishell *mini, char *v_unset)
 int	unset_builtin(char **cmd, t_minishell *mini)
 {
 	int	i;
-	int exit_status;
+	int	exit_status;
 
 	exit_status = 0;
 	i = 1;
