@@ -250,7 +250,7 @@ int		outfile_insert(t_redir *end, int fd_outfile);
 
 //----- redirection_heredoc.c
 char	*ft_reverse_split(char **line_split, char *c);
-int		ft_strlcpy_dollar(char *str, t_minishell mini);
+char	*ft_strlcpy_dollar(char *str, t_minishell mini);
 char	*heredoc_convert_dollar(t_minishell mini, char *line);
 void	here_doc_put_in(char *limiter, int *fds, t_minishell mini);
 
