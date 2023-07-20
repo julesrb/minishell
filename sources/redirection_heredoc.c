@@ -15,11 +15,11 @@
 char	*ft_reverse_split(char **line_split, char *c)
 {
 	char	*result;
-	int		i;
 	char	*temp;
+	int		i;
 
-	temp = NULL;
 	i = 1;
+	temp = NULL;
 	result = ft_strdup(line_split[0]);
 	while (line_split[i] != NULL)
 	{
@@ -32,27 +32,25 @@ char	*ft_reverse_split(char **line_split, char *c)
 	return (result);
 }
 
-int	ft_strlcpy_dollar(char *str, t_minishell *mini)
+char	*ft_strlcpy_dollar(char *str, t_minishell *mini)
 {
 	char	*temp;
 	char	*temp2;
 
 	temp = ft_strtrim(str, "\'\".");
+	free(str);
 	temp2 = getenv_mini(temp + 1, mini);
 	free(temp);
 	if (temp2 != NULL)
 	{
-		free(str);
-		str = malloc(sizeof(char) * (ft_strlen(temp2) + 1));
-		ft_strlcpy(str, temp2, ft_strlen(temp2) + 1);
+		temp = malloc(sizeof(char) * (ft_strlen(temp2) + 1));
+		ft_strlcpy(temp, temp2, ft_strlen(temp2) + 1);
 	}
 	else
 	{
-		free(str);
-		str = malloc(sizeof(char) * 1);
-		ft_strlcpy(str, (char *)"\0", 1);
+		temp = ft_calloc(sizeof(char), 1);
 	}
-	return (EXIT_SUCCESS);
+	return (temp);
 }
 
 char	*heredoc_convert_dollar(t_minishell *mini, char *line)
@@ -71,7 +69,9 @@ char	*heredoc_convert_dollar(t_minishell *mini, char *line)
 	while (line_split[i] != NULL)
 	{
 		if (ft_strchr(line_split[i], '$') != NULL)
-			ft_strlcpy_dollar(line_split[i], mini);
+		{
+			line_split[i] = ft_strlcpy_dollar(line_split[i], mini);
+		}
 		i++;
 	}
 	result = ft_reverse_split(line_split, (char *)" ");

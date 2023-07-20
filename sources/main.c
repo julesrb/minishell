@@ -46,8 +46,6 @@ void	init_t_mini(t_minishell *mini)
 	mini->here_doc_pid = 0;
 	mini->child_pid = 0;
 	mini->error_redir = 0;
-	mini->here_doc_fds[0] = 0;
-	mini->here_doc_fds[1] = 0;
 }
 
 int	main(int argc, char **argv, char **envp)
