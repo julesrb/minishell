@@ -43,6 +43,7 @@ void	init_t_mini(t_minishell *mini)
 	mini->execute = 0;
 	mini->error_malloc = 0;
 	mini->error_pipe = 0;
+	mini->here_doc_pid = 0;
 	mini->error_redir = 0;
 }
 

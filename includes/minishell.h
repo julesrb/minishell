@@ -56,6 +56,7 @@ typedef struct s_minishell
 	int		nb_cmd;
 	int		exit_status;
 	int		main_pid;
+	int		here_doc_pid;
 	int		error;
 	int		error_malloc;
 	int		execute;

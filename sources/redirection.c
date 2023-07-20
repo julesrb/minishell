@@ -19,13 +19,16 @@ void	here_doc(char *limiter, t_minishell mini)
 
 	if (pipe(fds) == -1)
 		exit(0);
-	pid = fork();
+	pid = fork();<<
+	mini.here_doc_pid = pid;
 	if (pid == -1)
 		exit(0);
 	if (pid == EXIT_SUCCESS)
 		here_doc_put_in(limiter, fds, mini);
 	else
 	{
+		ft_printf("pid parent is %d\n", getpid());
+	ft_printf("pid child is %d\n", mini.here_doc_pid);
 		wait(NULL);
 		close(fds[1]);
 		dup2(fds[0], 0);
