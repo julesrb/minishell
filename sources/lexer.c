@@ -15,7 +15,7 @@
 int	lexer_iswordstart(char c)
 {
 	if (c == '-' || c == '.' || c == '=' || c == '/'
-		|| c == '~' || c == '(')
+		|| c == '~' || c == '(' || c == '+')
 		return (1);
 	else
 		return (0);
