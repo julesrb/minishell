@@ -15,10 +15,13 @@
 t_llist	*parser_var_split(t_minishell *mini, t_llist **lex, t_llist *split_cmd)
 {
 	char	**split;
+	char	*temp;
 	int		i;
 
 	i = 0;
+	temp = (*lex)->str;
 	(*lex)->str = var_translation(mini, (*lex)->str);
+	free(temp);
 	if (ft_strchr((*lex)->str, ' ') != NULL)
 	{
 		split = ft_split((*lex)->str, ' ');
