@@ -101,27 +101,26 @@ char	**ft_split(char const *s, char c)
 {
 	size_t	i;
 	size_t	j;
+	int	h;
 	char	*str;
 	char	**tabs;
 
+	h = 0;
 	if (!s)
 		return (NULL);
 	str = (char *)s;
-	tabs = (char **)malloc(sizeof(*tabs) * (ft_word_count(str, c) + 1));
-	if (!tabs)
-		return (NULL);
+	tabs = ft_calloc(sizeof(*tabs), (ft_word_count(str, c) + 1));
 	i = ft_nb_set(str, c);
 	j = i;
 	while (ft_strlen(s) >= i && ft_word_count(str, c) != 0)
 	{
 		if (s[i] == c || s[i] == '\0')
 		{
-			*tabs++ = ft_strncpy_mem(str + j, i - j);
+			tabs[h++] = ft_strncpy_mem(str + j, i - j);
 			j = i + ft_nb_set(str + i, c);
 			i = j;
 		}
 		i++;
 	}
-	*tabs = NULL;
 	return (tabs);
 }
