@@ -27,6 +27,10 @@ int	exit_builtin(char **cmd, t_minishell *mini)
 		ft_putendl_fd(": too many arguments", 2);
 		return (0);
 	}
-	kill(mini->main_pid, SIGUSR1);
+	banner_print_exit();
+	free_mini(g_mini);
+	if (g_mini->env_mini != NULL)
+		deallocate_env(&g_mini->env_mini);
+	exit (EXIT_SUCCESS);
 	return (1);
 }

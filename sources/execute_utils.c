@@ -53,5 +53,7 @@ int	is_env_function(char **cmd)
 		return (1);
 	else if (ft_strncmp(cmd[0], "unset", max_length("unset", cmd[0])) == 0)
 		return (1);
+	else if (ft_strncmp(cmd[0], "exit", max_length("exit", cmd[0])) == 0)
+		return (1);
 	return (0);
 }

@@ -34,14 +34,6 @@ void	signal_command(t_minishell *mini)
 
 void	signal_main_handler(int s)
 {
-	if (s == SIGUSR1)
-	{
-		banner_print_exit();
-		free_mini(g_mini);
-		if (g_mini->env_mini != NULL)
-			deallocate_env(&g_mini->env_mini);
-		exit (EXIT_SUCCESS);
-	}
 	if (s == SIGQUIT)
 	{
 		if (g_mini->execute == 1)
