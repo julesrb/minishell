@@ -78,7 +78,7 @@ int	executor(t_minishell *mini)
 	{
 		pid = fork();
 		if (pid == 0)
-			exit(redirection_function(*mini, mini->redir_start));
+			exit(redirection_function_insert(*mini, mini->redir_start));
 		else
 		{
 			waitpid(pid, &status, 0);
