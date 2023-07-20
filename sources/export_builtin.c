@@ -22,7 +22,6 @@ char	*adjust_help2(t_minishell *mini, char *start, char *end)
 	rslt = NULL;
 	temp_trim = NULL;
 	temp_trim = ft_strtrim(end, (const char *)"\"");
-	printf("test6\n");
 	if (ft_strrchr(temp_trim, '$') != NULL)
 	{
 		while (ft_strchr(temp_trim, '$') != NULL)
@@ -54,7 +53,6 @@ char	*adjust_help1(t_minishell *mini, char *var_env, char *start, char *end)
 	else
 	{
 		rslt = adjust_help2(mini, start, end);
-		printf("test5\n");
 	}
 	free(end);
 	return (rslt);
@@ -73,7 +71,6 @@ char	*adjust_var_env(t_minishell *mini, char *var_env, int count)
 	ft_strlcpy(temp_start, var_env, count + 2);
 	temp_end = ft_strdup(var_env + count + 1);
 	rslt = adjust_help1(mini, var_env, temp_start, temp_end);
-	printf("test3\n");
 	return (rslt);
 }
 
@@ -92,7 +89,6 @@ int	export_with_arg(t_minishell *mini, char **cmd, int i, char *new_var)
 		else
 		{
 			new_var = adjust_var_env(mini, cmd[i], 0);
-			printf("transalation is %s\n", new_var);
 			new = ft_lstnew((void *)ft_strdup(new_var));
 			if (!new)
 				return (ft_free_fail(new_var, NULL, NULL, NULL));
