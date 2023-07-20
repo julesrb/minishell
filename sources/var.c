@@ -101,6 +101,7 @@ char	*add_var_translation(t_minishell *mini, char *str)
 	i = 0;
 	translation = NULL;
 	dup = ft_strdup(str);
+	free(dup);
 	while (str[i] != 0 && str[i] != '$')
 		i++;
 	translation = var_translation(mini, &str[i]);
