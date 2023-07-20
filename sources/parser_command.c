@@ -95,13 +95,6 @@ t_llist	*parser_build_cmd(t_minishell *mini, int i, t_llist *lex, t_llist *cmd)
 
 int	parser_empty_cmd(t_minishell *mini)
 {
-	if (mini->cmd_table[0][0] == 0)
-	{
-		free_null(mini->cmd_table[0]);
-		free_null(mini->cmd_table);
-		mini->nb_cmd = 0;
-		return (1);
-	}
 	if (!parser_error_check(mini))
 		return (1);
 	if (mini->cmd_table[0][0][0] == 0)
