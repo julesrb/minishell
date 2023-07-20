@@ -51,18 +51,30 @@ int	lst_env_remove(t_minishell *mini, char *v_unset)
 int	unset_builtin(char **cmd, t_minishell *mini)
 {
 	int	i;
+	int exit_status;
 
+	exit_status = 0;
 	i = 1;
 	while (cmd[i] != NULL)
 	{
-		if (check_unset_var(cmd[i], mini->env_mini) == EXIT_SUCCESS)
+		if (ft_strrchr_set(cmd[i], "$`\"'|><*?[]\\@#{}-+/^!()") != NULL)
+		{
+			ft_putstr_fd("unset: ", 2);
+			ft_putstr_fd(cmd[i], 2);
+			ft_putendl_fd(": invalid parameter name", 2);
+			exit_status = 1;
+		}
+		else if (check_unset_var(cmd[i], mini->env_mini) == EXIT_SUCCESS)
+		{
 			lst_env_remove(mini, cmd[i]);
+			exit_status = 0;
+		}
 		i++;
 	}
 	if (i == 1)
 	{
 		ft_putendl_fd("unset: not enough arguments", 2);
-		return (EXIT_FAILURE);
+		exit_status = 1;
 	}
-	return (EXIT_SUCCESS);
+	return (exit_status);
 }
