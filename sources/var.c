@@ -100,9 +100,6 @@ char	*add_var_translation(t_minishell *mini, char *str)
 	i++;
 	while (str[i] != 0 && str[i] != ' ')
 		i++;
-	ft_printf("translation is %s\n", translation);
-	ft_printf("dup is %s\n",dup);
-	ft_printf("rest is %s\n", &dup[i]);
 	end = ft_strjoin(translation, &dup[i]);
 	translation = ft_strjoin(str, end);
 	free(end);
