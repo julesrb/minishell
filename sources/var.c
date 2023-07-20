@@ -62,6 +62,7 @@ char	*var_find_translation(t_list *curr, char *var, char *translation)
 		curr = curr->next;
 	}
 	free(keyword);
+	free(var);
 	if (translation == NULL)
 		return (ft_strdup(""));
 	return (translation);
