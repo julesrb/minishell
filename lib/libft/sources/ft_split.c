@@ -101,7 +101,7 @@ char	**ft_split(char const *s, char c)
 {
 	size_t	i;
 	size_t	j;
-	int	h;
+	int		h;
 	char	*str;
 	char	**tabs;
 

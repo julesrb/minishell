@@ -50,9 +50,7 @@ void	signal_main_handler(int s)
 	if (s == SIGINT)
 	{
 		if (g_mini->here_doc_pid != 0)
-		{
 			exit(EXIT_SUCCESS);
-		}
 		ft_putendl_fd("", 2);
 		if (g_mini->execute == 0)
 		{

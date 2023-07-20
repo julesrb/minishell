@@ -24,7 +24,10 @@ void	here_doc(char *limiter, t_minishell *mini)
 	if (pid == -1)
 		exit(0);
 	if (pid == EXIT_SUCCESS)
+	{
+		mini->here_doc_pid = getpid();
 		here_doc_put_in(limiter, fds, mini);
+	}
 	else
 	{
 		wait(NULL);

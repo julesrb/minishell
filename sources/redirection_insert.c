@@ -17,11 +17,13 @@ void	here_doc_insert(t_minishell *mini, char *limiter)
 	pid_t	pid;
 
 	pid = fork();
-	mini->here_doc_pid = pid;
 	if (pid == -1)
 		exit(0);
 	if (pid == 0)
+	{
+		mini->here_doc_pid = getpid();
 		here_doc_put_in_insert(limiter);
+	}
 	else
 	{
 		waitpid(pid, NULL, 0);

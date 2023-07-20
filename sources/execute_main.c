@@ -74,6 +74,7 @@ int	executor(t_minishell *mini)
 	if (mini->error == 1)
 		return (0);
 	signal_command(mini);
+	g_mini->execute = 1;
 	if (mini->nb_cmd == 0)
 	{
 		pid = fork();
