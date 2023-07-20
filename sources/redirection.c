@@ -50,6 +50,7 @@ int	redirection_function(t_minishell mini, t_redir *redirection)
 			break ;
 		redirection = redirection->next;
 	}
+	printf("test3\n");
 	return (exit_status);
 }
 

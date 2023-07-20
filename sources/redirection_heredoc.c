@@ -74,8 +74,10 @@ char	*heredoc_convert_dollar(t_minishell mini, char *line)
 			ft_strlcpy_dollar(line_split[i], mini);
 		i++;
 	}
+	printf("test1\n");
 	result = ft_reverse_split(line_split, (char *)" ");
-	ft_free_success(NULL, NULL, line_split, NULL);
+	printf("test2\n");
+/* 	ft_free_success(NULL, NULL, line_split, NULL); */
 	return (result);
 }
 

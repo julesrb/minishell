@@ -12,22 +12,18 @@
 
 #include "minishell.h"
 
-void	here_doc_insert(char *limiter, t_minishell mini)
+void	here_doc_insert(char *limiter)
 {
-	int		fds[2];
 	pid_t	pid;
 
-	if (pipe(fds) == -1)
-		exit(0);
 	pid = fork();
 	if (pid == -1)
 		exit(0);
-	if (pid == EXIT_SUCCESS)
-		here_doc_put_in(limiter, fds, mini);
+	if (pid == 0)
+		here_doc_put_in_insert(limiter);
 	else
 	{
-		wait(NULL);
-		close(fds[1]);
+		waitpid(pid, NULL, 0);
 	}
 }
 
@@ -53,6 +49,7 @@ int	infile_insert(t_minishell mini, t_redir *start)
 {
 	int		fd_infile;
 
+	(void)mini;
 	if (!start)
 		return (EXIT_SUCCESS);
 	if (start->type == 1)
@@ -67,7 +64,7 @@ int	infile_insert(t_minishell mini, t_redir *start)
 		close(fd_infile);
 	}
 	else if (start->type == 2)
-		here_doc_insert(start->file, mini);
+		here_doc_insert(start->file);
 	return (EXIT_SUCCESS);
 }
 
