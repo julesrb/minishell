@@ -12,26 +12,6 @@
 
 #include "minishell.h"
 
-void	signal_here_handler(int s)
-{
-	if (s == SIGINT)
-	{
-			ft_putendl_fd("i made it here", 2);
-			ft_printf("i made it here");
-
-	}
-}
-
-void	signal_here(void)
-{
-	struct sigaction	sa_here;
-
-	sa_here.sa_handler = &signal_here_handler;
-	sigemptyset(&sa_here.sa_mask);
-	sa_here.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa_here, NULL);
-}
-
 void	signal_command_handler(int s)
 {
 	if (s == SIGQUIT)
@@ -71,14 +51,9 @@ void	signal_main_handler(int s)
 	{
 		if (g_mini->here_doc_pid != 0)
 		{
-			ft_printf("i'm in here\n");
-			return;
+			exit(EXIT_SUCCESS);
 		}
 		ft_putendl_fd("", 2);
-		//ft_printf("i'm in between\n");
-		ft_printf("pid main = %i\n", g_mini->main_pid);
-		ft_printf("pid child = %i\n", g_mini->child_pid);
-		ft_printf("pid here = %i\n", g_mini->here_doc_pid);
 		if (g_mini->execute == 0)
 		{
 			rl_on_new_line();

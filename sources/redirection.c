@@ -12,31 +12,28 @@
 
 #include "minishell.h"
 
-void	here_doc(char *limiter, t_minishell mini)
+void	here_doc(char *limiter, t_minishell *mini)
 {
 	int		fds[2];
 	pid_t	pid;
 
 	if (pipe(fds) == -1)
 		exit(0);
-	signal_here();
 	pid = fork();
-	mini.here_doc_pid = pid;
+	mini->here_doc_pid = pid;
 	if (pid == -1)
 		exit(0);
 	if (pid == EXIT_SUCCESS)
 		here_doc_put_in(limiter, fds, mini);
 	else
 	{
-		ft_printf("pid parent is %d\n", getpid());
-	ft_printf("pid child is %d\n", mini.here_doc_pid);
 		wait(NULL);
 		close(fds[1]);
 		dup2(fds[0], 0);
 	}
 }
 
-int	redirection_function(t_minishell mini, t_redir *redirection)
+int	redirection_function(t_minishell *mini, t_redir *redirection)
 {
 	int	exit_status;
 
@@ -54,7 +51,7 @@ int	redirection_function(t_minishell mini, t_redir *redirection)
 	return (exit_status);
 }
 
-int	input_redirection(t_minishell mini, t_redir *start)
+int	input_redirection(t_minishell *mini, t_redir *start)
 {
 	int		fd_infile;
 

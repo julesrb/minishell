@@ -61,12 +61,12 @@ int	child_process(t_minishell *mini, int index, char **cmd, int **fd)
 {
 	if (index == 0)
 	{
-		redirection_function(*mini, mini->redir_start);
+		redirection_function(mini, mini->redir_start);
 		dup2(fd[index][1], 1);
 	}
 	else if (index == mini->nb_cmd - 1)
 	{
-		redirection_function(*mini, mini->redir_end);
+		redirection_function(mini, mini->redir_end);
 		dup2(fd[index - 1][0], 0);
 	}
 	else
