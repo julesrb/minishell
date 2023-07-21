@@ -20,20 +20,21 @@ char	*adjust_help2(t_minishell *mini, char *start, char *end)
 
 	temp = NULL;
 	rslt = NULL;
-	temp_trim = NULL;
 	temp_trim = ft_strtrim(end, (const char *)"\"");
 	if (ft_strrchr(temp_trim, '$') != NULL)
 	{
 		while (ft_strchr(temp_trim, '$') != NULL)
-			temp_trim = add_var_translation(mini, temp_trim);
+		{
+			temp = add_var_translation(mini, temp_trim);
+			free(temp_trim);
+			temp_trim = ft_strdup(temp);
+			free(temp);
+		}
 		rslt = ft_strjoin(start, temp_trim);
-		free(temp_trim);
 	}
 	else
-	{
 		rslt = ft_strjoin(start, temp_trim);
-		free(temp_trim);
-	}
+	free(temp_trim);
 	return (rslt);
 }
 
