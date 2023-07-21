@@ -12,6 +12,19 @@
 
 #include "minishell.h"
 
+int	quote_translation_flag(t_minishell *mini, t_llist *curr)
+{
+	char	*trash;
+
+	while (ft_strchr(curr->str, '$') != NULL)
+	{
+		trash = curr->str;
+		curr->str = add_var_translation(mini, curr->str);
+		free(trash);
+	}
+	return (1);
+}
+
 int	quote_translation(t_minishell *mini, t_llist *curr)
 {
 	int		i;
@@ -32,10 +45,7 @@ int	quote_translation(t_minishell *mini, t_llist *curr)
 		i++;
 	}
 	if (flag_translation == 1)
-	{
-		while (ft_strchr(curr->str, '$') != NULL)
-			curr->str = add_var_translation(mini, curr->str);
-	}
+		quote_translation_flag(mini, curr);
 	return (EXIT_SUCCESS);
 }
 
@@ -101,16 +111,15 @@ char	*add_var_translation(t_minishell *mini, char *str)
 	i = 0;
 	translation = NULL;
 	dup = ft_strdup(str);
-	free(dup);
 	while (str[i] != 0 && str[i] != '$')
 		i++;
 	translation = var_translation(mini, &str[i]);
-	str[i] = 0;
+	dup[i] = 0;
 	i++;
 	while (str[i] != 0 && str[i] != ' ')
 		i++;
 	end = ft_strjoin(translation, &dup[i]);
-	translation = ft_strjoin(str, end);
+	translation = ft_strjoin(dup, end);
 	free(end);
 	return (translation);
 }

@@ -16,7 +16,7 @@ void	signal_command_handler(int s)
 {
 	if (s == SIGQUIT)
 	{
-		if (g_mini->execute == 1)
+		if (g_mini->execute == 1 && g_mini->here_doc_f != 0)
 			ft_putendl_fd("Quit (core dumped)", 2);
 	}
 }

@@ -16,6 +16,8 @@ void	here_doc_insert(t_minishell *mini, char *limiter)
 {
 	pid_t	pid;
 
+	signal(SIGQUIT, SIG_IGN);
+	g_mini->here_doc_f = 1;
 	pid = fork();
 	if (pid == -1)
 		exit(0);

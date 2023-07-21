@@ -60,6 +60,7 @@ typedef struct s_minishell
 	int		child_pid;
 	int		error;
 	int		error_malloc;
+	int		here_doc_f;
 	int		execute;
 	char	**envp;
 }t_minishell;
