@@ -35,7 +35,7 @@ char	*origine_path(int count_trim, t_minishell *mini, int j, int nb)
 			break ;
 	}
 	or_path = (char *)malloc(sizeof(or_path) * (i + 1));
-	ft_strlcpy(or_path, current_path, i);
+	ft_strlcpy(or_path, current_path, i + 1);
 	free(current_path);
 	return (or_path);
 }
