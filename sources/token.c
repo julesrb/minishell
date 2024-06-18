@@ -62,7 +62,6 @@ int	token_yield_quote(char *token, t_minishell *mini)
 int	token_yield_var(char *token, t_minishell *mini)
 {
 	char	*str;
-	int		i;
 	int		len;
 
 	len = 0;
@@ -71,7 +70,6 @@ int	token_yield_var(char *token, t_minishell *mini)
 	str = malloc(sizeof(char) * (len + 1));
 	if (str == NULL)
 		return (0);
-	i = 0;
 	ft_strlcpy(str, token, len + 1);
 	if (!add_to_list(&mini->lexer_table, str))
 		return (0);
